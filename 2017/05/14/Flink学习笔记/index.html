@@ -3,17 +3,19 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Archives: 2017/6 | Jochen-M</title>
+  <title>Flink学习笔记 | Jochen-M</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="每一个不曾起舞的日子都是对生命的辜负！">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Jochen-M">
-<meta property="og:url" content="http://jochen-m.github.io/archives/2017/06/index.html">
+  <meta name="description" content="Apache Flink is an open source platform for distributed stream and batch data processing. Flink’s core is a streaming dataflow engine that provides data distribution, communication, and fault toleranc">
+<meta name="keywords" content="Flink">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Flink学习笔记">
+<meta property="og:url" content="http://jochen-m.github.io/2017/05/14/Flink学习笔记/index.html">
 <meta property="og:site_name" content="Jochen-M">
-<meta property="og:description" content="每一个不曾起舞的日子都是对生命的辜负！">
+<meta property="og:description" content="Apache Flink is an open source platform for distributed stream and batch data processing. Flink’s core is a streaming dataflow engine that provides data distribution, communication, and fault toleranc">
+<meta property="og:updated_time" content="2017-06-02T05:35:29.020Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Jochen-M">
-<meta name="twitter:description" content="每一个不曾起舞的日子都是对生命的辜负！">
+<meta name="twitter:title" content="Flink学习笔记">
+<meta name="twitter:description" content="Apache Flink is an open source platform for distributed stream and batch data processing. Flink’s core is a streaming dataflow engine that provides data distribution, communication, and fault toleranc">
   
     <link rel="alternate" href="/atom.xml" title="Jochen-M" type="application/atom+xml">
   
@@ -62,58 +64,75 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2017/06/02/hello-world/" class="archive-article-date">
-  <time datetime="2017-06-02T05:26:15.117Z" itemprop="datePublished">Jun 2</time>
+        <section id="main"><article id="post-Flink学习笔记" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/05/14/Flink学习笔记/" class="article-date">
+  <time datetime="2017-05-14T14:36:03.000Z" itemprop="datePublished">2017-05-14</time>
 </a>
-      
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/大数据/">大数据</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/06/02/hello-world/">Hello World</a>
+    <h1 class="article-title" itemprop="name">
+      Flink学习笔记
     </h1>
   
 
-    </header>
-  </div>
-</article>
-  
+      </header>
     
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2017/06/01/将本地项目推送到git/" class="archive-article-date">
-  <time datetime="2017-06-01T15:21:44.000Z" itemprop="datePublished">Jun 1</time>
-</a>
+    <div class="article-entry" itemprop="articleBody">
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/06/01/将本地项目推送到git/">将本地项目推送到git</a>
-    </h1>
-  
+        <p>Apache Flink is an open source platform for distributed stream and batch data processing. Flink’s core is a streaming dataflow engine that provides data distribution, communication, and fault tolerance for distributed computations over data streams. Flink also builds batch processing on top of the streaming engine, overlaying native iteration support, managed memory, and program optimization.</p>
+<a id="more"></a>
+<h4 id="Building-Flink-from-Source"><a href="#Building-Flink-from-Source" class="headerlink" title="Building Flink from Source"></a>Building Flink from Source</h4><p>To clone from git, enter:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git clone https://github.com/apache/flink</div></pre></td></tr></table></figure></p>
+<p>The simplest way of building Flink is by running<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">// 1)For maven 3.0.x, 3.1.x, and 3.2.x</div><div class="line">//   In the root directory of Flink code base:</div><div class="line">mvn clean install -DskipTests</div><div class="line"></div><div class="line">// 2)For maven 3.3.x</div><div class="line">//   The build has to be done in two steps:</div><div class="line">//   First in the base directory, then in the distribution project</div><div class="line">mvn clean install -DskipTests</div><div class="line">cd flink-dist</div><div class="line">mvn clean install</div></pre></td></tr></table></figure></p>
+<p><em>Note:</em> To check your Maven version, run <code>mvn –version</code>.</p>
+<h4 id="Create-Project"><a href="#Create-Project" class="headerlink" title="Create Project"></a>Create Project</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">mvn archetype:generate                               \</div><div class="line">    -DarchetypeGroupId=org.apache.flink              \</div><div class="line">    -DarchetypeArtifactId=flink-quickstart-java      \</div><div class="line">    -DarchetypeVersion=1.4-SNAPSHOT</div></pre></td></tr></table></figure>
+<p>This allows you to name your newly created project. It will interactively ask you for the groupId, artifactId, and package name.</p>
+<h4 id="Build-Project"><a href="#Build-Project" class="headerlink" title="Build Project"></a>Build Project</h4><p>Go to your project directory and enter the command:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mvn clean install -Pbuild-jar</div></pre></td></tr></table></figure></p>
+<p>You will find a jar that runs on every Flink cluster with a compatible version, target/original-your-artifact-id-your-version.jar. There is also a fat-jar in target/your-artifact-id-your-version.jar which, additionally, contains all dependencies that were added to the Maven project.</p>
+<h4 id="DataStream-API-Examples"><a href="#DataStream-API-Examples" class="headerlink" title="DataStream API Examples"></a>DataStream API Examples</h4><h5 id="Map-DataStream-→-DataStream"><a href="#Map-DataStream-→-DataStream" class="headerlink" title="Map: DataStream → DataStream"></a>Map: DataStream → DataStream</h5>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://jochen-m.github.io/2017/05/14/Flink学习笔记/" data-id="cj3ff59fb00007pjxn36dhtl6" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Flink/">Flink</a></li></ul>
 
-    </header>
+    </footer>
   </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/05/16/Nodejs的使用技巧/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Nodejs的使用技巧
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/05/07/Java注解/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Java注解</div>
+    </a>
+  
+</nav>
+
+  
 </article>
-  
-  
-    </div></section>
-  
 
 </section>
         

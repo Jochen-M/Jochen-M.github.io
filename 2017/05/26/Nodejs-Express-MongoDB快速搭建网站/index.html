@@ -3,17 +3,19 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Archives: 2017/6 | Jochen-M</title>
+  <title>Nodejs + Express + MongoDB快速搭建网站 | Jochen-M</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="每一个不曾起舞的日子都是对生命的辜负！">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Jochen-M">
-<meta property="og:url" content="http://jochen-m.github.io/archives/2017/06/index.html">
+  <meta name="description" content="基本架构 后台： Node.js Express框架(通过npm安装) Moment.js——处理时间格式(通过npm安装) mongoose——mongoDB数据库插件(通过npm安装)   数据库： mongoDB   前端： jade模板引擎(通过npm安装) Bower(通过npm安装) jQuery(通过Bower安装) Bootstrap(通过Bower安装)">
+<meta name="keywords" content="Nodejs,Express,MongoDB">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Nodejs + Express + MongoDB快速搭建网站">
+<meta property="og:url" content="http://jochen-m.github.io/2017/05/26/Nodejs-Express-MongoDB快速搭建网站/index.html">
 <meta property="og:site_name" content="Jochen-M">
-<meta property="og:description" content="每一个不曾起舞的日子都是对生命的辜负！">
+<meta property="og:description" content="基本架构 后台： Node.js Express框架(通过npm安装) Moment.js——处理时间格式(通过npm安装) mongoose——mongoDB数据库插件(通过npm安装)   数据库： mongoDB   前端： jade模板引擎(通过npm安装) Bower(通过npm安装) jQuery(通过Bower安装) Bootstrap(通过Bower安装)">
+<meta property="og:updated_time" content="2017-06-02T05:35:29.020Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Jochen-M">
-<meta name="twitter:description" content="每一个不曾起舞的日子都是对生命的辜负！">
+<meta name="twitter:title" content="Nodejs + Express + MongoDB快速搭建网站">
+<meta name="twitter:description" content="基本架构 后台： Node.js Express框架(通过npm安装) Moment.js——处理时间格式(通过npm安装) mongoose——mongoDB数据库插件(通过npm安装)   数据库： mongoDB   前端： jade模板引擎(通过npm安装) Bower(通过npm安装) jQuery(通过Bower安装) Bootstrap(通过Bower安装)">
   
     <link rel="alternate" href="/atom.xml" title="Jochen-M" type="application/atom+xml">
   
@@ -62,58 +64,98 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2017/06/02/hello-world/" class="archive-article-date">
-  <time datetime="2017-06-02T05:26:15.117Z" itemprop="datePublished">Jun 2</time>
+        <section id="main"><article id="post-Nodejs-Express-MongoDB快速搭建网站" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/05/26/Nodejs-Express-MongoDB快速搭建网站/" class="article-date">
+  <time datetime="2017-05-26T14:17:56.000Z" itemprop="datePublished">2017-05-26</time>
 </a>
-      
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Nodejs/">Nodejs</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/06/02/hello-world/">Hello World</a>
+    <h1 class="article-title" itemprop="name">
+      Nodejs + Express + MongoDB快速搭建网站
     </h1>
   
 
-    </header>
-  </div>
-</article>
-  
+      </header>
     
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2017/06/01/将本地项目推送到git/" class="archive-article-date">
-  <time datetime="2017-06-01T15:21:44.000Z" itemprop="datePublished">Jun 1</time>
-</a>
+    <div class="article-entry" itemprop="articleBody">
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/06/01/将本地项目推送到git/">将本地项目推送到git</a>
-    </h1>
-  
+        <h4 id="基本架构"><a href="#基本架构" class="headerlink" title="基本架构"></a>基本架构</h4><ul>
+<li>后台：<ul>
+<li>Node.js</li>
+<li>Express框架(通过npm安装)</li>
+<li>Moment.js——处理时间格式(通过npm安装)</li>
+<li>mongoose——mongoDB数据库插件(通过npm安装)</li>
+</ul>
+</li>
+<li>数据库：<ul>
+<li>mongoDB</li>
+</ul>
+</li>
+<li>前端：<ul>
+<li>jade模板引擎(通过npm安装)</li>
+<li>Bower(通过npm安装)</li>
+<li>jQuery(通过Bower安装)</li>
+<li>Bootstrap(通过Bower安装)</li>
+</ul>
+</li>
+</ul>
+<a id="more"></a>
+<h4 id="注意事项及技巧"><a href="#注意事项及技巧" class="headerlink" title="注意事项及技巧"></a>注意事项及技巧</h4><ul>
+<li><p>使用bower安装依赖的库和文件时，应事先在项目根目录建立.bowerrc文件，并在文件中添加配置信息，表示库和文件的安装目录：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  &quot;directory&quot;: &quot;public/libs&quot;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>使用<code>bower init</code>和<code>cnpm init</code>生成配置文件。</p>
+</li>
+</ul>
+<h4 id="项目具体源代码："><a href="#项目具体源代码：" class="headerlink" title="项目具体源代码："></a>项目具体源代码：</h4><p>Github: <a href="https://github.com/Jochen-M/MovieGoGo.git" target="_blank" rel="external">https://github.com/Jochen-M/MovieGoGo.git</a></p>
+<blockquote>
+<p>项目来源：慕课网Scott老师的教学视频《node+mongodb 建站攻略》<br>本文仅作为学习使用！</p>
+</blockquote>
 
-    </header>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://jochen-m.github.io/2017/05/26/Nodejs-Express-MongoDB快速搭建网站/" data-id="cj3ff59g2000c7pjxyvua7z2g" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Express/">Express</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MongoDB/">MongoDB</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Nodejs/">Nodejs</a></li></ul>
+
+    </footer>
   </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/06/01/将本地项目推送到git/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          将本地项目推送到git
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/05/19/Hadoop大数据平台架构与实践/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Hadoop大数据平台架构与实践</div>
+    </a>
+  
+</nav>
+
+  
 </article>
-  
-  
-    </div></section>
-  
 
 </section>
         
