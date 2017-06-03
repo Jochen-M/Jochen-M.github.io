@@ -140,9 +140,4 @@ $ hexo deploy
 
 > #### 推荐：
 > Hexo官方文档：[https://hexo.io/zh-cn/](https://hexo.io/zh-cn/)
-> NexT主题文档（本博客所用主题）：[http://theme-next.iissnan.com/](http://theme-next.iissnan.com/)
 > Markdown语法说明（中文版）：[http://www.appinn.com/markdown/](http://www.appinn.com/markdown/)
->
->
-> #### 本文参考：
-> 简书作者inerdstack的博文：[《20分钟教你使用hexo搭建github博客》](http://www.jianshu.com/p/e99ed60390a8)
