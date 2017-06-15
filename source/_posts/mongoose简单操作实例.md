@@ -3,9 +3,10 @@ title: mongoose简单操作实例
 date: 2017-06-15 10:24:46
 tags:
     - Nodejs
+    - MongoDB
     - mongoose
 categories:
-    - Nodejs
+    - MongoDB
 ---
 
 Mongoose API: [http://mongoosejs.com/docs/api.html](http://mongoosejs.com/docs/api.html)

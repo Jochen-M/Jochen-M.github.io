@@ -9,8 +9,8 @@ categories:
     - Nodejs
 ---
 
-### 基本架构（前期准备）
-#### 后台：
+## 基本架构（前期准备）
+### 后台：
 - Node.js
 - Express框架(通过npm安装)
 - Moment.js——处理时间格式(通过npm安装)
@@ -20,11 +20,12 @@ categories:
 - express-session——处理session(通过npm安装)
 - connect-mongo——用mongodb做会话的持久化(通过npm安装)
 - bcrypt——密码加密处理模块(通过npm安装)
+- morgan——logger调试模块(通过npm安装)
 
-#### 数据库：
+### 数据库：
 - mongoDB
 
-#### 前端：
+### 前端：
 - jade模板引擎(通过npm安装)
 - Bower(通过npm安装)
 - jQuery(通过Bower安装)
@@ -32,10 +33,10 @@ categories:
 
 * * * 
 
-### 项目流程（编码实现）：
-#### 项目前后端流程打通
+## 项目流程（编码实现）：
+### 项目前后端流程打通
 
-- Node入口文件分析
+#### Node入口文件分析
 ```
 let port = 3000;
 let express = require('express');
@@ -68,7 +69,7 @@ app.listen(port);
 console.log('MovieGoGo is running at http://localhost:' + port);
 ```
   
-- 目录初始化：
+#### 目录初始化：
 
 ```
 MovieGoGo/
@@ -100,7 +101,7 @@ MovieGoGo/
 ```
 
 
-- 创建jade视图及入口文件中处理
+#### 创建jade视图及入口文件中处理
 
 head.jade:
 ```
@@ -253,11 +254,11 @@ block content
   script(src="/js/admin.js")
 ```
 
-- 伪造模板数据跑通前后端交互流程(略)
+#### 伪造模板数据跑通前后端交互流程(略)
 
-#### 项目数据库实现
+### 项目数据库实现
 
-- mongodb模式模型设计及编码
+#### mongodb模式模型设计及编码
 
 schemas/movie.js:
 ```
@@ -319,7 +320,7 @@ let Movie = mongoose.model('Movie', MovieSchema);
 module.exports = Movie
 ```
 
-- 编写数据库交互代码
+#### 编写数据库交互代码
 
 app.js文件中添加代码：
 ```
@@ -438,8 +439,8 @@ app.get('/admin/list', function(req, res){
 });
 ```
 
-#### 删除功能及项目生成配置文件
-- 删除功能
+### 删除功能及项目生成配置文件
+#### 删除功能
 
 app.js文件中添加代码:
 ```
@@ -481,292 +482,12 @@ $(function(){
 });
 ```
 
-- 生成项目配置文件
+#### 生成项目配置文件
 使用<code>bower init</code>和<code>cnpm init</code>生成配置文件。
-
-#### 开发用户的注册登录功能
-
-- 用户模型及密码处理
-
-schemas/user.js:
-```
-let mongoose = require('mongoose');
-let bcrypt = require("bcrypt");
-const SALT_WORK_FACTOR = 10;
-
-let UserSchema = new mongoose.Schema({
-  name: {
-    unique: true,
-    type: String
-  },
-  password: String,
-  meta: {
-    createAt: {
-      type: Date,
-      default: Date.now() 
-    },
-    updateAt: {
-      type: Date,
-      default: Date.now()
-    }
-  }
-});
-
-UserSchema.pre('save', function(next){
-  let user = this;
-  if(this.isNew){
-    this.meta.createAt = this.meta.updateAt = Date.now();
-  }else{
-    this.meta.updateAt = Date.now();
-  }
-
-  // 将密码与盐混合后加密处理
-  bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt){
-    if(err) return next(err);
-    
-    bcrypt.hash(user.password, salt, function(err, hash){
-      if(err) return next(err);
-
-      user.password = hash;
-      next();
-    })
-  });
-});
-
-UserSchema.methods = {
-  /**
-   * 验证密码是否正确
-   */
-  verifyPassword: function(_password, cb){
-    bcrypt.compare(_password, this.password, function(err, isMatch){
-      if(err){
-        return cb(err);
-      }
-      cb(null, isMatch);
-    });
-  }
-};
-
-UserSchema.statics = {
-  fetch: function(callback){
-    return this
-      .find({})
-      .sort('meta.updateAt')
-      .exec(callback);
-  },
-  findById: function(id, callback){
-    return this
-      .findOne({_id: id})
-      .exec(callback);
-  }
-};
-
-module.exports = UserSchema
-```
-
-models/user.js:
-```
-let mongoose = require('mongoose');
-let UserSchema = require('../schemas/user');
-let User = mongoose.model('User', UserSchema);
-
-module.exports = User
-```
-
-- 登录注册前端视图
-
-修改head.jade文件：
-```
-.navbar.navbar-default
-  .container
-    .navbar-header
-      a.navbar-brand(href="/") MovieGoGo
-    p.navbar-text.navbar-right
-      a.navbar-link(href="#", data-toggle="modal", data-target="#signupModal") 注册
-      span &nbsp;|&nbsp;
-      a.navbar-link(href="#", data-toggle="modal", data-target="#signinModal") 登录
-#signupModal.modal.fade
-  .modal-dialog
-    .modal-content
-      form(method="POST", action="/user/signup")
-        .modal-header 注册
-        .modal-body
-          .form-group
-            label(for="signupName") 用户名
-            input#signupName.form-control(name="user[name]", type="text")
-          .form-group
-            label(for="signupPassword") 密码
-            input#signupName.form-control(name="user[password]", type="password")
-        .modal-footer
-          button.btn.btn-danger(type="button", data-dismiss="modal") 关闭
-          button.btn.btn-success(type="submit") 提交
-#signinModal.modal.fade
-  .modal-dialog
-    .modal-content
-      form(method="POST", action="/user/signin")
-        .modal-header 登录
-        .modal-body
-          .form-group
-            label(for="signinName") 用户名
-            input#signinName.form-control(name="user[name]", type="text")
-          .form-group
-            label(for="signinPassword") 密码
-            input#signinName.form-control(name="user[password]", type="password")
-        .modal-footer
-          button.btn.btn-danger(type="button", data-dismiss="modal") 关闭
-          button.btn.btn-success(type="submit") 登录
-```
-
-- 注册用户后台存储
-
-app.js文件中添加代码：
-```
-let User = require('./models/user');
-
-// signup
-app.post('/user/signup', function(req, res){
-  let _user = req.body.user;
-
-  User.find({name: _user.name}, function(err, user){
-    if(err){
-      console.log(err);
-    }
-
-    if(user.length > 0){
-      return res.redirect("/");
-    }else{
-      let user = new User(_user);
-
-      user.save(function(err, user){
-        if(err){
-          console.log(err);
-        }
-
-        res.redirect('/admin/userlist');
-      });
-    }
-  });
-});
-```
-
-- 实现登录逻辑
-
-```
-// signin
-app.post('/user/signin', function(req, res){
-  let user_form = req.body.user;
-  let name = user_form.name;
-  let password = user_form.password;
-
-  User.findOne({name: name}, function(err, _user){
-    if(err){
-      console.log(err);
-    }
-
-    if(!_user){
-      return res.redirect('/');
-    }
-
-    let user = new User(_user); 
-    user.verifyPassword(password, function(err, isMatch){
-      if(err){
-        console.log(err);
-      }
-
-      if(isMatch){
-        console.log("Password is matched");
-        req.session.user = user;
-        return res.redirect('/');
-      }else{
-        console.log("Password is not matched");
-      }
-    });
-  });
-});
-```
-
-- 利用mongodb做会话的持久化
-
-app.js文件中添加代码：
-```
-let cookieParser = require('cookie-parser');
-let session = require('express-session');
-let mongoStore = require('connect-mongo')(session);
-
-app.use(cookieParser());
-app.use(session({
-  secret: 'moviegogo',
-  store: new mongoStore({
-    url: dbUrl,
-    collection: 'sessions'
-  })
-}));
-```
-
-测试：在 app.js 中 app.get('/',function(req,res){})加入测试代码：
-
-```
-console.log("user in session: ");
-console.log(req.session.user);
-```
-
-- 注销用户、用户退出功能实现
-
-修改head.jade文件：
-```
-.navbar.navbar-default
-  .container
-    .navbar-header
-      a.navbar-brand(href="/") MovieGoGo
-    if user
-      p.navbar-text.navbar-right
-        span 欢迎您,#{user.name}
-        span &nbsp;|&nbsp;
-        a.navbar-link(href="/logout") 退出
-    else
-      p.navbar-text.navbar-right
-        a.navbar-link(href="#", data-toggle="modal", data-target="#signupModal") 注册
-        span &nbsp;|&nbsp;
-        a.navbar-link(href="#", data-toggle="modal", data-target="#signinModal") 登录
-```
-
-app.js文件：
-```
-// ---------- 修改 ----------
-// index page
-app.get('/', function(req, res){
-  // console.log("user in session: ");
-  // console.log(req.session.user);
-
-  let _user = req.session.user;
-  if(_user){
-    app.locals.user = _user;
-  }
-
-  Movie.fetch(function(err, movies){
-    if(err){
-      console.log(err);
-    }
-
-    res.render('index', {
-      title: 'MovieGoGo 首页',
-      movies: movies
-    });
-  })
-});
-
-// ---------- 添加 ----------
-// logout
-app.get('/logout', function(req, res){
-  delete req.session.user;
-  delete app.locals.user;
-  res.redirect('/');
-});
-```
 
 * * *
 
-### 注意事项及技巧
+## 注意事项及技巧
 1）使用bower安装依赖的库和文件时，应事先在项目根目录建立.bowerrc文件，并在文件中添加配置信息，表示库和文件的安装目录：
   ```
   {
@@ -775,5 +496,7 @@ app.get('/logout', function(req, res){
   ```
 2）安装相关模块时，使用<code>--save</code>参数，自动将配置信息写入配置文件（如：cnpm install cookie-parser --save)
 
-### 项目具体源代码：
+## 项目具体源代码：
 Github: [https://github.com/Jochen-M/MovieGoGo.git](https://github.com/Jochen-M/MovieGoGo.git)
+
+> 后续内容参看[《Nodejs-Express-MongoDB快速搭建网站(进阶)》](https://jochen-m.github.io/2017/06/15/Nodejs-Express-MongoDB快速搭建网站-进阶/)
