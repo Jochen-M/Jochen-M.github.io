@@ -199,4 +199,34 @@ hadoop dfsadmin -report         // 查看HDFS信息
 
 ### MapReduce简介
 #### MapReduce的原理
+分而治之，一个大任务分成多个小的子任务（map），并行执行后，合并结果（reduce）
+![Alt text](/uploads/map_reduce.png)
+
 #### MapReduce的运行流程
+##### 基本概念
++ Job(作业) & Task(任务)
+  一个Job可以分成多个Task（MapTask & ReduceTask）
++ JobTracker（作业管理节点）
+  客户端提交Job，JobTracker将其放入候选队列中，在适当的时候进行调度，将Job拆分成多个MapTask和ReduceTask，分发给TaskTracker执行。JobTracker的角色：
+  * 作业调度
+  * 分配任务、监控任务执行进度
+  * 监控TaskTracker的状态
++ TaskTracker（任务管理节点）
+  通常TaskTracker和HDFS的DataNode属于同一组物理节点，实现了移动计算代替移动数据，保证读取数据开销最小。TaskTracker的角色：
+  * 执行任务
+  * 汇报任务状态
+
+##### MapReduce的体系结构
+![Alt text](/uploads/map_reduce_structure.png)
+
+##### MapReduce作业执行过程
+![Alt text](/uploads/map_reduce_job_execution.png)
+
+##### MapReduce的容错机制
++ 重复执行
+  默认为最多4次后放弃
++ 推测执行
+  原因：所有Map端运算完成，才开始执行Reduce端。
+  作用：保证整个任务的计算，不会因为某一两个TaskTracker的故障，导致整个任务执行效率很低。
+
+> Hadoop官网：[http://hadoop.apache.org](http://hadoop.apache.org)
