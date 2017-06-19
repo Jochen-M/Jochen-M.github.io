@@ -46,6 +46,3 @@ Go to your project directory and enter the command:
 mvn clean install -Pbuild-jar 
 ```
 You will find a jar that runs on every Flink cluster with a compatible version, target/original-your-artifact-id-your-version.jar. There is also a fat-jar in target/your-artifact-id-your-version.jar which, additionally, contains all dependencies that were added to the Maven project.
-
-#### DataStream API Examples
-##### Map: DataStream → DataStream

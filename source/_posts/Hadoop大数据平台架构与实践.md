@@ -8,25 +8,21 @@ categories:
 ---
 
 ### What Is Apache Hadoop?
-> The Apache™ Hadoop® project develops open-source software for reliable, scalable, distributed computing.
-The Apache Hadoop software library is a framework that allows for the distributed processing of large data sets across clusters of computers using simple programming models. It is designed to scale up from single servers to thousands of machines, each offering local computation and storage. Rather than rely on hardware to deliver high-availability, the library itself is designed to detect and handle failures at the application layer, so delivering a highly-available service on top of a cluster of computers, each of which may be prone to failures.
+The Apache™ Hadoop® project develops open-source software for reliable, scalable, distributed computing.The Apache Hadoop software library is a framework that allows for the distributed processing of large data sets across clusters of computers using simple programming models. It is designed to scale up from single servers to thousands of machines, each offering local computation and storage. Rather than rely on hardware to deliver high-availability, the library itself is designed to detect and handle failures at the application layer, so delivering a highly-available service on top of a cluster of computers, each of which may be prone to failures.
 
-<!-- more -->
-
-> #### The project includes these modules:
+#### The project includes these modules:
 + *Hadoop Common*: The common utilities that support the other Hadoop modules.
 + *Hadoop Distributed File System (HDFS™)*: A distributed file system that provides high-throughput access to application data.
 + *Hadoop YARN*: A framework for job scheduling and cluster resource management.
 + *Hadoop MapReduce*: A YARN-based system for parallel processing of large data sets.
-
-> #### And other Hadoop-related projects at Apache.
++ And other Hadoop-related projects at Apache.
 
 
 ### Hadoop安装（以hadoop-1.2.1为例）
 #### 准备条件
-* Linux操作系统
-* 安装JDK以及配置相关环境变量
-* 下载Hadoop安装包，如：hadoop-1.2.1.tar.gz（官网下载地址：[http://hadoop.apache.org/releases.html](http://hadoop.apache.org/releases.html)）
++ Linux操作系统
++ 安装JDK以及配置相关环境变量
++ 下载Hadoop安装包，如：hadoop-1.2.1.tar.gz（官网下载地址：[http://hadoop.apache.org/releases.html](http://hadoop.apache.org/releases.html)）
 
 #### 安装
 将hadoop-1.2.1.tar.gz解压到指定目录，如：/opt/hadoop-1.2.1/
@@ -44,12 +40,15 @@ export PATH=$JAVA_HOME/bin:$JRE_HOME/bin:$HADOOP_HOME/bin:$PATH
 #### 修改四个配置文件
 这四个配置文件均在/opt/hadoop-1.2.1/conf/目录下。
 
-* (a)修改hadoop-env.sh,设置JAVA_HOME:
++ (a)修改hadoop-env.sh,设置JAVA_HOME:
+
 ```
 # The java implementation to use.  Required.
 export JAVA_HOME=/opt/jdk1.8.0_131
 ```
-* (b)修改core-site.xml,设置hadoop.tmp.dir,dfs.name.dir,fs.default.name:
+
++ (b)修改core-site.xml,设置hadoop.tmp.dir,dfs.name.dir,fs.default.name:
+
 ```
 <configuration>
   <property>
@@ -68,7 +67,9 @@ export JAVA_HOME=/opt/jdk1.8.0_131
   </property>
 </configuration>
 ```
-* (c)修改mapred-site.xml,设置mapred.job.tracker:
+
++ (c)修改mapred-site.xml,设置mapred.job.tracker:
+
 ```
 <configuration>
   <property>
@@ -77,7 +78,9 @@ export JAVA_HOME=/opt/jdk1.8.0_131
   </property>
 </configuration>
 ```
-* (d)修改hdfs-site.xml,设置dfs.data.dir:
+
++ (d)修改hdfs-site.xml,设置dfs.data.dir:
+
 ```
 <configuration>
   <property>
@@ -144,3 +147,56 @@ $ jps
 21659 NameNode
 23436 SecondaryNameNode
 ```
+
+### HDFS简介
+#### HDFS基本概念
+##### HDFS设计架构
+![Alt text](/uploads/hdfs_block_namenode_datanode.png)
++ 块（Block）：
+    * HDFS的文件被分成块进行存储
+    * HDFS块的默认大小为64MB
+    * 块是文件存储处理的逻辑单元
++ 管理节点（NameNode），存放文件元数据：
+    * 文件与数据块的映射表
+    * 数据块与数据节点的映射表
++ DataNode：
+    * DataNode是HDFS的工作节点
+    * 存放数据块
+    
+#### 数据管理策略与容错
++ 数据块副本：每个数据块至少3个副本，分布在两个机架内的多个节点
++ 心跳检测：DataNode定期向NameNode发送心跳消息
+![Alt text](/uploads/beat_information.png)
++ 二级NameNode：二级NameNode定期同步元数据映像文件和修改日志，NameNode发生故障时，二级NameNode替换为主NameNode
+![Alt text](/uploads/secondary_namenode.png)
+
+#### HDFS中文件的读写操作
+##### HDFS读取文件的流程
+![Alt text](/uploads/hdfs_readfile.png)
+##### HDFS写入文件的流程
+![Alt text](/uploads/hdfs_writefile.png)
+
+#### HDFS的特点
++ 数据冗余，硬件容错
++ 流式的数据访问（一次写入、多次读取）
++ 适合存储大文件
++ 适用性和局限性
+    * 适合数据批量读写，吞吐量高
+    * 不适合交互式应用，低延迟很难满足
+    * 适合一次写入多次读取，顺序读写
+    * 不支持多用户并发写相同文件
+
+#### HDFS使用
+HDFS命令行操作：
+```
+hadoop fs -ls dirpath           // 列出某目录下的文件和目录
+hadoop fs -mkdir dirname        // 在HDFS中新建目录
+hadoop fs -put filepath dirpath // 将本地文件上传到HDFS
+hadoop fs -get filepath dirpath // 从HDFS下载文件到本地
+hadoop fs -cat filepath         // 查看文件内容
+hadoop dfsadmin -report         // 查看HDFS信息
+```
+
+### MapReduce简介
+#### MapReduce的原理
+#### MapReduce的运行流程
