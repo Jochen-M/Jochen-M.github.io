@@ -91,15 +91,6 @@ UserSchema.statics = {
 module.exports = UserSchema
 ```
 
-models/user.js:
-```
-let mongoose = require('mongoose');
-let UserSchema = require('../schemas/user');
-let User = mongoose.model('User', UserSchema);
-
-module.exports = User
-```
-
 #### 登录注册前端视图
 
 修改head.jade文件：
@@ -228,13 +219,6 @@ app.use(session({
     collection: 'sessions'
   })
 }));
-```
-
-测试：在 app.js 中 app.get('/',function(req,res){})加入测试代码：
-
-```
-console.log("user in session: ");
-console.log(req.session.user);
 ```
 
 #### 注销用户、用户退出功能实现
@@ -478,3 +462,125 @@ app.get('/admin/movie/update/:id', User.signinRequired, User.adminRequired, Movi
 app.get('/admin/movie/list', User.signinRequired, User.adminRequired, Movie.list);
 app.delete('/admin/movie/delete', User.signinRequired, User.adminRequired, Movie.delete);
 ```
+
+### 开发评论功能
+#### 设计评论的数据模型
+schemas/comment.js:
+```
+let mongoose = require('mongoose');
+let Schema = mongoose.Schema;
+let ObjectId = Schema.Types.ObjectId;
+
+let CommentSchema = new mongoose.Schema({
+  movie: {
+    type: ObjectId, 
+    ref: 'Movie'
+  },
+  from: {
+    type: ObjectId,
+    ref: 'User'
+  },
+  content: String,
+  meta: {
+    createAt: {
+      type: Date,
+      default: Date.now() 
+    },
+    updateAt: {
+      type: Date,
+      default: Date.now()
+    }
+  }
+});
+
+CommentSchema.pre('save', function(next){
+  if(this.isNew){
+    this.meta.createAt = this.meta.updateAt = Date.now();
+  }else{
+    this.meta.updateAt = Date.now();
+  }
+  next();
+});
+
+CommentSchema.statics = {
+  fetch: function(callback){
+    return this
+      .find({})
+      .sort('meta.updateAt')
+      .exec(callback);
+  },
+  findById: function(id, callback){
+    return this
+      .findOne({_id: id})
+      .exec(callback);
+  }
+};
+
+module.exports = CommentSchema
+```
+
+#### 评论的存储与展现
+在detail.jade中添加评论区：
+```
+.panel.panel-default
+  .panel-heading
+    h3 评论区
+  .panel-body
+    ul.media-list
+  if comments
+    each item in comments
+      li(style="list-style-type:none").media
+        .pull-left
+          img.media-object(src="/images/avatar.jpg", style="width: 48px; height: 48px;")
+        .media-body
+          h4.media-heading #{item.from.name}
+          p #{item.content}
+  form(method="post", action="/user/comment")
+    input(type="hidden", name="comment[movie]", value="#{movie._id}")
+    input(type="hidden", name="comment[from]", value="#{user._id}")
+    .form-group
+      textarea.form-group(name="comment[content]", row="3")
+    button.btn.btn-primary(type="submit") 提交
+```
+
+添加路由：
+```
+app.post('/user/comment', User.signinRequired, Comment.save);
+```
+
+评论存储，新建models/comment.js：
+```
+let Comment = require('../models/comment');
+
+exports.save = function(req, res){
+  let _comment = req.body.comment;
+  let movieId = _comment.movie;
+  let comment = new Comment(_comment);
+  comment.save(function(err, comment){
+    if(err){
+      console.log(err);
+    }
+    res.redirect('/movie/' + movieId);    // 评论后返回当前电影
+  });
+};
+```
+
+为了展示评论，需要对controllers/movie.js稍作修改：
+```
+exports.detail = function(req, res){
+  let id = req.params.id;
+  Movie.findById(id, function(err, movie){
+    Comment
+    .find({movie: id})
+    .populate('from', 'name')       // 连表查询from的name字段，即评论人的名字
+    .exec(function(err, comments){
+      res.render('detail', {
+        title: "" + movie.title,
+        movie: movie,
+        comments: comments
+      });
+    });
+  });
+};
+```
+
