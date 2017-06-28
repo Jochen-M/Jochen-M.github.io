@@ -463,8 +463,9 @@ app.get('/admin/movie/list', User.signinRequired, User.adminRequired, Movie.list
 app.delete('/admin/movie/delete', User.signinRequired, User.adminRequired, Movie.delete);
 ```
 
-### 开发评论功能
-#### 设计评论的数据模型
+### 开发评论和回复功能
+*注*：只有登陆的用户才能发表评论和回复
+#### 设计评论和回复的数据模型
 schemas/comment.js:
 ```
 let mongoose = require('mongoose');
@@ -480,6 +481,17 @@ let CommentSchema = new mongoose.Schema({
     type: ObjectId,
     ref: 'User'
   },
+  reply: [{
+    from: {
+      type: ObjectId,
+      ref: 'User'
+    },
+    to: {
+      type: ObjectId,
+      ref: 'User'
+    },
+    content: String
+  }]，
   content: String,
   meta: {
     createAt: {
@@ -519,8 +531,8 @@ CommentSchema.statics = {
 module.exports = CommentSchema
 ```
 
-#### 评论的存储与展现
-在detail.jade中添加评论区：
+#### 评论及回复的存储与展现
+在detail.jade中添加评论区和回复区：
 ```
 .panel.panel-default
   .panel-heading
@@ -531,16 +543,37 @@ module.exports = CommentSchema
     each item in comments
       li(style="list-style-type:none").media
         .pull-left
-          img.media-object(src="/images/avatar.jpg", style="width: 48px; height: 48px;")
+          a.comment(href="#comment", data-cid="#{item._id}", data-tid="#{item.from._id}")
+            img.media-object(src="/images/avatar.jpg", style="width: 48px; height: 48px;")
         .media-body
           h4.media-heading #{item.from.name}
           p #{item.content}
-  form(method="post", action="/user/comment")
-    input(type="hidden", name="comment[movie]", value="#{movie._id}")
-    input(type="hidden", name="comment[from]", value="#{user._id}")
-    .form-group
-      textarea.form-group(name="comment[content]", row="3")
-    button.btn.btn-primary(type="submit") 提交
+          //- 回复部分
+          if item.reply && item.reply.length > 0
+            each reply in item.reply
+              .media
+                .pull-left
+                  a.comment(href="#comment", data-cid="#{item._id}", data-tid="#{reply.from._id}")
+                    img.media-object(src="/images/avatar.jpg", style="width: 48px; height: 48px;")
+                .media-body
+                  h4.media-heading 
+                    | #{reply.from.name}
+                    span.text-info &nbsp;回复&nbsp;
+                    | #{reply.to.name}
+                  p #{reply.content}
+            //- 回复部分结束
+  #comment
+    form#commentForm(method="post", action="/user/comment")
+      input(type="hidden", name="comment[movie]", value="#{movie._id}")
+      if user
+        input(type="hidden", name="comment[from]", value="#{user._id}")
+      .form-group
+        textarea.form-group(name="comment[content]", row="3")
+      if user
+        button.btn.btn-primary(type='submit') 提交
+      else
+        a.navbar-link(href="#", data-toggle="modal", data-target="#signinModal") 登录后评论
+  script(src="/js/detail.js")
 ```
 
 添加路由：
@@ -552,20 +585,73 @@ app.post('/user/comment', User.signinRequired, Comment.save);
 ```
 let Comment = require('../models/comment');
 
+// Routes for comment
 exports.save = function(req, res){
   let _comment = req.body.comment;
   let movieId = _comment.movie;
-  let comment = new Comment(_comment);
-  comment.save(function(err, comment){
-    if(err){
-      console.log(err);
-    }
-    res.redirect('/movie/' + movieId);    // 评论后返回当前电影
-  });
+
+  if(_comment.cid){
+    Comment.findById(_comment.cid, function(err, comment){
+      let reply = {
+        from: _comment.from,
+        to: _comment.tid,
+        content: _comment.content
+      };
+      comment.reply.push(reply);
+      comment.save(function(err, comment){
+        if(err){
+          console.log(err);
+        }
+        res.redirect('/movie/' + movieId);
+      });
+    });
+  }else{
+    let comment = new Comment(_comment);
+    comment.save(function(err, comment){
+      if(err){
+        console.log(err);
+      }
+      res.redirect('/movie/' + movieId);  // 评论后返回当前电影
+    });
+  }
 };
 ```
 
-为了展示评论，需要对controllers/movie.js稍作修改：
+为头像增加点击事件：
+public/js/detail.js:
+```
+$(function(){
+  $('.comment').click(function(e){
+    let target = $(this);
+    let toId = target.data('tid');
+    let commentId = target.data('cid');
+
+    if($("#toId").length > 0){
+      $("#toId").val(toId);
+    }else{
+      $('<input>').attr({
+        type: 'hidden',
+        id: 'toId',
+        name: 'comment[tid]',
+        value: toId
+      }).appendTo('#commentForm');
+    }
+
+    if($("#commentId").length > 0){
+      $("#commentId").val(commentId);
+    }else{
+      $('<input>').attr({
+        type: 'hidden',
+        id: 'commentId',
+        name: 'comment[cid]',
+        value: commentId
+      }).appendTo('#commentForm');
+    }
+  });
+});
+```
+
+为了展示评论和回复，需要对controllers/movie.js稍作修改：
 ```
 exports.detail = function(req, res){
   let id = req.params.id;
@@ -573,6 +659,7 @@ exports.detail = function(req, res){
     Comment
     .find({movie: id})
     .populate('from', 'name')       // 连表查询from的name字段，即评论人的名字
+    .populate('reply.from reply.to', 'name')  // 连表查询reply.from和reply.to的name字段，即回复人的名字和被回复人的名字
     .exec(function(err, comments){
       res.render('detail', {
         title: "" + movie.title,
@@ -583,4 +670,3 @@ exports.detail = function(req, res){
   });
 };
 ```
-
