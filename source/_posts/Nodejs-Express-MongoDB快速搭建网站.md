@@ -105,10 +105,29 @@ MovieGoGo/
 
 head.jade:
 ```
-.container
-  .row
-    .page-header
-      h1 #{title}
+.navbar.navbar-default.navbar-inverse
+  .container
+    navbar-header
+      a.navbar-brand(href="/") MovieGoGo
+      ul.nav.navbar-nav
+        li.dropdown
+          a(href="#", class="dropdown-toggle", data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false") Movie 
+            span.caret
+          ul.dropdown-menu
+            li: a(href="/admin/movie/new") New
+            li: a(href="/admin/movie/list") List
+        li.dropdown
+          a(href="#", class="dropdown-toggle", data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false") Category 
+            span.caret
+          ul.dropdown-menu
+            li: a(href="/admin/category/new") New
+            li: a(href="/admin/category/list") List
+        li.dropdown
+          a(href="#", class="dropdown-toggle", data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false") User 
+            span.caret
+          ul.dropdown-menu
+            li: a(href="/signup") New
+            li: a(href="/admin/user/list") List
 ```
 
 header.jade

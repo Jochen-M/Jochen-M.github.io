@@ -7,16 +7,17 @@ categories:
     - 大数据
 ---
 
-### What Is Apache Hadoop?
-The Apache™ Hadoop® project develops open-source software for reliable, scalable, distributed computing.The Apache Hadoop software library is a framework that allows for the distributed processing of large data sets across clusters of computers using simple programming models. It is designed to scale up from single servers to thousands of machines, each offering local computation and storage. Rather than rely on hardware to deliver high-availability, the library itself is designed to detect and handle failures at the application layer, so delivering a highly-available service on top of a cluster of computers, each of which may be prone to failures.
+### 什么是Apache Hadoop？
+#### 定义和特性
++ 可靠的、可扩展的、分布式计算开源软件。
++ Apache Hadoop软件库是一个框架，允许使用简单的编程模型，在计算机集群分布式地处理大型数据集。
++ 它可以从单个服务器扩展到数千台机器，每个机器都提供本地计算和存储。
++ 每一台计算机都容易出现故障，库本身的目的是检测和处理应用层的故障，因此在一组计算机上提供高可用性服务，而不是依靠硬件来提供高可用性。
 
-#### The project includes these modules:
-+ *Hadoop Common*: The common utilities that support the other Hadoop modules.
-+ *Hadoop Distributed File System (HDFS™)*: A distributed file system that provides high-throughput access to application data.
-+ *Hadoop YARN*: A framework for job scheduling and cluster resource management.
-+ *Hadoop MapReduce*: A YARN-based system for parallel processing of large data sets.
-+ And other Hadoop-related projects at Apache.
-
+#### 主要模块：
++ Hadoop Distributed File System(HDFS): 一个分布式文件系统，它提供对应用程序数据的高吞吐量访问。
++ Hadoop YARN: 作业调度和集群资源管理的框架。
++ Hadoop MapReduce: 基于YARN的大型数据集并行处理系统。
 
 ### Hadoop安装（以hadoop-1.2.1为例）
 #### 准备条件

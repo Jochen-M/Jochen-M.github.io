@@ -504,31 +504,6 @@ let CommentSchema = new mongoose.Schema({
     }
   }
 });
-
-CommentSchema.pre('save', function(next){
-  if(this.isNew){
-    this.meta.createAt = this.meta.updateAt = Date.now();
-  }else{
-    this.meta.updateAt = Date.now();
-  }
-  next();
-});
-
-CommentSchema.statics = {
-  fetch: function(callback){
-    return this
-      .find({})
-      .sort('meta.updateAt')
-      .exec(callback);
-  },
-  findById: function(id, callback){
-    return this
-      .findOne({_id: id})
-      .exec(callback);
-  }
-};
-
-module.exports = CommentSchema
 ```
 
 #### 评论及回复的存储与展现
@@ -670,3 +645,78 @@ exports.detail = function(req, res){
   });
 };
 ```
+
+### 电影分类功能的实现
+#### 分类的数据模型 schemas/category.js:
+```
+let CategorySchema = new mongoose.Schema({
+  name: String,
+  movies: [{
+    type: ObjectId,
+    ref: 'Movie'
+  }],
+  meta: {
+    createAt: {
+      type: Date,
+      default: Date.now() 
+    },
+    updateAt: {
+      type: Date,
+      default: Date.now()
+    }
+  }
+});
+```
+
+#### 分类后台录入及存储
+增加路由信息routes.js：
+```
+let Category = require('../app/controllers/category');
+
+// Category
+app.post('/admin/category/save', User.signinRequired, User.adminRequired, Category.save);
+app.get('/admin/category/new', User.signinRequired, User.adminRequired, Category.new);
+app.get('/admin/category/list', User.signinRequired, User.adminRequired, Category.list);
+```
+
+分类的控制器 controllers/category.js:
+```
+let Category = require('../models/category');
+
+// Routes for category
+exports.new = function(req, res){
+  res.render('admin_category', {
+    title: '后台分类录入页',
+    category: {}
+  });
+};
+
+exports.save = function(req, res){
+  let _catetory = req.body.catetory;
+  let category = new Caterory(__category);
+
+  category.save(function(err){
+    if(err){
+      console.log(err);
+    }
+
+    res.redirect('/admin/category/list');
+  });
+};
+
+exports.list = function(req, res){
+  Category.fetch(function(err, categories){
+    if(err){
+      console.log(err);
+    }
+
+    res.render('catetorylist', {
+      title: '分类列表页',
+      categories: categories
+    });
+  })
+};
+```
+
+增加相关页面 admin_category.jade、categorylist.jade。（类似于admin.jade、list.jade，略）
+
