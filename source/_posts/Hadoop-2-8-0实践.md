@@ -162,9 +162,30 @@ $ sbin/start-yarn.sh
 ##### 浏览ResourceManager web界面;默认情况下：
 http://localhost:8088/
 
-##### 运行MapReduce作业：
+##### 运行MapReduce作业
 
 ##### 完成后，停止守护进程：
 ```
 $ sbin/stop-yarn.sh
 ```
+
+### HDFS - Hadoop 分布式文件系统
+
+### MapReduce - Map & Reduce
+
+### YARN - Hadoop 资源管理器
++ YARN的基本思想是将资源管理和作业调度/监控的功能拆分到不同的守护进程。这种思想需要有一个全局的资源管理器（RM）和（每个应用程序都要有的）应用程序管理器（AM）。
++ 资源管理器（RM）和节点管理器（NodeManager）形成了数据计算框架。资源管理器（RM）是在系统中所有应用程序间仲裁资源的最终权威。节点管理器（NodeManager）是每台机器的框架代理，负责容器的管理，监控他们的资源使用情况(cpu、内存、磁盘、网络)，并向资源管理器（RM）/调度器报告该情况。
++ 每个应用程序的应用程序管理器（AM）实际上是一个特定的框架的库，它的任务是与资源管理器（RM）协商资源，并与节点管理器（NodeManager）一起工作来执行和监视任务。
++ 资源管理器（RM）有两个主要组件:调度程序和应用程序管理器（AM）。
+    * 调度程序负责将资源分配给各种运行的应用程序。调度程序是纯粹的调度器，因为它不执行应用程序的状态监视或跟踪。另外，它也不能保证重新启动失败的任务，无论是由于应用程序失败还是硬件故障。
+    * 应用程序管理器（AM）负责接收提交的工作，协商执行应用程序的第一个容器，并并提供在失败时重新启动应用程序管理器(AM)容器的服务。每个应用程序管理器(AM)负责从调度程序中协商适当的资源容器，跟踪它们的状态并监视进程。
++ YARN 还支持资源预定的概念，保留资源以确保重要工作的可预见性执行。预订系统会对资源进行跟踪，对预订进行控制，并动态地指导底层的调度程序，以确保预订是满的。
+
+![Alt text](/uploads/hadoop_yarn.png)
+
+> 推荐：
+> Apache Hadoop: http://hadoop.apache.org/
+> Hadoop Commands Guide: http://hadoop.apache.org/docs/r2.8.0/hadoop-project-dist/hadoop-common/CommandsManual.html
+> Apache Hadoop Main 3.0.0-alpha3 API: http://hadoop.apache.org/docs/current/api/
+> 我的另一篇博文： [《Hadoop大数据平台架构与实践》](https://jochen-m.github.io/2017/05/19/Hadoop%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%B9%B3%E5%8F%B0%E6%9E%B6%E6%9E%84%E4%B8%8E%E5%AE%9E%E8%B7%B5/)
