@@ -692,8 +692,8 @@ exports.new = function(req, res){
 };
 
 exports.save = function(req, res){
-  let _catetory = req.body.catetory;
-  let category = new Caterory(__category);
+  let _category = req.body.category;
+  let category = new Caterory(_category);
 
   category.save(function(err){
     if(err){
