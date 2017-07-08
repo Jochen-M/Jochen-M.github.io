@@ -222,6 +222,7 @@ sbin/start-yarn.sh
 
 #### 查看各个节点启动的进程
 + 通过jps命令可以查看各个节点启动的进程
+
 master节点:
 ![Alt text](/uploads/jps_master.png)
 slave1节点:
