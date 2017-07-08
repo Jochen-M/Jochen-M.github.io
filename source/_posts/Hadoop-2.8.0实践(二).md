@@ -222,8 +222,9 @@ sbin/start-yarn.sh
 
 #### 查看各个节点启动的进程
 + 通过jps命令可以查看各个节点启动的进程
-
+master节点:
 ![Alt text](/uploads/jps_master.png)
+slave1节点:
 ![Alt text](/uploads/jps_slave1.png)
 
 + 在master节点通过命令<code>bin/hdfs dfsadmin -report</code>可以查看DataNode是否正常启动。
