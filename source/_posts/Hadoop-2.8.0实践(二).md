@@ -81,9 +81,9 @@ cat /home/hadoop/id_rsa.pub >> ~/.ssh/authorized_keys
 现在，我们就可以在A中使用SSH无密登陆到B的hadoop用户了，同理如果想无密登陆其它的主机都可以使用此方法。需要注意的是配置hadoop集群时需要Master和Slave可以互相SSH无密登陆。
 
 ### 网络配置
-##### 我使用了三台主机搭建集群，选定master后，在该主机的/etc/hostname中，修改机器名为master，将其他主机命名为slave1、slave2等。
+我使用了三台主机搭建集群，选定master后，在该主机的/etc/hostname中，修改机器名为master，将其他主机命名为slave1、slave2等。
 
-##### 接着将"主机名与IP地址对应信息"写入/etc/hosts文件中：
+接着将"主机名与IP地址对应信息"写入/etc/hosts文件中：
 
 ```
 127.0.0.1 localhost
@@ -94,17 +94,16 @@ cat /home/hadoop/id_rsa.pub >> ~/.ssh/authorized_keys
 ```
 注：各台主机（包括Master和Slave）都要进行相应的配置。
 
-##### 配置好之后，在各个主机上执行ping master和ping slave1测试，验证是否相互ping得通。
+配置好之后，在各个主机上执行ping master和ping slave1测试，验证是否相互ping得通。
 
 ![Alt text](/uploads/ping_master.png)
 （说明:这里我将slave主机命名为node1、node2，只要前后对应即可。）
 
 ### 安装Hadoop
-#### 下载 Hadoop 2.8.0
-下载地址：http://mirror.bit.edu.cn/apache/hadoop/common/hadoop-2.8.0/
-选择下载 hadoop-2.8.0.tar.gz。
+下载地址：http://mirror.bit.edu.cn/apache/hadoop/common/
 
-#### 将下载的压缩文件解压至/home/hadoop/目录
++ 选择下载 hadoop-2.8.0.tar.gz
++ 将下载的压缩文件解压至/home/hadoop/目录
 
 ### 配置集群/分布式环境
 集群/分布式模式需要修改/home/hadoop/hadoop-2.8.0/etc/hadoop/下的5个配置文件。
@@ -232,6 +231,8 @@ sbin/start-yarn.sh
 ![Alt text](/uploads/report_master.png)
 
 + 也可以通过Web页面查看集群的信息 http://master:50070/
+
+![Alt text](/uploads/web_cluster.png)
 
 #### 关闭集群
 在master节点执行：
