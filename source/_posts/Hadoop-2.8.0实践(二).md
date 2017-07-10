@@ -3,8 +3,9 @@ title: Hadoop-2.8.0实践——搭建Hadoop集群
 date: 2017-07-05 21:59:37
 tags:
     - Hadoop
-categories:
     - 大数据
+categories:
+    - Hadoop
 ---
 
 在本地测试hadoop成功后，我们在多台主机上搭建hadoop集群，用于处理大规模数据...
