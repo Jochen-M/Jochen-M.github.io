@@ -9,8 +9,6 @@ categories:
     - Nodejs
 ---
 
-> 注：承接[《Nodejs + Express + MongoDB快速搭建网站》](https://jochen-m.github.io/2017/05/26/Nodejs-Express-MongoDB快速搭建网站/)
-
 ### 开发用户的注册登录功能
 
 #### 用户模型及密码处理
@@ -30,7 +28,7 @@ let UserSchema = new mongoose.Schema({
   meta: {
     createAt: {
       type: Date,
-      default: Date.now() 
+      default: Date.now()
     },
     updateAt: {
       type: Date,
@@ -50,7 +48,7 @@ UserSchema.pre('save', function(next){
   // 将密码与盐混合后加密处理
   bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt){
     if(err) return next(err);
-    
+
     bcrypt.hash(user.password, salt, function(err, hash){
       if(err) return next(err);
 
@@ -185,7 +183,7 @@ app.post('/user/signin', function(req, res){
       return res.redirect('/');
     }
 
-    let user = new User(_user); 
+    let user = new User(_user);
     user.verifyPassword(password, function(err, isMatch){
       if(err){
         console.log(err);
@@ -250,7 +248,7 @@ app.use(function(req, res, next){
     if(_user){
         app.locals.user = _user;
     }
-    
+
     return next();
 });
 
@@ -474,7 +472,7 @@ let ObjectId = Schema.Types.ObjectId;
 
 let CommentSchema = new mongoose.Schema({
   movie: {
-    type: ObjectId, 
+    type: ObjectId,
     ref: 'Movie'
   },
   from: {
@@ -496,7 +494,7 @@ let CommentSchema = new mongoose.Schema({
   meta: {
     createAt: {
       type: Date,
-      default: Date.now() 
+      default: Date.now()
     },
     updateAt: {
       type: Date,
@@ -531,7 +529,7 @@ let CommentSchema = new mongoose.Schema({
                   a.comment(href="#comment", data-cid="#{item._id}", data-tid="#{reply.from._id}")
                     img.media-object(src="/images/avatar.jpg", style="width: 48px; height: 48px;")
                 .media-body
-                  h4.media-heading 
+                  h4.media-heading
                     | #{reply.from.name}
                     span.text-info &nbsp;回复&nbsp;
                     | #{reply.to.name}
@@ -660,7 +658,7 @@ let CategorySchema = new mongoose.Schema({
   meta: {
     createAt: {
       type: Date,
-      default: Date.now() 
+      default: Date.now()
     },
     updateAt: {
       type: Date,
@@ -682,7 +680,7 @@ app.get('/admin/category/new', User.signinRequired, User.adminRequired, Category
 app.get('/admin/category/list', User.signinRequired, User.adminRequired, Category.list);
 ```
 
-##### 分类的控制器 
+##### 分类的控制器
 controllers/category.js:
 ```
 let Category = require('../models/category');
@@ -739,7 +737,7 @@ category: {
 ```
 
 ##### 增加“电影分类”表单项
-修改admin.jade： 
+修改admin.jade：
 ```
 .form-group
   label.col-sm-2.control-label(for="inputCategory") 电影分类
@@ -926,3 +924,128 @@ exports.save = function(req, res){
   }
 };
 ```
+
+#### 增加分类列表及分页
+修改index.jade,为分类标题增加链接：
+```
+h3
+  a(href="/category/search?catId=#{cat._id}&page=1") #{cat.name}
+```
+
+增加路由：
+```
+app.get('/category/search', Category.search);
+```
+
+增加后台逻辑处理：
+```
+exports.search = function(req, res){
+	let catId = req.query.catId;
+	let page = parseInt(req.query.page, 10) || 0;
+	let perPage = 5;
+	let index = (page - 1) * perPage;
+
+	Category
+		.find({_id: catId})
+		.populate({
+			path: 'movies',
+			select: 'title poster'
+		})
+		.exec(function(err, categories){
+			if(err){
+				console.log(err);
+			}
+			let category = categories[0] || {};
+			let movies = category.movies || [];
+			let results = movies.slice(index, index + perPage);
+
+			res.render('results', {
+				title: '分类',
+				query: 'catId=' + catId,
+				keyword: category.name,
+				currentPage: page,
+				totalPage: Math.ceil(movies.length / perPage),
+				movies: results
+			});
+		});
+};
+```
+
+展示页面results.jade：
+```
+extends ../layout
+
+block content
+	.container
+		.row
+			.panel.panel-default
+				.panel-heading
+					h3
+						if query
+							a(href="/category/search?#{query}&page=1") #{keyword}
+						else
+							a(href="/movie/search?keyword=#{keyword}&page=1") #{keyword}
+				.panel-body
+					if movies && movies.length > 0
+						for item in movies
+							.col-md-2
+								.thumbnail
+									a(href="/movie/#{item._id}")
+										img(src="#{item.poster}", alt="#{item.title}")
+									.caption
+										h3 #{item.title}
+										p: a.btn.btn-primary(href="/movie/#{item._id}", role="button") 观看预告片
+			ul.pagination.col-md-6.col-md-offset-3
+				- for(let i = 0; i < totalPage; i++){
+					- if(currentPage == (i + 1)){
+						li.active
+							span #{currentPage}
+					- }else{
+						li
+							if query
+								a(href='/category/search?#{query}&page=#{i + 1}') #{i + 1}
+							else
+								a(href='/movie/search?keyword=#{keyword}&page=#{i + 1}') #{i + 1}
+					- }
+				- }
+```
+
+#### 搜索功能的实现
+增加搜索框head.jade:
+```
+form.navbar-form.navbar-left(method="get", action="/movie/search")
+  .form-group
+    input.form-control(type="text", placeholder="Search", name="keyword")
+    button.btn.btn-default(type="submit") Submit
+```
+
+增加路由：
+```
+// 应放在 app.get('/movie/:id', Movie.detail) 之前，否则会有冲突
+app.get('/movie/search', Movie.search);   
+```
+
+增加后台逻辑处理：
+```
+exports.search = function(req, res){
+	let keyword = req.query.keyword;
+	let page = parseInt(req.query.page) || 1;
+	let perPage = 5;
+	Movie
+		.find({title: new RegExp('.*' + keyword + '.*')}, function(err, movies){
+			if(err){
+				console.log(err);
+			}
+			res.render('results', {
+				title: '分类',
+				keyword: keyword,
+				currentPage: page,
+				totalPage: Math.ceil(movies.length / perPage),
+				movies: movies
+			})
+		})
+};
+```
+
+
+> [《Nodejs + Express + MongoDB快速搭建网站》](https://jochen-m.github.io/2017/05/26/Nodejs-Express-MongoDB快速搭建网站/)
