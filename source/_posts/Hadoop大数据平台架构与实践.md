@@ -3,9 +3,9 @@ title: Hadoop大数据平台架构与实践
 date: 2017-05-19 22:06:37
 tags:
     - Hadoop
-    - 大数据
+    - Java
 categories:
-    - Hadoop
+    - 大数据
 ---
 
 ### 什么是Apache Hadoop？

@@ -3,9 +3,9 @@ title: Hadoop-2.8.0实践——搭建Hadoop集群
 date: 2017-07-05 21:59:37
 tags:
     - Hadoop
-    - 大数据
+    - Java
 categories:
-    - Hadoop
+    - 大数据
 ---
 
 在本地测试hadoop成功后，我们在多台主机上搭建hadoop集群，用于处理大规模数据...
@@ -242,6 +242,139 @@ slave1节点:
 ```
 sbin/stop-dfs.sh
 sbin/stop-yarn.sh
+# 或者
+sbin/stop-all.sh
+```
+
+### 示例：运行 WordCount
+#### 上传文件到 HDFS
+在本地新建一个文件 words.txt，写入将要分析的内容，如：
+
+```
+When You Are Old
+When you are old and grey and full of sleep
+And nodding by the fire take down this book
+And slowly read and dream of the soft look 
+Your eyes had once and of their shadows deep
+How many loved your moments of glad grace
+And loved your beauty with love false or true
+But one man loved the pilgrim soul in you
+And loved the sorrows of your changing face
+And bending down beside the glowing bars
+Murmur a little sadly how Love fled 
+And paced upon the mountains overhead 
+And hid his face amid a crowd of stars
+```
+
+然后在分布式文件系统中新建一个文件夹/wordcount/input/，用于上传测试文件words.txt:
+
+```
+# 在 hdfs 新建文件夹
+bin/hdfs dfs -mkdir /wordcount
+bin/hdfs dfs -mkdir /wordcount/input
+
+# 上传文件
+bin/hdfs dfs -put words.txt /wordcount/input/
+
+# 查看
+bin/hdfs dfs -ls /wordcount/input
+```
+
+#### 编写 WordCount 程序
+```
+import java.io.IOException;
+import java.util.StringTokenizer;
+
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Job;
+import org.apache.hadoop.mapreduce.Mapper;
+import org.apache.hadoop.mapreduce.Reducer;
+import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+
+public class MyWordCount {
+    public static class MyTokenizerMapper
+        extends Mapper<Object, Text, Text, IntWritable>{
+        private final static IntWritable one = new IntWritable(1);
+        private Text word = new Text();
+
+        /**
+         * 将句子分解成单词，并将<word, 1>写入context
+         * @param key
+         * @param value
+         * @param context
+         * @throws IOException
+         * @throws InterruptedException
+         */
+        public void map(Object key, Text value, Context context)
+                throws IOException, InterruptedException{
+            StringTokenizer itr = new StringTokenizer(value.toString());
+            while(itr.hasMoreTokens()){
+                word.set(itr.nextToken());
+                context.write(word, one);
+            }
+        }
+    }
+
+    public static class MyIntSumReducer
+        extends Reducer<Text, IntWritable, Text, IntWritable>{
+        private IntWritable result = new IntWritable();
+
+        /**
+         * 累计求和，结果写入context
+         * @param key
+         * @param values 一个 key 对应一组 value
+         * @param context
+         * @throws IOException
+         * @throws InterruptedException
+         */
+        public void reduce(Text key, Iterable<IntWritable> values,
+                           Context context)
+            throws IOException, InterruptedException{
+            int sum = 0;
+            for(IntWritable val : values){
+                sum += val.get();
+            }
+            result.set(sum);
+            context.write(key, result);
+        }
+    }
+
+    public static void main(String[] args) throws Exception{
+        Configuration conf = new Configuration();                   // 加载配置信息
+        Job job = Job.getInstance(conf, "my word count");           // 新建job
+        job.setJarByClass(MyWordCount.class);                       // 设置Jar
+        job.setMapperClass(MyTokenizerMapper.class);                // 设置Mapper
+        job.setCombinerClass(MyIntSumReducer.class);                // 设置Combiner
+        job.setReducerClass(MyIntSumReducer.class);                 // 设置Reducer
+        job.setOutputKeyClass(Text.class);                          // 设置输出的key
+        job.setOutputValueClass(IntWritable.class);                 // 设置输出的value
+        FileInputFormat.addInputPath(job, new Path(args[0]));       // 设置输入路径
+        FileOutputFormat.setOutputPath(job, new Path(args[1]));     // 设置输出路径
+        System.exit(job.waitForCompletion(true) ? 0 : 1);           // 执行job
+    }
+}
+```
+
+#### 打包并提交任务
+```
+# 环境变量配置:（/etc/profile 或 ~/.bashrc）
+export JAVA_HOME=/usr/java/default
+export PATH=${JAVA_HOME}/bin:${PATH}
+export HADOOP_CLASSPATH=${JAVA_HOME}/lib/tools.jar
+
+# 编译并打包成jar:
+bin/hadoop com.sun.tools.javac.Main WordCount.java
+jar cf wc.jar WordCount*.class
+
+# 提交任务（在hadoop根目录下执行）
+bin/hadoop jar wc.jar WordCount /wordcount/input /wordcount/output
+
+# 查看运行结果：
+bin/hadoop fs -cat /wordcount/output/part-r-00000
 ```
 
 > 推荐：

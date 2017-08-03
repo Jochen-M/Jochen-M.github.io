@@ -3,9 +3,9 @@ title: Hadoop-2.8.0实践——单机模式和伪分布模式
 date: 2017-06-28 19:29:29
 tags:
     - Hadoop
-    - 大数据
+    - Java
 categories:
-    - Hadoop
+    - 大数据
 ---
 
 ### 安装

@@ -507,7 +507,7 @@ let CommentSchema = new mongoose.Schema({
 ```
 
 #### 评论及回复的存储与展现
-在detail.jade中添加评论区和回复区：
+#####　在detail.jade中添加评论区和回复区：
 ```
 .panel.panel-default
   .panel-heading
@@ -551,12 +551,12 @@ let CommentSchema = new mongoose.Schema({
   script(src="/js/detail.js")
 ```
 
-添加路由：
+#####　添加路由：
 ```
 app.post('/user/comment', User.signinRequired, Comment.save);
 ```
 
-评论存储，新建models/comment.js：
+#####　评论存储，新建models/comment.js：
 ```
 let Comment = require('../models/comment');
 
@@ -592,7 +592,7 @@ exports.save = function(req, res){
 };
 ```
 
-为头像增加点击事件：
+#####　为头像增加点击事件：
 public/js/detail.js:
 ```
 $(function(){
@@ -626,7 +626,8 @@ $(function(){
 });
 ```
 
-为了展示评论和回复，需要对controllers/movie.js稍作修改：
+#####　展示评论和回复
+对controllers/movie.js稍作修改：
 ```
 exports.detail = function(req, res){
   let id = req.params.id;
@@ -647,7 +648,8 @@ exports.detail = function(req, res){
 ```
 
 ### 电影分类功能的实现
-#### 分类的数据模型 schemas/category.js:
+#### 分类的数据模型
+schemas/category.js:
 ```
 let CategorySchema = new mongoose.Schema({
   name: String,
@@ -669,7 +671,8 @@ let CategorySchema = new mongoose.Schema({
 ```
 
 #### 分类后台录入及存储
-增加路由信息routes.js：
+##### 增加路由信息
+routes.js：
 ```
 let Category = require('../app/controllers/category');
 
@@ -679,7 +682,8 @@ app.get('/admin/category/new', User.signinRequired, User.adminRequired, Category
 app.get('/admin/category/list', User.signinRequired, User.adminRequired, Category.list);
 ```
 
-分类的控制器 controllers/category.js:
+##### 分类的控制器 
+controllers/category.js:
 ```
 let Category = require('../models/category');
 
@@ -718,5 +722,169 @@ exports.list = function(req, res){
 };
 ```
 
-增加相关页面 admin_category.jade、categorylist.jade。（类似于admin.jade、list.jade，略）
+##### 增加相关页面
+admin_category.jade、categorylist.jade。（类似于admin.jade、list.jade，略）
 
+#### 电影录入增加分类选择
+##### 为电影增加字段
+修改schemas/movie.js
+```
+let Schema = mongoose.Schema;
+let ObjectId = Schema.Types.ObjectId;
+
+category: {
+    type: ObjectId,
+    ref: 'Category'
+  }
+```
+
+##### 增加“电影分类”表单项
+修改admin.jade： 
+```
+.form-group
+  label.col-sm-2.control-label(for="inputCategory") 电影分类
+    .col-sm-8
+      input#inputCategory.form-control(type="text", name="movie[category_new]")
+.form-group
+  label.col-sm-2.control-label(for="radioCategory")
+  each cat in categories
+    label.radio-inline
+      if movie._id
+        input#radioCategory(type="radio", name="movie[category]", value=cat._id, checked=cat._id.toString()==movie.category.toString())
+        | #{cat.name}
+      else
+        input#radioCategory(type="radio", name="movie[category]", value=cat._id)
+        | #{cat.name}
+```
+
+##### 修改movie控制器
+controllers/movie.js：
+```
+exports.new = function(req, res){
+  Category.find({}, function(err, categories){
+    res.render('admin', {
+      title: '后台录入页',
+      categories: categories,
+      movie: {}
+    })
+  });
+};
+
+exports.save = function(req, res){
+  let id = req.body.movie._id;
+  let movieObj = req.body.movie;
+  let _movie;
+
+  if(id){
+    //...
+  }else{
+    _movie = new Movie(movieObj);
+    let categoryId = _movie.category;
+    _movie.save(function(err, movie){
+      if(err){
+        console.log(err);
+      }
+      Category.findById(categoryId, function(err, category){
+        category.movies.push(movie._id);
+        category.save(function(err, category){
+          res.redirect('/admin/movie/list');
+        });
+      })
+    });
+  }
+};
+
+exports.update = function(req, res){
+  let id = req.params.id;
+  if(id){
+    Movie.findById(id, function(err, movie){
+      Category.find({}, function(err, categories){
+        res.render('admin', {
+          title: '后台更新页',
+          movie: movie,
+          categories: categories
+        });
+      });
+    });
+  }
+};
+```
+
+#### 分类效果展示
+##### 首页控制器
+index.js：
+```
+exports.index = function(req, res){
+  Category
+    .find({})
+    .populate({path: 'movies', options: {limit: 5}})
+    .exec(function(err, categories){
+        if(err){
+          console.log(err);
+        }
+        res.render('index', {
+          title: '首页',
+          categories: categories
+        });
+    })
+};
+```
+
+##### 首页视图
+index.jade
+```
+for cat in categories
+  .panel.panel-default
+    .panel-heading
+      h3 #{cat.name}
+    .panel-body
+      if cat.movies && cat.movies.length > 0
+        for item in cat.movies
+        //...
+```
+
+#### jsonp同步豆瓣数据
+admin.jade 增加"豆瓣同步"表单项, 并引入admin.js:
+```
+.form-group
+  label.col-sm-2.control-label(for="inputTitle") 豆瓣同步
+    .col-sm-8
+      input#douban.form-control(type="text")
+
+script(src="/js/admin.js")
+```
+
+编辑admin.js, 通过ajax加载豆瓣数据：
+```
+$(function(){
+  //...
+  $('#douban').blur(function(){
+    let id = $(this).val();   // 电影id
+    $.ajax({
+      url: 'https://api.douban.com/v2/movie/subject/' + id,
+      cache: true,
+      type: 'get',
+      dataType: 'jsonp',
+      crossDomain: true,
+      jspnp: 'callback',
+      success: function(data){
+        $('#inputTitle').val(data.title);
+        $('#inputDirector').val(data.directors[0].name);
+        $('#inputCountry').val(data.countries[0]);
+        $('#inputPoster').val(data.images.large);
+        $('#inputShowAt').val(data.year);
+        $('#inputSummary').val(data.summary);
+      }
+    })
+  });
+}
+```
+
+在豆瓣电影中查找电影id，如：
+```
+https://movie.douban.com/subject/26363254/?from=showing   // id=26363254
+```
+输入表单后，效果如图：
+![Alt Text](/uploads/douban-example.png)
+
+> 豆瓣开发者文档： https://developers.douban.com/wiki/?title=guide
