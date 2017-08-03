@@ -778,8 +778,8 @@ exports.save = function(req, res){
   if(id){
     //...
   }else{
+    let categoryId = movieObj.category;
     _movie = new Movie(movieObj);
-    let categoryId = _movie.category;
     _movie.save(function(err, movie){
       if(err){
         console.log(err);
@@ -888,3 +888,41 @@ https://movie.douban.com/subject/26363254/?from=showing   // id=26363254
 ![Alt Text](/uploads/douban-example.png)
 
 > 豆瓣开发者文档： https://developers.douban.com/wiki/?title=guide
+
+#### 电影录入增加自定义分类
+修改controllers/movie.js:
+```
+exports.save = function(req, res){
+  if(id){
+    //...
+  }else{
+    let categoryId = movieObj.category;
+    let categoryName = movieObj.category_new;
+    _movie = new Movie(movieObj);
+    _movie.save(function(err, movie){
+      if(err){
+        console.log(err);
+      }
+      if(categoryId){ // 已有分类
+        Category.findById(categoryId, function(err, category){
+          category.movies.push(movie._id);
+          category.save(function(err, category){
+            res.redirect('/admin/movie/list');
+          });
+        })
+      }else if(categoryName){ // 新分类
+        let category = new Category({
+          name: categoryName,
+          movies: [movie._id]
+        });
+        category.save(function(err, category){
+          _movie.category = category._id;
+          _movie.save(function(err, movie){ // 注意：movie要保存两次
+            res.redirect('/admin/movie/list');
+          });
+        });
+      }
+    });
+  }
+};
+```
