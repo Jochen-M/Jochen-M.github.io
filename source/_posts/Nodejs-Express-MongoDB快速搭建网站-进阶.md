@@ -1047,5 +1047,89 @@ exports.search = function(req, res){
 };
 ```
 
+#### 上传海报
+增加文件选择表单项
+admin.jade:
+```
+form.form-horizontal(method="post", action="/admin/movie/save", enctype="multipart/form-data")
+  .form-group
+    label.col-sm-2.control-label(for="uploadPoster") 上传海报
+    .col-sm-8
+      input#uploadPoster(type="file", name="uploadPoster")
+```
+
+为系统增加中间件：(cnpm install connect-multiparty --save)
+app.js:
+```
+let multipart = require('connect-multiparty');
+app.use(multipart());
+```
+
+为保存电影增加中间件posterUploaded，以保证图片上传成功（这里最好采用异步方式）:
+```
+app.post('/admin/movie/save', User.signinRequired, User.adminRequired, Movie.posterUploaded, Movie.save);
+```
+
+具体实现，controllers/movie.js:
+```
+exports.posterUploaded = function(req, res, next){
+	let posterData = req.files.uploadPoster;
+	let filePath = posterData.path;
+	let originalFilename = posterData.originalFilename;
+
+	if(originalFilename){
+		fs.readFile(filePath, function(err, data){
+			let timestamp = Date.now();
+			let type = posterData.type.split('/')[1];
+			let newPosterName = timestamp + '.' + type;
+			let newPath = path.join(__dirname, '../../public/images/' + newPosterName);
+
+			fs.writeFile(newPath, data, function(err){
+				req.newPosterName = '/images/' + newPosterName;
+				next();
+			})
+		})
+	}else{
+		next();
+	}
+}
+```
+
+在保存电影之前，判断是否上传了图片，并替换之：
+```
+exports.save = function(req, res){
+	let movieObj = req.body.movie;
+
+	if(req.newPosterName){
+		movieObj.poster = req.newPosterName;
+	}
+  //...
+}
+```
+
+#### 访客统计
+为movie增加字段:
+```
+pv: {
+  type: Number,
+  default: 0
+},
+```
+
+每当访问详情页时，访问量 +1 ：
+```
+exports.detail = function(req, res){
+	let id = req.params.id;
+	Movie.update({_id: id}, {$inc: {pv: 1}}, function(err){
+		if(err){
+			console.log(err);
+		}
+	})
+	// ...
+};
+```
+
+展示：在列表页增加“访客统计”字段，即可。
+
 
 > [《Nodejs + Express + MongoDB快速搭建网站》](https://jochen-m.github.io/2017/05/26/Nodejs-Express-MongoDB快速搭建网站/)
