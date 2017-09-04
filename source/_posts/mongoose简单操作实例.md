@@ -6,7 +6,7 @@ tags:
     - MongoDB
     - mongoose
 categories:
-    - MongoDB
+    - Nodejs
 ---
 
 Mongoose API: [http://mongoosejs.com/docs/api.html](http://mongoosejs.com/docs/api.html)
@@ -14,7 +14,7 @@ Mongoose API: [http://mongoosejs.com/docs/api.html](http://mongoosejs.com/docs/a
 ```
 // mongoose 链接
 var mongoose = require('mongoose');
-var db       = mongoose.createConnection('mongodb://127.0.0.1:27017/NodeJS'); 
+var db       = mongoose.createConnection('mongodb://127.0.0.1:27017/NodeJS');
 
 // 链接错误
 db.on('error', function(error) {

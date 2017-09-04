@@ -5,7 +5,7 @@ tags:
     - Java
     - Safe
 categories:
-    - Java
+    - Algorithm
 ---
 
 与数字签名不同，公钥密码算法中用公钥进行加密，用私钥进行解密。

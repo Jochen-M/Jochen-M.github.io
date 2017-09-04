@@ -5,7 +5,7 @@ tags:
     - Flink
     - Java
 categories:
-    - 大数据
+    - Big Data
 ---
 
 Apache Flink is an open source platform for distributed stream and batch data processing. Flink’s core is a streaming dataflow engine that provides data distribution, communication, and fault tolerance for distributed computations over data streams. Flink also builds batch processing on top of the streaming engine, overlaying native iteration support, managed memory, and program optimization.
@@ -44,6 +44,6 @@ This allows you to name your newly created project. It will interactively ask yo
 #### Build Project
 Go to your project directory and enter the command:
 ```
-mvn clean install -Pbuild-jar 
+mvn clean install -Pbuild-jar
 ```
 You will find a jar that runs on every Flink cluster with a compatible version, target/original-your-artifact-id-your-version.jar. There is also a fat-jar in target/your-artifact-id-your-version.jar which, additionally, contains all dependencies that were added to the Maven project.

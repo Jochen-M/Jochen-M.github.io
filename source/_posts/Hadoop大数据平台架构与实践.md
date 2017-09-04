@@ -5,7 +5,7 @@ tags:
     - Hadoop
     - Java
 categories:
-    - 大数据
+    - Big Data
 ---
 
 ### 什么是Apache Hadoop？
@@ -101,7 +101,7 @@ $ hadoop namenode -format
 ```
 Warning: $HADOOP_HOME is deprecated.
 
-17/05/19 23:46:05 INFO namenode.NameNode: STARTUP_MSG: 
+17/05/19 23:46:05 INFO namenode.NameNode: STARTUP_MSG:
 /************************************************************
 STARTUP_MSG: Starting NameNode
 STARTUP_MSG:   host = ubuntu/127.0.0.1
@@ -121,12 +121,12 @@ STARTUP_MSG:   java = 1.8.0_131
 17/05/19 23:46:05 INFO namenode.FSNamesystem: dfs.block.invalidate.limit=100
 17/05/19 23:46:05 INFO namenode.FSNamesystem: isAccessTokenEnabled=false accessKeyUpdateInterval=0 min(s), accessTokenLifetime=0 min(s)
 17/05/19 23:46:05 INFO namenode.FSEditLog: dfs.namenode.edits.toleration.length = 0
-17/05/19 23:46:05 INFO namenode.NameNode: Caching file names occuring more than 10 times 
+17/05/19 23:46:05 INFO namenode.NameNode: Caching file names occuring more than 10 times
 17/05/19 23:46:05 INFO common.Storage: Image file /home/jochen/hadoop/dfs/name/current/fsimage of size 112 bytes saved in 0 seconds.
 17/05/19 23:46:06 INFO namenode.FSEditLog: closing edit log: position=4, editlog=/home/jochen/hadoop/dfs/name/current/edits
 17/05/19 23:46:06 INFO namenode.FSEditLog: close success: truncate to 4, editlog=/home/jochen/hadoop/dfs/name/current/edits
 17/05/19 23:46:06 INFO common.Storage: Storage directory /home/jochen/hadoop/dfs/name has been successfully formatted.
-17/05/19 23:46:06 INFO namenode.NameNode: SHUTDOWN_MSG: 
+17/05/19 23:46:06 INFO namenode.NameNode: SHUTDOWN_MSG:
 /************************************************************
 SHUTDOWN_MSG: Shutting down NameNode at ubuntu/127.0.0.1
 ************************************************************/
@@ -164,7 +164,7 @@ $ jps
 + DataNode：
     * DataNode是HDFS的工作节点
     * 存放数据块
-    
+
 #### 数据管理策略与容错
 + 数据块副本：每个数据块至少3个副本，分布在两个机架内的多个节点
 + 心跳检测：DataNode定期向NameNode发送心跳消息

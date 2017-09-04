@@ -5,7 +5,7 @@ tags:
     - Java
     - Safe
 categories:
-    - Java
+    - Algorithm
 ---
 
 ### Vigenere密码系统

@@ -1,12 +1,11 @@
 ---
 title: Hexo + Github 搭建个人博客
 date: 2017-01-25 13:46:13
-tags: 
+tags:
+  - Hexo
   - Github
-  - Hexo
-  - NexT
-categories: 
-  - Hexo
+categories:
+  - Github
 ---
 
 ### 用Hexo + Github 搭建个人博客的具体步骤如下：
@@ -68,7 +67,7 @@ $ npm install
 
 ```
 title: Jochen-M
-subtitle: 
+subtitle:
     description: 每一个不曾起舞的日子都是对生命的辜负！
     author: Jochen-M
     language: zh-Hans

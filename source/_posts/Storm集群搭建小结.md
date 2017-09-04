@@ -5,7 +5,7 @@ tags:
     - Storm
     - Java
 categories:
-    - 大数据
+    - Big Data
 ---
 
 ### 环境

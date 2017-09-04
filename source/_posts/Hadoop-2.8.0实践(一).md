@@ -5,7 +5,7 @@ tags:
     - Hadoop
     - Java
 categories:
-    - 大数据
+    - Big Data
 ---
 
 ### 安装
@@ -31,7 +31,7 @@ export JAVA_HOME=/path/to/java/root/dir
 ```
 
 #### 启动 Hadoop
-运行命令： 
+运行命令：
 ```
 bin/hadoop
 ```
