@@ -95,6 +95,13 @@ social_icons:
     Github: github
     微博: weibo
 
+# 搜索
 search:
     path: search.xml
     field: all
+
+# google baidu 收录
+sitemap:
+    path: sitemap.xml
+baidusitemap:
+    path: baidusitemap.xml
