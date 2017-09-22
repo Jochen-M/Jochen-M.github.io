@@ -94,3 +94,7 @@ social_icons:
     #Icon Mappings
     Github: github
     微博: weibo
+
+search:
+    path: search.xml
+    field: all
