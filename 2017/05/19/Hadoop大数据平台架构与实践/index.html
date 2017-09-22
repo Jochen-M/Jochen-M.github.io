@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html style="display: none;" lang="en">
+    <head>
+    <meta charset="utf-8">
+    <!--
+        © Material Theme
+        https://github.com/viosey/hexo-theme-material
+        Version: 1.4.0 -->
+    <script>window.materialVersion = "1.4.0"</script>
+
+    <!-- Title -->
+    
+    <title>
+        
+            Hadoop大数据平台架构与实践 | 
+        
+        Jochen-M
+    </title>
+
+    <!-- dns prefetch -->
+    <meta http-equiv="x-dns-prefetch-control" content="on">
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    <!-- Meta & Info -->
+    <meta http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="theme-color" content="#0097A7">
+    <meta name="author" content="Jochen-M">
+    <meta name="description" itemprop="description" content="The journey of a thousand miles begins with a single step.">
+    <meta name="keywords" content="Jochen,Java,Hadoop">
+
+    <!-- Site Verification -->
+    
+    
+
+    <!-- Favicons -->
+    <link rel="icon shortcut" type="image/ico" href="/img/favicon.png">
+    <link rel="icon" sizes="192x192" href="/img/favicon.png">
+    <link rel="apple-touch-icon" href="/img/favicon.png">
+
+    <!--iOS -->
+    <meta name="apple-mobile-web-app-title" content="Title">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="480">
+
+    <!-- Add to homescreen for Chrome on Android -->
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <!-- Add to homescreen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Jochen-M">
+
+    <!-- The Open Graph protocol -->
+    <meta property="og:url" content="http://jochen-m.github.io">
+    <meta property="og:type" content="blog">
+    <meta property="og:title" content="Hadoop大数据平台架构与实践 | Jochen-M">
+    <meta property="og:image" content="/img/favicon.png" />
+    <meta property="og:description" content="The journey of a thousand miles begins with a single step.">
+    <meta property="og:article:tag" content="Java"> <meta property="og:article:tag" content="Hadoop"> 
+
+    
+        <meta property="article:published_time" content="May 19, 2017" />
+        <meta property="article:modified_time" content="Sep 19, 2017" />
+    
+
+    <!-- The Twitter Card protocol -->
+    <meta name="twitter:title" content="Hadoop大数据平台架构与实践 | Jochen-M">
+    <meta name="twitter:description" content="The journey of a thousand miles begins with a single step.">
+    <meta name="twitter:image" content="/img/favicon.png">
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="http://jochen-m.github.io" />
+
+    <!-- Add canonical link for SEO -->
+    
+        <link rel="canonical" href="http://jochen-m.github.io/2017/05/19/Hadoop大数据平台架构与实践/index.html" />
+    
+
+    <!-- Structured-data for SEO -->
+    
+        
+
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "publisher": {
+        "@type": "Organization",
+        "name": "Jochen-M",
+        "logo": "/img/favicon.png"
+    },
+    "author": {
+        "@type": "Person",
+        "name": "Jochen-M",
+        "image": {
+            "@type": "ImageObject",
+            "url": "/img/favicon.png"
+        },
+        "description": "Do the thing you think you cannot do."
+    },
+    "headline": "Hadoop大数据平台架构与实践",
+    "url": "http://jochen-m.github.io/2017/05/19/Hadoop大数据平台架构与实践/index.html",
+    "datePublished": "May 19, 2017",
+    "dateModified": "Sep 19, 2017",
+    "description": "The journey of a thousand miles begins with a single step.",
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "http://jochen-m.github.io"
+    }
+}
+</script>
+
+
+    
+
+    <!--[if lte IE 9]>
+        <link rel="stylesheet" href="/css/ie-blocker.css">
+
+        
+            <script src="/js/ie-blocker.en.js"></script>
+        
+    <![endif]-->
+
+    <!-- Import lsloader -->
+    <script>(function(){window.lsloader={jsRunSequence:[],jsnamemap:{},cssnamemap:{}};lsloader.removeLS=function(key){try{localStorage.removeItem(key)}catch(e){}};lsloader.setLS=function(key,val){try{localStorage.setItem(key,val)}catch(e){}};lsloader.getLS=function(key){var val="";try{val=localStorage.getItem(key)}catch(e){val=""}return val};versionString="/*"+materialVersion+"*/";lsloader.clean=function(){try{var keys=[];for(var i=0;i<localStorage.length;i++){keys.push(localStorage.key(i))}keys.forEach(function(key){var data=lsloader.getLS(key);if(data&&data.indexOf(versionString)===-1){lsloader.removeLS(key)}})}catch(e){}};lsloader.clean();lsloader.load=function(jsname,jspath,cssonload){cssonload=cssonload||function(){};var code;code=this.getLS(jsname);if(code&&code.indexOf(versionString)===-1){this.removeLS(jsname);this.requestResource(jsname,jspath,cssonload);return}if(code){var versionNumber=code.split(versionString)[0];if(versionNumber!=jspath){console.log("reload:"+jspath);this.removeLS(jsname);this.requestResource(jsname,jspath,cssonload);return}code=code.split(versionString)[1];if(/\.js?.+$/.test(versionNumber)){this.jsRunSequence.push({name:jsname,code:code});this.runjs(jspath,jsname,code)}else{document.getElementById(jsname).appendChild(document.createTextNode(code));cssonload()}}else{this.requestResource(jsname,jspath,cssonload)}};lsloader.requestResource=function(name,path,cssonload){var that=this;if(/\.js?.+$/.test(path)){this.iojs(path,name,function(path,name,code){that.setLS(name,path+versionString+code);that.runjs(path,name,code)})}else if(/\.css?.+$/.test(path)){this.iocss(path,name,function(code){document.getElementById(name).appendChild(document.createTextNode(code));that.setLS(name,path+versionString+code)},cssonload)}};lsloader.iojs=function(path,jsname,callback){var that=this;that.jsRunSequence.push({name:jsname,code:""});try{var xhr=new XMLHttpRequest;xhr.open("get",path,true);xhr.onreadystatechange=function(){if(xhr.readyState==4){if(xhr.status>=200&&xhr.status<300||xhr.status==304){if(xhr.response!=""){callback(path,jsname,xhr.response);return}}that.jsfallback(path,jsname)}};xhr.send(null)}catch(e){that.jsfallback(path,jsname)}};lsloader.iocss=function(path,jsname,callback,cssonload){var that=this;try{var xhr=new XMLHttpRequest;xhr.open("get",path,true);xhr.onreadystatechange=function(){if(xhr.readyState==4){if(xhr.status>=200&&xhr.status<300||xhr.status==304){if(xhr.response!=""){callback(xhr.response);cssonload();return}}that.cssfallback(path,jsname,cssonload)}};xhr.send(null)}catch(e){that.cssfallback(path,jsname,cssonload)}};lsloader.iofonts=function(path,jsname,callback,cssonload){var that=this;try{var xhr=new XMLHttpRequest;xhr.open("get",path,true);xhr.onreadystatechange=function(){if(xhr.readyState==4){if(xhr.status>=200&&xhr.status<300||xhr.status==304){if(xhr.response!=""){callback(xhr.response);cssonload();return}}that.cssfallback(path,jsname,cssonload)}};xhr.send(null)}catch(e){that.cssfallback(path,jsname,cssonload)}};lsloader.runjs=function(path,name,code){if(!!name&&!!code){for(var k in this.jsRunSequence){if(this.jsRunSequence[k].name==name){this.jsRunSequence[k].code=code}}}if(!!this.jsRunSequence[0]&&!!this.jsRunSequence[0].code&&this.jsRunSequence[0].status!="failed"){var script=document.createElement("script");script.appendChild(document.createTextNode(this.jsRunSequence[0].code));script.type="text/javascript";document.getElementsByTagName("head")[0].appendChild(script);this.jsRunSequence.shift();if(this.jsRunSequence.length>0){this.runjs()}}else if(!!this.jsRunSequence[0]&&this.jsRunSequence[0].status=="failed"){var that=this;var script=document.createElement("script");script.src=this.jsRunSequence[0].path;script.type="text/javascript";this.jsRunSequence[0].status="loading";script.onload=function(){that.jsRunSequence.shift();if(that.jsRunSequence.length>0){that.runjs()}};document.body.appendChild(script)}};lsloader.tagLoad=function(path,name){this.jsRunSequence.push({name:name,code:"",path:path,status:"failed"});this.runjs()};lsloader.jsfallback=function(path,name){if(!!this.jsnamemap[name]){return}else{this.jsnamemap[name]=name}for(var k in this.jsRunSequence){if(this.jsRunSequence[k].name==name){this.jsRunSequence[k].code="";this.jsRunSequence[k].status="failed";this.jsRunSequence[k].path=path}}this.runjs()};lsloader.cssfallback=function(path,name,cssonload){if(!!this.cssnamemap[name]){return}else{this.cssnamemap[name]=1}var link=document.createElement("link");link.type="text/css";link.href=path;link.rel="stylesheet";link.onload=link.onerror=cssonload;var root=document.getElementsByTagName("script")[0];root.parentNode.insertBefore(link,root)};lsloader.runInlineScript=function(scriptId,codeId){var code=document.getElementById(codeId).innerText;this.jsRunSequence.push({name:scriptId,code:code});this.runjs()};lsloader.loadCombo=function(jslist){var updateList="";var requestingModules={};for(var k in jslist){var LS=this.getLS(jslist[k].name);if(!!LS){var version=LS.split(versionString)[0];var code=LS.split(versionString)[1]}else{var version=""}if(version==jslist[k].path){this.jsRunSequence.push({name:jslist[k].name,code:code,path:jslist[k].path})}else{this.jsRunSequence.push({name:jslist[k].name,code:null,path:jslist[k].path,status:"comboloading"});requestingModules[jslist[k].name]=true;updateList+=(updateList==""?"":";")+jslist[k].path}}var that=this;if(!!updateList){var xhr=new XMLHttpRequest;xhr.open("get",combo+updateList,true);xhr.onreadystatechange=function(){if(xhr.readyState==4){if(xhr.status>=200&&xhr.status<300||xhr.status==304){if(xhr.response!=""){that.runCombo(xhr.response,requestingModules);return}}else{for(var i in that.jsRunSequence){if(requestingModules[that.jsRunSequence[i].name]){that.jsRunSequence[i].status="failed"}}that.runjs()}}};xhr.send(null)}this.runjs()};lsloader.runCombo=function(comboCode,requestingModules){comboCode=comboCode.split("/*combojs*/");comboCode.shift();for(var k in this.jsRunSequence){if(!!requestingModules[this.jsRunSequence[k].name]&&!!comboCode[0]){this.jsRunSequence[k].status="comboJS";this.jsRunSequence[k].code=comboCode[0];this.setLS(this.jsRunSequence[k].name,this.jsRunSequence[k].path+versionString+comboCode[0]);comboCode.shift()}}this.runjs()}})();</script>
+
+    <!-- Import CSS & jQuery -->
+    
+        <style id="css/material.min.css"></style><script>if(typeof window.lsLoadCSSMaxNums === "undefined")window.lsLoadCSSMaxNums = 0;window.lsLoadCSSMaxNums++;lsloader.load("css/material.min.css","/css/material.min.css?fJTiM/K1J3dWIruo3pxtAw==",function(){if(typeof window.lsLoadCSSNums === "undefined")window.lsLoadCSSNums = 0;window.lsLoadCSSNums++;if(window.lsLoadCSSNums == window.lsLoadCSSMaxNums)document.documentElement.style.display="";})</script>
+        <style id="css/style.min.css"></style><script>if(typeof window.lsLoadCSSMaxNums === "undefined")window.lsLoadCSSMaxNums = 0;window.lsLoadCSSMaxNums++;lsloader.load("css/style.min.css","/css/style.min.css?oCSEO3ST+aEypEwttTDI9g==",function(){if(typeof window.lsLoadCSSNums === "undefined")window.lsLoadCSSNums = 0;window.lsLoadCSSNums++;if(window.lsLoadCSSNums == window.lsLoadCSSMaxNums)document.documentElement.style.display="";})</script>
+        
+        
+            <style>
+    
+    
+    
+    .footer-sns-gplus {
+        background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgY2xhc3M9Imljb24iIHZpZXdCb3g9IjAgMCAxMDI0IDEwMjQiPjxwYXRoIGQ9Ik0xMzguNiA3OGMtMjIuNCA1LjItNTUuOCA0MC4yLTYwLjYgNjMuNC0xLjQgNi40LTIgMTI5LjgtMS42IDM2Ny42LjYgMjk4LjYgMSAzNTguOCAzLjQgMzYzIDExIDIwLjIgMjEuNiAzMi40IDM3LjIgNDMgMTUgMTAuMiAxNy40IDExLjIgMzMgMTMgMTEuMiAxLjQgMTM2IDIgMzY1IDEuNiAzMTQtLjYgMzQ4LjYtMSAzNTUtMy44IDE1LjgtNy4yIDMzLjgtMjIgNDMuMi0zNS40IDUuMi03LjQgMTAuOC0xNi42IDEyLjYtMjAuNCAyLjgtNi40IDMuMi00MC44IDMuOC0zNTQgLjQtMjIzLS4yLTM1My40LTEuNC0zNjUtMi0xNy0yLjYtMTguNi0xMy0zNC04LjYtMTIuNi0xNC4yLTE4LjQtMjUuMi0yNS44LTcuOC01LjQtMTcuNC0xMS0yMS42LTEyLjQtNi0yLjItNzIuOC0yLjYtMzY1LjQtMi42LTE5Ni44LjItMzYxIC44LTM2NC40IDEuOHpNNDMwIDI5NS40YzQwLjYgMTUuNCA1Ni42IDIzLjggNzIuNiAzOC40IDYuOCA2LjIgNy4yIDE1LjIgMSAyMy40LTYuMiA4LTMzLjYgMzMuOC0zOSAzNi42LTUuNiAyLjgtMTcuNiAyLjgtMjMuMi0uMi0yLjQtMS4yLTguMi01LjItMTMtOC44LTExLjItOC42LTI0LjYtMTEuMi01NS4yLTExLjItMjcuNCAwLTQwLjYgMi42LTUyLjIgMTAuNC00LjQgMi44LTEyLjIgNy42LTE3LjIgMTAuNi0yMyAxMy4yLTUxLjQgNTUtNTUuOCA4Mi40LTIuNiAxNS42LTIuNCAzNC44LjIgNTEgMi44IDE3LjQgMTkuOCA0OC44IDM1LjIgNjUuMiAxNiAxNi42IDQ1IDMzLjYgNjIuOCAzNi42IDI2LjggNC40IDY1LjggMS42IDc5LjQtNS44IDIwLjYtMTEuNCAzMS0xOSA0MS0zMC40IDE4LjgtMjEuNiAyMy40LTM0LjIgMTUuNi00My44LTMuOC00LjgtNC40LTQuOC01MS01LjgtNjAuOC0xLjItNTYuMiAyLjItNTYuMi00My4yIDAtMzIuNC4yLTMzLjIgNC44LTM3IDQuNC0zLjYgOS0zLjggOTItMy44IDc5IDAgODcuOC40IDk0LjIgMy42IDExLjIgNS42IDEzIDExLjQgMTIuOCA0My40IDAgMjUuNC0uOCAzMC44LTcuNiA1OC00IDE2LjYtOS44IDM0LTEyLjYgMzktMi44IDUtOC4yIDE0LjItMTEuNiAyMC42LTguNCAxNS40LTI3LjIgMzYuOC00MC44IDQ2LjYtNS44IDQuNC0xMy44IDEwLjItMTcuNiAxMy4yLTMuOCAzLTExIDctMTYuMiA4LjgtNS4yIDEuOC0xNi4yIDYuNC0yNC40IDEwLTIyLjQgOS42LTM0LjggMTEuNi03MyAxMS42LTM3LjYuMi00Ny0xLjQtNzEtMTItOC4yLTMuNi0xNy42LTcuMi0yMC44LTgtMTUuOC0zLjgtNjctNDUuMi03Ny44LTYyLjgtMi4yLTMuOC03LjYtMTEuNi0xMS44LTE3LjItNC4yLTUuNC05LTE0LTEwLjYtMTktMS44LTQuOC02LjItMTYtMTAtMjQuOC0zLjYtOC44LTcuOC0yMi4yLTkuMi0yOS42LTMuMi0xOC44LTEuNC03OS40IDIuOC05MS40IDEzLjgtNDAuNiAzNS42LTc4IDU4LjgtMTAwLjIgMTQtMTMuNiA0Ny4yLTM2LjQgNTgtMzkuOCA0LjItMS40IDEzLjQtNS4yIDIwLjYtOC40IDIyLTEwIDMyLjgtMTEuNiA3Ni0xMSAzMy44LjYgNDAuNCAxLjIgNTAgNC44em0zNDAuOCA4MC44YzggMy42IDkuNiAxMS4yIDkuMiAzOS4yLS42IDM0LjQtLjYgMzQgNSAzOS42IDQuOCA1IDUuNCA1IDM3LjYgNSA0My40IDAgNDQuNC44IDQzLjIgMzYuMi0uOCAxNy0xLjIgMTguNC02LjQgMjMtNS40IDQuNi02LjYgNC44LTM3LjYgNC44LTMxLjIgMC0zMiAuMi0zNi44IDUtNS42IDUuNC01LjYgNC40LTUgNDEuMi40IDI2LjQuMiAyNy40LTQuNiAzMy00LjggNS42LTYgNS44LTI0LjQgNi40LTIwLjguOC0yOS42LTEuNC0zMy40LTguNC0xLjQtMi42LTItMTUuNi0xLjgtMzUuNi40LTMxLjIuNC0zMS42LTQuNi0zNi42cy01LjYtNS0zNi01Yy0xOC44IDAtMzMtLjgtMzYtMi4yLTcuNi0zLjYtOS42LTExLjItOC44LTMzLjguOC0yOC4yLjQtMjggNDEtMjggNDUuNCAwIDQ1LjQgMCA0NC42LTQyLjYtLjYtMzMtLjYtMzMgNS0zOC40IDQuNC00LjYgNi4yLTUgMjQuOC01IDExIDAgMjIuMiAxIDI1IDIuMnoiLz48L3N2Zz4=);
+    }
+    
+    
+    .footer-sns-weibo {
+        background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgY2xhc3M9Imljb24iIHZpZXdCb3g9IjAgMCAxMDI0IDEwMjQiPjxwYXRoIGQ9Ik0xMzUuMiA3OWMtOC42IDMtMjIuOCAxMi40LTMyLjggMjEuOC04LjIgNy44LTIyLjIgMzEtMjQuNiA0MC42LTEgNC4yLTEuNiAxNjctMS42IDM2NC42IDAgMjg0LjguNCAzNTguNCAyLjYgMzY0IDEuNCAzLjggNi44IDEzIDEyIDIwLjQgOC44IDEyLjggMjQgMjUuNCA0MS44IDM1IDYgMy40IDI3IDMuNiAzNjcuNCAzLjYgMjg2LjIgMCAzNjIuNi0uNiAzNjktMi42IDE5LjgtNi4yIDUxLjItMzcuNiA1Ny40LTU3LjQgMi02LjQgMi42LTgyLjYgMi42LTM2OFYxNDFsLTQuMi05Yy0xMS42LTI0LTM5LjItNDkuOC01OC4yLTU0LjItNC4yLTEtMTY4LjYtMS42LTM2NS42LTEuNi0zMDAgMC0zNTkuMi40LTM2NS44IDIuOHptNTU4LjYgMTY5YzguNiAxLjIgMTYuNCA0IDI0IDguNiA2LjIgMy42IDE1LjIgOC4yIDIwLjIgMTAuMiA1LjggMi4yIDE0LjYgOC44IDI1IDE4LjggMjUuNCAyNC44IDMyLjggMzQuOCAzNy44IDUxIDIuNiA4IDcuNCAxOS44IDEwLjggMjYuNCA3LjggMTQuNiAxMS42IDQyLjYgOS40IDY5LTEgMTQuMi0yLjIgMTguNi03LjQgMjYuNC0zLjIgNS4yLTkgMTIuMi0xMi44IDE1LjYtMTMuOCAxMi0zNCA1LjgtMzguOC0xMi0xLjYtNi0xLjQtMTEuNCAxLjItMjMuNCA0LjItMjAgMy00Ni0yLjYtNTguNi0yLjItNS04LTEyLjYtMTIuOC0xNi44LTQuOC00LjItMTQuNi0xNi40LTIxLjgtMjYuOC03LjItMTAuNi0xNS4yLTIwLjgtMTgtMjIuOC0yLjgtMi0xMi42LTYtMjItOS0xNC40LTQuNC0yMC44LTUuNC00My01LjYtMjgtLjItMzEuNC0xLjItNDIuNC0xMS42LTcuNC03LTguNi0xNS42LTMuOC0yNS4yIDctMTMuMiAxNi40LTE2IDU0LjItMTYgMTYuNiAwIDM1LjguOCA0Mi44IDEuOHptLTIxMy42IDc1LjZjMjAuMiAxNS40IDIwLjYgMTYuNCAyMiA0OCAuNiAxNSAxLjggMjkgMi42IDMxIDIuOCA2LjIgMTEgNi42IDIxLjYuNiA1LjQtMy4yIDE0LTUuOCAyMC02LjQgNS44LS42IDE4LjgtMi40IDI5LTQuMiAxNy4yLTMgMTkuNC0zIDM2IC40IDMyIDYuNiAzNS44IDkuMiA0NC4yIDMxLjYgNS4yIDE0IDUuNCAyMS40IDEuMiAzMi44LTIuMiA1LjQtMi44IDExLTIgMTUuNCAxLjggMTAgMTcuNiAyMy40IDM1IDMwLjIgMTEuMiA0LjIgMTYuMiA3LjYgMjcgMTkgMTkuMiAxOS44IDIwLjIgMjMgMjAgNTktLjIgMzUtLjQgMzUuNC0xOS44IDYzLjYtMTMuOCAxOS44LTMyLjQgMzguNi00OSA1MC01IDMuNC0xMi4yIDguOC0xNS44IDEyLTMuOCAzLjItMTEuNiA4LTE3LjIgMTAuNC01LjYgMi42LTE0LjYgNy40LTE5LjggMTAuNi01LjIgMy40LTE1LjggNy42LTIzLjggOS40LTggMi0yMS4yIDYuNi0yOS42IDEwLjItMjIuNCAxMC0zNi4yIDExLjItMTIxLjggMTAuNGwtNzUtLjYtMTktOC40Yy0xMC42LTQuNi0yNS40LTkuOC0zMy0xMS42LTcuNi0xLjYtMTgtNS44LTIzLTlzLTE0LjItOC0yMC40LTEwLjhjLTE4LTgtNTkuNC00Ni4yLTY2LTYxLjItMi4yLTUtNy40LTE0LjQtMTEuNC0yMC44bC03LjItMTJWNTQ5bDcuNi0xMy42YzQuMi03LjQgOS40LTE4LjYgMTEuNi0yNC44IDMuOC0xMS40IDEzLjQtMjcuOCAyNC44LTQyLjYgMjAuMi0yNi4yIDM4LjQtNDYuOCA1My02MCA5LjItOC4yIDIxLTE4LjYgMjYtMjMuMiA1LTQuNCAxMy4yLTExIDE4LjYtMTQuNiA1LjItMy40IDkuNC03LjIgOS40LTggMC0xIDUuNi00LjYgMTIuNi04LjIgNi44LTMuOCAxNi40LTkuNiAyMS40LTEzLjIgNS0zLjYgMTQuNC04IDIxLTkuOCA2LjYtMiAxNy44LTYuNiAyNS0xMC4yIDEyLTYuMiAxNC40LTYuOCAzMi40LTYuOGgxOS40bDEyLjQgOS42em0yMDMuNiAxMy4yYzMgMS42IDYuNiA0LjQgOCA2IDEuNiAxLjggOS40IDcgMTcuNCAxMS42IDE3IDkuNiAxOSAxMyAyNCA0MiAzLjQgMjAuNCAyLjYgMzIuMi0zLjQgNDMuOC03LjYgMTUuMi0yMi44IDIwLjYtMzEuMiAxMS4yLTctNy42LTkuMi0xMy44LTEwLjYtMjkuNi0xLjItMTMuMi0yLjQtMTYuNC05LjYtMjcuMi0xMS0xNi0xNi44LTIwLjYtMjcuMi0yMC42LTEwIDAtMjQtNi4yLTI3LTExLjYtNS44LTEwLjguNC0yNC42IDEyLjQtMjguNCA4LjYtMi42IDQwLjItLjggNDcuMiAyLjh6Ii8+PHBhdGggZD0iTTQyNCA0NzcuNGMtMzIuNiAzLjYtNDcuOCA3LTYxLjggMTMuOC04IDQtMTkgOC40LTI0LjIgMTAtNS4yIDEuNi0xMi40IDUtMTYuMiA3LjgtMy44IDIuNi0xMSA3LjYtMTYuMiAxMS0xMy40IDguOC0zNSAzMy4yLTM4LjggNDQtMS44IDUtNS40IDE0LjQtOC4yIDIxLTguOCAyMS4yLTguMiAyNi44IDQgNTMgMTAuNiAyMi42IDExIDIzLjIgMjcuNiAzNi40IDIxIDE2LjggMjMuNiAxOC40IDUwLjggMjguMiAyMC4yIDcuMiAyNC42IDggNTQgMTAgMTcuNiAxLjIgNDUuNiAyLjIgNjIgMi4ybDMwIC4yIDE3LjQtOC40YzkuNi00LjYgMjIuNC05LjYgMjguMi0xMS40IDYtMS44IDE1LjQtNi4yIDIwLjgtMTAgNS40LTMuNiAxMy40LTguNiAxNy42LTEwLjggOS4yLTQuNiAzOS0zNC40IDM5LTM5IDAtMS42IDMuOC0xMC4yIDguNC0xOC44IDcuOC0xNC4yIDguNi0xNi44IDguNC0yOS42LS4yLTEyLjgtMS0xNS44LTEwLjYtMzQuNi0xMy40LTI2LjItMzAuNC00My42LTUwLjItNTEuNC03LjItMi44LTE2LjItNy0yMC05LjYtMTEuNC03LjYtMTcuNi05LjItNDguOC0xMi40LTI3LjYtMi44LTU2LjYtMy40LTczLjItMS42em0zOS40IDQ0LjRjMTEuMiAyLjIgMjIuNiA1IDI1IDYuNCA3IDMuNiAyNiAyMS44IDMwLjggMjkuNCA4LjYgMTMuNCAxMSA1NCA0LjYgNzctMi42IDkuNi0xOC44IDI3LjYtMzkuNCA0NC4yLTE1LjYgMTIuNC0xNyAxMy0yOS44IDE0LTcuNi44LTIyLjQgMi4yLTMzIDMuNi0yMi42IDIuNi00NS42IDEtNTMuOC0zLjgtMy4yLTItOC02LjgtMTAuOC0xMC44LTIuNi00LjItOC40LTEwLjQtMTIuOC0xMy44LTguMi02LjgtMTMuNC0xNi40LTE5LjQtMzctMy44LTEzLjItMi44LTIxLjggNS4yLTQ3LjYgMy4yLTEwLjQgNi0xNC42IDE3LjQtMjUuOCAxMi40LTEyLjIgMjMuOC0yMi4yIDMzLjItMjkuNiA0LTMgMzguNi05LjQgNTMuNC05LjggNSAwIDE4LjIgMS42IDI5LjQgMy42eiIvPjxwYXRoIGQ9Ik0zODcuMiA2MDZjLTEyLjIgMy44LTE4LjIgMTMuNC0xNSAyNC42IDUuOCAyMS4yIDI3LjggMjUuOCA0MC42IDguNiA2LjYtOC44IDcuOC0xNi4yIDQuMi0yNC00LjgtMTAuMi0xNS40LTEzLjQtMjkuOC05LjJ6Ii8+PC9zdmc+);
+    }
+    
+    
+    
+    
+    .footer-sns-github {
+        background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgY2xhc3M9Imljb24iIHZpZXdCb3g9IjAgMCAxMDI0IDEwMjQiPjxwYXRoIGQ9Ik0xMzguNCA3OGMtNi40IDEuNC0yNi40IDE0LjItMzYgMjIuOC04IDcuMi0yMiAyOS44LTI0LjQgMzkuMi0xLjYgNi40LTIgMTEzLjItMS42IDM2OCAuNiAyOTkuNCAxIDM1OS44IDMuNCAzNjQgMTEgMjAuMiAyMS42IDMyLjQgMzcuMiA0MyAxNS42IDEwLjYgMTcuMiAxMS4yIDM0LjIgMTMuMiAxMC42IDEuMiA2My40IDEuNiAxMjcuNiAxLjRsMTA5LjYtLjYgNi02LjggNi4yLTYuOC0xLjItMjUuMmMtLjgtMTUuOC0uMi0zMy40IDEuNC00Ny4yIDMtMjUuNCAxLjQtMzYuMi02LTQzLjItNS00LjYtNi4yLTQuOC0zMC42LTQuMi0yNy42LjgtMjQgMS42LTY4LjgtMTYtOC42LTMuNC0yMi42LTE4LTI4LjQtMjkuOC0xMS40LTIyLjgtMjctNDUtMzkuMi01NS42LTE0LTEyLjItMTkuOC0yMC44LTE5LjgtMjguNiAwLTExLjYgMTMuNi0xMi42IDMzLjItMi40IDE2LjYgOC44IDIwLjggMTIuNCA0MC44IDM2LjIgMjQuMiAyOC42IDMxIDMzLjYgNTQgMzkuNiAxNS4yIDQgNDIuMiAzIDUxLjQtMS44IDktNC42IDE4LTE1LjIgMjQuNC0yOS4yIDExLjQtMjQuMiA3LjQtMzEuMi0yMC42LTM2LjgtOS44LTItMjkuMi04LTQzLjQtMTMuNC00MC40LTE1LjgtNjQuNi0zNy40LTg1LjQtNzYuMi0xMS42LTIxLjgtMTUuNC0zMy0xOC4yLTUzLjYtNC4yLTMyLjItNC44LTYwLjItMS40LTg0IDMuNC0yMy44IDYuOC0zMi44IDIwLjItNTQgNC02IDguOC0xNS42IDExLTIxLjQgMy44LTEwIDMuOC0xMS42IDEtMzAtNS4yLTM0LjItMy4yLTUyLjQgNy42LTcwLjIgNy4yLTEyLjIgMTUtMTcuMiAyNC4yLTE1LjggMTIuOCAyLjIgNTIgMTcuNCA2Ni44IDI2LjIgMjYgMTUgMjkgMTUuNCA4Mi40IDcuMiAyNC42LTMuOCAzMy44LTQuMiA2MC0zLjIgMTcgLjYgNDEuNCAzIDU0IDUuMiAzOC40IDYuNiA0OS42IDUuMiA3My0xMCA2LjYtNC4yIDE3LjQtOS40IDI0LTExLjYgNi42LTIuMiAxNi01LjggMjEtOC4yIDEzLTYgMjgtNS42IDM1LjYuOCAxMi40IDEwLjQgMTguNiA0MS40IDE0LjQgNzEuNi00LjQgMzAuNi0zIDM5LjQgOC40IDUzLjggMy40IDQuNCAxMS4yIDE5LjIgMTcuNCAzMy4yTDc3NSA0NDN2NzhsLTEwIDI4Yy0xNS4yIDQzLjItMzYuOCA3My4yLTY2LjIgOTIuOC0xMy40IDguOC01NyAyNS40LTc2LjggMjktMjguMiA1LjItMzMuMiAxMi42LTIyIDMyLjIgMTEuMiAxOS40IDEyLjQgMzIuOCAxMS42IDEyOS42bC0uNiA4NS44IDUuNCA0LjZjMy42IDMgOS4yIDUuMiAxNiA2IDUuOC44IDYwLjIgMSAxMjAuNi42IDEwOC40LS42IDExMC4yLS42IDExOS01IDI0LTExLjYgNDAtMjcuNCA1MS42LTUwLjZsNS40LTExIC42LTM0N2MuNC0yMjMtLjItMzUzLjQtMS40LTM2NS0yLTE3LTIuNi0xOC42LTEzLTM0LTEwLjYtMTUuNC0yMi44LTI2LjItNDMuMi0zNy4yLTQuMi0yLjQtNjQuNi0yLjgtMzY2LTMuMi0xOTguNiAwLTM2NCAuNC0zNjcuNiAxLjR6Ii8+PC9zdmc+);
+    }
+    
+    
+    
+    
+    
+</style>
+
+        
+        <!-- Config CSS -->
+
+<!-- Other Styles -->
+<style>
+  body, html {
+    font-family: Roboto, "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+  }
+
+  a {
+    color: #00838F;
+  }
+
+  .mdl-card__media,
+  #search-label,
+  #search-form-label:after,
+  #scheme-Paradox .hot_tags-count,
+  #scheme-Paradox .sidebar_archives-count,
+  #scheme-Paradox .sidebar-colored .sidebar-header,
+  #scheme-Paradox .sidebar-colored .sidebar-badge{
+    background-color: #0097A7 !important;
+  }
+
+  /* Sidebar User Drop Down Menu Text Color */
+  #scheme-Paradox .sidebar-colored .sidebar-nav>.dropdown>.dropdown-menu>li>a:hover,
+  #scheme-Paradox .sidebar-colored .sidebar-nav>.dropdown>.dropdown-menu>li>a:focus {
+    color: #0097A7 !important;
+  }
+
+  #post_entry-right-info,
+  .sidebar-colored .sidebar-nav li:hover > a,
+  .sidebar-colored .sidebar-nav li:hover > a i,
+  .sidebar-colored .sidebar-nav li > a:hover,
+  .sidebar-colored .sidebar-nav li > a:hover i,
+  .sidebar-colored .sidebar-nav li > a:focus i,
+  .sidebar-colored .sidebar-nav > .open > a,
+  .sidebar-colored .sidebar-nav > .open > a:hover,
+  .sidebar-colored .sidebar-nav > .open > a:focus,
+  #ds-reset #ds-ctx .ds-ctx-entry .ds-ctx-head a {
+    color: #0097A7 !important;
+  }
+
+  .toTop {
+    background: #757575 !important;
+  }
+
+  .material-layout .material-post>.material-nav,
+  .material-layout .material-index>.material-nav,
+  .material-nav a {
+    color: #757575;
+  }
+
+  #scheme-Paradox .MD-burger-layer {
+    background-color: #757575;
+  }
+
+  #scheme-Paradox #post-toc-trigger-btn {
+    color: #757575;
+  }
+
+  .post-toc a:hover {
+    color: #00838F;
+    text-decoration: underline;
+  }
+
+</style>
+
+
+<!-- Theme Background Related-->
+
+    <style>
+      body{
+        background-color: #F5F5F5;
+      }
+
+      /* blog_info bottom background */
+      #scheme-Paradox .material-layout .something-else .mdl-card__supporting-text{
+        background-color: #fff;
+      }
+    </style>
+
+
+
+
+<!-- Fade Effect -->
+
+    <style>
+      .fade {
+        transition: all 800ms linear;
+        -webkit-transform: translate3d(0,0,0);
+        -moz-transform: translate3d(0,0,0);
+        -ms-transform: translate3d(0,0,0);
+        -o-transform: translate3d(0,0,0);
+        transform: translate3d(0,0,0);
+        opacity: 1;
+      }
+
+      .fade.out{
+        opacity: 0;
+      }
+    </style>
+
+
+<!-- Import Font -->
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"rel="stylesheet">
+
+
+        <script>lsloader.load("js/jquery.min.js","/js/jquery.min.js?qcusAULNeBksqffqUM2+Ig==")</script>
+    
+    
+    <script>function Queue(){this.dataStore=[];this.offer=b;this.poll=d;this.execNext=a;this.debug=false;this.startDebug=c;function b(e){if(this.debug){console.log("Offered a Queued Function.")}if(typeof e==="function"){this.dataStore.push(e)}else{console.log("You must offer a function.")}}function d(){if(this.debug){console.log("Polled a Queued Function.")}return this.dataStore.shift()}function a(){var e=this.poll();if(e!==undefined){if(this.debug){console.log("Run a Queued Function.")}e()}}function c(){this.debug=true}}var queue=new Queue();</script>
+
+    <!-- Analytics -->
+    
+
+    <!-- Custom Head -->
+    
+<link rel="stylesheet" href="/css/prism-dark.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+
+
+    
+        <body id="scheme-Paradox" class="lazy">
+            <div class="material-layout  mdl-js-layout has-drawer is-upgraded">
+                
+
+                <!-- Main Container -->
+                <main class="material-layout__content" id="main">
+
+                    <!-- Top Anchor -->
+                    <div id="top"></div>
+
+                    
+                        <!-- Hamburger Button -->
+                        <button class="MD-burger-icon sidebar-toggle">
+                            <span class="MD-burger-layer"></span>
+                        </button>
+                    
+
+                    <!-- Post TOC -->
+
+    
+    <!-- Back Button -->
+    <!--
+    <div class="material-back" id="backhome-div" tabindex="0">
+        <a class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon"
+           href="#" onclick="window.history.back();return false;"
+           target="_self"
+           role="button"
+           data-upgraded=",MaterialButton,MaterialRipple">
+            <i class="material-icons" role="presentation">arrow_back</i>
+            <span class="mdl-button__ripple-container">
+                <span class="mdl-ripple"></span>
+            </span>
+        </a>
+    </div>
+    -->
+
+    <!-- Left aligned menu below button -->
+    <button id="post-toc-trigger-btn"
+        class="mdl-button mdl-js-button mdl-button--icon">
+        <i class="material-icons">format_list_numbered</i>
+    </button>
+
+    
+    <ul class="post-toc-wrap mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="post-toc-trigger-btn" style="max-height:80vh; overflow-y:scroll;">
+        <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#什么是Apache-Hadoop？"><span class="post-toc-number">1.</span> <span class="post-toc-text">什么是Apache Hadoop？</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#定义和特性"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">定义和特性</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#主要模块："><span class="post-toc-number">1.2.</span> <span class="post-toc-text">主要模块：</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Hadoop安装（以hadoop-1-2-1为例）"><span class="post-toc-number">2.</span> <span class="post-toc-text">Hadoop安装（以hadoop-1.2.1为例）</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#准备条件"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">准备条件</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#安装"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">安装</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#配置hadoop环境变量"><span class="post-toc-number">2.3.</span> <span class="post-toc-text">配置hadoop环境变量</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#修改四个配置文件"><span class="post-toc-number">2.4.</span> <span class="post-toc-text">修改四个配置文件</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#格式化"><span class="post-toc-number">2.5.</span> <span class="post-toc-text">格式化</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#启动"><span class="post-toc-number">2.6.</span> <span class="post-toc-text">启动</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#查看当前运行的java进程"><span class="post-toc-number">2.7.</span> <span class="post-toc-text">查看当前运行的java进程</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#HDFS简介"><span class="post-toc-number">3.</span> <span class="post-toc-text">HDFS简介</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#HDFS基本概念"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">HDFS基本概念</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#HDFS设计架构"><span class="post-toc-number">3.1.1.</span> <span class="post-toc-text">HDFS设计架构</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#数据管理策略与容错"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">数据管理策略与容错</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#HDFS中文件的读写操作"><span class="post-toc-number">3.3.</span> <span class="post-toc-text">HDFS中文件的读写操作</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#HDFS读取文件的流程"><span class="post-toc-number">3.3.1.</span> <span class="post-toc-text">HDFS读取文件的流程</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#HDFS写入文件的流程"><span class="post-toc-number">3.3.2.</span> <span class="post-toc-text">HDFS写入文件的流程</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#HDFS的特点"><span class="post-toc-number">3.4.</span> <span class="post-toc-text">HDFS的特点</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#HDFS使用"><span class="post-toc-number">3.5.</span> <span class="post-toc-text">HDFS使用</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#MapReduce简介"><span class="post-toc-number">4.</span> <span class="post-toc-text">MapReduce简介</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#MapReduce的原理"><span class="post-toc-number">4.1.</span> <span class="post-toc-text">MapReduce的原理</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#MapReduce的运行流程"><span class="post-toc-number">4.2.</span> <span class="post-toc-text">MapReduce的运行流程</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#基本概念"><span class="post-toc-number">4.2.1.</span> <span class="post-toc-text">基本概念</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#MapReduce的体系结构"><span class="post-toc-number">4.2.2.</span> <span class="post-toc-text">MapReduce的体系结构</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#MapReduce作业执行过程"><span class="post-toc-number">4.2.3.</span> <span class="post-toc-text">MapReduce作业执行过程</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#MapReduce的容错机制"><span class="post-toc-number">4.2.4.</span> <span class="post-toc-text">MapReduce的容错机制</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#YARN-Hadoop-资源管理器"><span class="post-toc-number">5.</span> <span class="post-toc-text">YARN - Hadoop 资源管理器</span></a></li></ol>
+        <!--
+        <li class="mdl-menu__item">
+            Some Action
+        </li>
+        -->
+    </ul>
+    
+
+
+
+
+
+<!-- Layouts -->
+
+    <!-- Post Module -->
+    <div class="material-post_container">
+
+        <div class="material-post mdl-grid">
+            <div class="mdl-card mdl-shadow--4dp mdl-cell mdl-cell--12-col">
+
+                <!-- Post Header(Thumbnail & Title) -->
+                
+    <!-- Paradox Post Header -->
+    
+        
+            <!-- Random Thumbnail -->
+            <div class="post_thumbnail-random mdl-card__media mdl-color-text--grey-50">
+            <script type="text/ls-javascript" id="post-thumbnail-script">
+    var randomNum = Math.floor(Math.random() * 19 + 1);
+
+    $('.post_thumbnail-random').attr('data-original', '/img/random/material-' + randomNum + '.png');
+    $('.post_thumbnail-random').addClass('lazy');
+</script>
+
+        
+    
+            <p class="article-headline-p">
+                Hadoop大数据平台架构与实践
+            </p>
+        </div>
+
+
+
+
+
+                
+                    <!-- Paradox Post Info -->
+                    <div class="mdl-color-text--grey-700 mdl-card__supporting-text meta">
+
+    <!-- Author Avatar -->
+    <div id="author-avatar">
+        <img src="/img/avatar.jpg" width="44px" height="44px" alt="Author Avatar"/>
+    </div>
+    <!-- Author Name & Date -->
+    <div>
+        <strong>Jochen-M</strong>
+        <span>May 19, 2017</span>
+    </div>
+
+    <div class="section-spacer"></div>
+
+    <!-- Favorite -->
+    <!--
+        <button id="article-functions-like-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon btn-like">
+            <i class="material-icons" role="presentation">favorite</i>
+            <span class="visuallyhidden">favorites</span>
+        </button>
+    -->
+
+    <!-- Qrcode -->
+    
+
+    <!-- Tags (bookmark) -->
+    
+    <button id="article-functions-viewtags-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+        <i class="material-icons" role="presentation">bookmark</i>
+        <span class="visuallyhidden">bookmark</span>
+    </button>
+    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-functions-viewtags-button">
+        <li class="mdl-menu__item">
+        <a class="post_tag-link" href="/tags/Hadoop/">Hadoop</a></li><li class="mdl-menu__item"><a class="post_tag-link" href="/tags/Java/">Java</a>
+    </ul>
+    
+
+    <!-- Share -->
+    <button id="article-fuctions-share-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+    <i class="material-icons" role="presentation">share</i>
+    <span class="visuallyhidden">share</span>
+</button>
+<ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-fuctions-share-button">
+    
+
+    
+
+    <!-- Share Weibo -->
+    
+        <a class="post_share-link" href="http://service.weibo.com/share/share.php?appkey=&title=Hadoop大数据平台架构与实践&url=http://jochen-m.github.io/2017/05/19/Hadoop大数据平台架构与实践/index.html&pic=&searchPic=false&style=simple" target="_blank">
+            <li class="mdl-menu__item">
+                Share to Weibo
+            </li>
+        </a>
+    
+
+    <!-- Share Twitter -->
+    
+        <a class="post_share-link" href="https://twitter.com/intent/tweet?text=Hadoop大数据平台架构与实践&url=http://jochen-m.github.io/2017/05/19/Hadoop大数据平台架构与实践/index.html&via=Jochen-M" target="_blank">
+            <li class="mdl-menu__item">
+                Share to Twitter
+            </li>
+        </a>
+    
+
+    <!-- Share Facebook -->
+    
+        <a class="post_share-link" href="https://www.facebook.com/sharer/sharer.php?u=http://jochen-m.github.io/2017/05/19/Hadoop大数据平台架构与实践/index.html" target="_blank">
+            <li class="mdl-menu__item">
+                Share to Facebook
+            </li>
+        </a>
+    
+
+    <!-- Share Google+ -->
+    
+        <a class="post_share-link" href="https://plus.google.com/share?url=http://jochen-m.github.io/2017/05/19/Hadoop大数据平台架构与实践/index.html" target="_blank">
+            <li class="mdl-menu__item">
+                Share to Google+
+            </li>
+        </a>
+    
+
+    <!-- Share LinkedIn -->
+    
+
+    <!-- Share QQ -->
+    
+
+    <!-- Share Telegram -->
+    
+</ul>
+
+</div>
+
+                
+
+                <!-- Post Content -->
+                <div id="post-content" class="mdl-color-text--grey-700 mdl-card__supporting-text fade out">
+    
+        <h3 id="什么是Apache-Hadoop？"><a href="#什么是Apache-Hadoop？" class="headerlink" title="什么是Apache Hadoop？"></a>什么是Apache Hadoop？</h3><h4 id="定义和特性"><a href="#定义和特性" class="headerlink" title="定义和特性"></a>定义和特性</h4><ul>
+<li>可靠的、可扩展的、分布式计算开源软件。</li>
+<li>Apache Hadoop软件库是一个框架，允许使用简单的编程模型，在计算机集群分布式地处理大型数据集。</li>
+<li>它可以从单个服务器扩展到数千台机器，每个机器都提供本地计算和存储。</li>
+<li>每一台计算机都容易出现故障，库本身的目的是检测和处理应用层的故障，因此在一组计算机上提供高可用性服务，而不是依靠硬件来提供高可用性。</li>
+</ul>
+<h4 id="主要模块："><a href="#主要模块：" class="headerlink" title="主要模块："></a>主要模块：</h4><ul>
+<li>Hadoop Distributed File System(HDFS): 一个分布式文件系统，它提供对应用程序数据的高吞吐量访问。</li>
+<li>Hadoop YARN: 作业调度和集群资源管理的框架。</li>
+<li>Hadoop MapReduce: 基于YARN的大型数据集并行处理系统。</li>
+</ul>
+<h3 id="Hadoop安装（以hadoop-1-2-1为例）"><a href="#Hadoop安装（以hadoop-1-2-1为例）" class="headerlink" title="Hadoop安装（以hadoop-1.2.1为例）"></a>Hadoop安装（以hadoop-1.2.1为例）</h3><h4 id="准备条件"><a href="#准备条件" class="headerlink" title="准备条件"></a>准备条件</h4><ul>
+<li>Linux操作系统</li>
+<li>安装JDK以及配置相关环境变量</li>
+<li>下载Hadoop安装包，如：hadoop-1.2.1.tar.gz（官网下载地址：<a href="http://hadoop.apache.org/releases.html" target="_blank" rel="external">http://hadoop.apache.org/releases.html</a>）</li>
+</ul>
+<h4 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h4><p>将hadoop-1.2.1.tar.gz解压到指定目录，如：/opt/hadoop-1.2.1/</p>
+<h4 id="配置hadoop环境变量"><a href="#配置hadoop环境变量" class="headerlink" title="配置hadoop环境变量"></a>配置hadoop环境变量</h4><p>在/etc/profile中配置如下信息：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">export JAVA_HOME=/opt/jdk1.8.0_131</div><div class="line">export JRE_HOME=/opt/jdk1.8.0_131/jre</div><div class="line">export HADOOP_HOME=/opt/hadoop-1.2.1</div><div class="line">export CLASSPATH=.:$CLASSPATH:$JAVA_HOME/lib:$JRE_HOME/Lib</div><div class="line">export PATH=$JAVA_HOME/bin:$JRE_HOME/bin:$HADOOP_HOME/bin:$PATH</div></pre></td></tr></table></figure></p>
+<h4 id="修改四个配置文件"><a href="#修改四个配置文件" class="headerlink" title="修改四个配置文件"></a>修改四个配置文件</h4><p>这四个配置文件均在/opt/hadoop-1.2.1/conf/目录下。</p>
+<ul>
+<li>(a)修改hadoop-env.sh,设置JAVA_HOME:</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"># The java implementation to use.  Required.</div><div class="line">export JAVA_HOME=/opt/jdk1.8.0_131</div></pre></td></tr></table></figure>
+<ul>
+<li>(b)修改core-site.xml,设置hadoop.tmp.dir,dfs.name.dir,fs.default.name:</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">&lt;configuration&gt;</div><div class="line">  &lt;property&gt;</div><div class="line">    &lt;name&gt;hadoop.tmp.dir&lt;/name&gt;     &lt;!-- hadoop临时工作目录 --&gt;</div><div class="line">    &lt;value&gt;/home/jochen/hadoop&lt;/value&gt;</div><div class="line">  &lt;/property&gt;</div><div class="line"></div><div class="line">  &lt;property&gt;</div><div class="line">    &lt;name&gt;dfs.name.dir&lt;/name&gt;       &lt;!-- hadoop源数据目录 --&gt;</div><div class="line">    &lt;value&gt;/home/jochen/hadoop/name&lt;/value&gt;</div><div class="line">  &lt;/property&gt;</div><div class="line"></div><div class="line">  &lt;property&gt;</div><div class="line">    &lt;name&gt;fs.default.name&lt;/name&gt;    &lt;!-- 文件系统namenode =&gt; 地址：端口号 --&gt;</div><div class="line">    &lt;value&gt;hdfs://localhost:9000&lt;/value&gt;</div><div class="line">  &lt;/property&gt;</div><div class="line">&lt;/configuration&gt;</div></pre></td></tr></table></figure>
+<ul>
+<li>(c)修改mapred-site.xml,设置mapred.job.tracker:</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&lt;configuration&gt;</div><div class="line">  &lt;property&gt;</div><div class="line">    &lt;name&gt;mapred.job.tracker&lt;/name&gt;</div><div class="line">    &lt;value&gt;localhost:9001&lt;/value&gt;</div><div class="line">  &lt;/property&gt;</div><div class="line">&lt;/configuration&gt;</div></pre></td></tr></table></figure>
+<ul>
+<li>(d)修改hdfs-site.xml,设置dfs.data.dir:</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&lt;configuration&gt;</div><div class="line">  &lt;property&gt;</div><div class="line">    &lt;name&gt;dfs.data.dir&lt;/name&gt;       &lt;!-- dfs文件块存放目录 --&gt;</div><div class="line">    &lt;value&gt;/home/jochen/hadoop/data&lt;/value&gt;</div><div class="line">  &lt;/property&gt;</div><div class="line">&lt;/configuration&gt;</div></pre></td></tr></table></figure>
+<h4 id="格式化"><a href="#格式化" class="headerlink" title="格式化"></a>格式化</h4><p>执行命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hadoop namenode -format</div></pre></td></tr></table></figure></p>
+<p>正确执行的结果如下所示：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">Warning: $HADOOP_HOME is deprecated.</div><div class="line"></div><div class="line">17/05/19 23:46:05 INFO namenode.NameNode: STARTUP_MSG:</div><div class="line">/************************************************************</div><div class="line">STARTUP_MSG: Starting NameNode</div><div class="line">STARTUP_MSG:   host = ubuntu/127.0.0.1</div><div class="line">STARTUP_MSG:   args = [-format]</div><div class="line">STARTUP_MSG:   version = 1.2.1</div><div class="line">STARTUP_MSG:   build = https://svn.apache.org/repos/asf/hadoop/common/branches/branch-1.2 -r 1503152; compiled by &apos;mattf&apos; on Mon Jul 22 15:23:09 PDT 2013</div><div class="line">STARTUP_MSG:   java = 1.8.0_131</div><div class="line">************************************************************/</div><div class="line">17/05/19 23:46:05 INFO util.GSet: Computing capacity for map BlocksMap</div><div class="line">17/05/19 23:46:05 INFO util.GSet: VM type       = 64-bit</div><div class="line">17/05/19 23:46:05 INFO util.GSet: 2.0% max memory = 932184064</div><div class="line">17/05/19 23:46:05 INFO util.GSet: capacity      = 2^21 = 2097152 entries</div><div class="line">17/05/19 23:46:05 INFO util.GSet: recommended=2097152, actual=2097152</div><div class="line">17/05/19 23:46:05 INFO namenode.FSNamesystem: fsOwner=jochen</div><div class="line">17/05/19 23:46:05 INFO namenode.FSNamesystem: supergroup=supergroup</div><div class="line">17/05/19 23:46:05 INFO namenode.FSNamesystem: isPermissionEnabled=true</div><div class="line">17/05/19 23:46:05 INFO namenode.FSNamesystem: dfs.block.invalidate.limit=100</div><div class="line">17/05/19 23:46:05 INFO namenode.FSNamesystem: isAccessTokenEnabled=false accessKeyUpdateInterval=0 min(s), accessTokenLifetime=0 min(s)</div><div class="line">17/05/19 23:46:05 INFO namenode.FSEditLog: dfs.namenode.edits.toleration.length = 0</div><div class="line">17/05/19 23:46:05 INFO namenode.NameNode: Caching file names occuring more than 10 times</div><div class="line">17/05/19 23:46:05 INFO common.Storage: Image file /home/jochen/hadoop/dfs/name/current/fsimage of size 112 bytes saved in 0 seconds.</div><div class="line">17/05/19 23:46:06 INFO namenode.FSEditLog: closing edit log: position=4, editlog=/home/jochen/hadoop/dfs/name/current/edits</div><div class="line">17/05/19 23:46:06 INFO namenode.FSEditLog: close success: truncate to 4, editlog=/home/jochen/hadoop/dfs/name/current/edits</div><div class="line">17/05/19 23:46:06 INFO common.Storage: Storage directory /home/jochen/hadoop/dfs/name has been successfully formatted.</div><div class="line">17/05/19 23:46:06 INFO namenode.NameNode: SHUTDOWN_MSG:</div><div class="line">/************************************************************</div><div class="line">SHUTDOWN_MSG: Shutting down NameNode at ubuntu/127.0.0.1</div><div class="line">************************************************************/</div></pre></td></tr></table></figure></p>
+<h4 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ cd /opt/hadoop-1.2.1/bin</div><div class="line">$ ./start-all.sh</div></pre></td></tr></table></figure>
+<h4 id="查看当前运行的java进程"><a href="#查看当前运行的java进程" class="headerlink" title="查看当前运行的java进程"></a>查看当前运行的java进程</h4><p>在Terminal输入命令，出现如下结果表示hadoop安装成功：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">$ jps</div><div class="line">12785 JobTracker</div><div class="line">1161 Jps</div><div class="line">23626 TaskTracker</div><div class="line">23275 DataNode</div><div class="line">21659 NameNode</div><div class="line">23436 SecondaryNameNode</div></pre></td></tr></table></figure></p>
+<h3 id="HDFS简介"><a href="#HDFS简介" class="headerlink" title="HDFS简介"></a>HDFS简介</h3><h4 id="HDFS基本概念"><a href="#HDFS基本概念" class="headerlink" title="HDFS基本概念"></a>HDFS基本概念</h4><h5 id="HDFS设计架构"><a href="#HDFS设计架构" class="headerlink" title="HDFS设计架构"></a>HDFS设计架构</h5><p><img src="/uploads/hdfs_block_namenode_datanode.png" alt="Alt text"></p>
+<ul>
+<li>块（Block）：<ul>
+<li>HDFS的文件被分成块进行存储</li>
+<li>HDFS块的默认大小为64MB</li>
+<li>块是文件存储处理的逻辑单元</li>
+</ul>
+</li>
+<li>管理节点（NameNode），存放文件元数据：<ul>
+<li>文件与数据块的映射表</li>
+<li>数据块与数据节点的映射表</li>
+</ul>
+</li>
+<li>DataNode：<ul>
+<li>DataNode是HDFS的工作节点</li>
+<li>存放数据块</li>
+</ul>
+</li>
+</ul>
+<h4 id="数据管理策略与容错"><a href="#数据管理策略与容错" class="headerlink" title="数据管理策略与容错"></a>数据管理策略与容错</h4><ul>
+<li>数据块副本：每个数据块至少3个副本，分布在两个机架内的多个节点</li>
+<li>心跳检测：DataNode定期向NameNode发送心跳消息<br><img src="/uploads/beat_information.png" alt="Alt text"></li>
+<li>二级NameNode：二级NameNode定期同步元数据映像文件和修改日志，NameNode发生故障时，二级NameNode替换为主NameNode<br><img src="/uploads/secondary_namenode.png" alt="Alt text"></li>
+</ul>
+<h4 id="HDFS中文件的读写操作"><a href="#HDFS中文件的读写操作" class="headerlink" title="HDFS中文件的读写操作"></a>HDFS中文件的读写操作</h4><h5 id="HDFS读取文件的流程"><a href="#HDFS读取文件的流程" class="headerlink" title="HDFS读取文件的流程"></a>HDFS读取文件的流程</h5><p><img src="/uploads/hdfs_readfile.png" alt="Alt text"></p>
+<h5 id="HDFS写入文件的流程"><a href="#HDFS写入文件的流程" class="headerlink" title="HDFS写入文件的流程"></a>HDFS写入文件的流程</h5><p><img src="/uploads/hdfs_writefile.png" alt="Alt text"></p>
+<h4 id="HDFS的特点"><a href="#HDFS的特点" class="headerlink" title="HDFS的特点"></a>HDFS的特点</h4><ul>
+<li>数据冗余，硬件容错</li>
+<li>流式的数据访问（一次写入、多次读取）</li>
+<li>适合存储大文件</li>
+<li>适用性和局限性<ul>
+<li>适合数据批量读写，吞吐量高</li>
+<li>不适合交互式应用，低延迟很难满足</li>
+<li>适合一次写入多次读取，顺序读写</li>
+<li>不支持多用户并发写相同文件</li>
+</ul>
+</li>
+</ul>
+<h4 id="HDFS使用"><a href="#HDFS使用" class="headerlink" title="HDFS使用"></a>HDFS使用</h4><p>HDFS命令行操作：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">hadoop fs -ls dirpath           // 列出某目录下的文件和目录</div><div class="line">hadoop fs -mkdir dirname        // 在HDFS中新建目录</div><div class="line">hadoop fs -put filepath dirpath // 将本地文件上传到HDFS</div><div class="line">hadoop fs -get filepath dirpath // 从HDFS下载文件到本地</div><div class="line">hadoop fs -cat filepath         // 查看文件内容</div><div class="line">hadoop dfsadmin -report         // 查看HDFS信息</div></pre></td></tr></table></figure></p>
+<h3 id="MapReduce简介"><a href="#MapReduce简介" class="headerlink" title="MapReduce简介"></a>MapReduce简介</h3><h4 id="MapReduce的原理"><a href="#MapReduce的原理" class="headerlink" title="MapReduce的原理"></a>MapReduce的原理</h4><p>分而治之，一个大任务分成多个小的子任务（map），并行执行后，合并结果（reduce）<br><img src="/uploads/map_reduce.png" alt="Alt text"></p>
+<h4 id="MapReduce的运行流程"><a href="#MapReduce的运行流程" class="headerlink" title="MapReduce的运行流程"></a>MapReduce的运行流程</h4><h5 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h5><ul>
+<li>Job(作业) &amp; Task(任务)<br>一个Job可以分成多个Task（MapTask &amp; ReduceTask）</li>
+<li>JobTracker（作业管理节点）<br>客户端提交Job，JobTracker将其放入候选队列中，在适当的时候进行调度，将Job拆分成多个MapTask和ReduceTask，分发给TaskTracker执行。JobTracker的角色：<ul>
+<li>作业调度</li>
+<li>分配任务、监控任务执行进度</li>
+<li>监控TaskTracker的状态</li>
+</ul>
+</li>
+<li>TaskTracker（任务管理节点）<br>通常TaskTracker和HDFS的DataNode属于同一组物理节点，实现了移动计算代替移动数据，保证读取数据开销最小。TaskTracker的角色：<ul>
+<li>执行任务</li>
+<li>汇报任务状态</li>
+</ul>
+</li>
+</ul>
+<h5 id="MapReduce的体系结构"><a href="#MapReduce的体系结构" class="headerlink" title="MapReduce的体系结构"></a>MapReduce的体系结构</h5><p><img src="/uploads/map_reduce_structure.png" alt="Alt text"></p>
+<h5 id="MapReduce作业执行过程"><a href="#MapReduce作业执行过程" class="headerlink" title="MapReduce作业执行过程"></a>MapReduce作业执行过程</h5><p><img src="/uploads/map_reduce_job_execution.png" alt="Alt text"></p>
+<h5 id="MapReduce的容错机制"><a href="#MapReduce的容错机制" class="headerlink" title="MapReduce的容错机制"></a>MapReduce的容错机制</h5><ul>
+<li>重复执行<br>默认为最多4次后放弃</li>
+<li>推测执行<br>原因：所有Map端运算完成，才开始执行Reduce端。<br>作用：保证整个任务的计算，不会因为某一两个TaskTracker的故障，导致整个任务执行效率很低。</li>
+</ul>
+<h3 id="YARN-Hadoop-资源管理器"><a href="#YARN-Hadoop-资源管理器" class="headerlink" title="YARN - Hadoop 资源管理器"></a>YARN - Hadoop 资源管理器</h3><ul>
+<li>YARN的基本思想是将资源管理和作业调度/监控的功能拆分到不同的守护进程。这种思想需要有一个全局的资源管理器（RM）和（每个应用程序都要有的）应用程序管理器（AM）。</li>
+<li>资源管理器（RM）和节点管理器（NodeManager）形成了数据计算框架。资源管理器（RM）是在系统中所有应用程序间仲裁资源的最终权威。节点管理器（NodeManager）是每台机器的框架代理，负责容器的管理，监控他们的资源使用情况(cpu、内存、磁盘、网络)，并向资源管理器（RM）/调度器报告该情况。</li>
+<li>每个应用程序的应用程序管理器（AM）实际上是一个特定的框架的库，它的任务是与资源管理器（RM）协商资源，并与节点管理器（NodeManager）一起工作来执行和监视任务。</li>
+<li>资源管理器（RM）有两个主要组件:调度程序和应用程序管理器（AM）。<ul>
+<li>调度程序负责将资源分配给各种运行的应用程序。调度程序是纯粹的调度器，因为它不执行应用程序的状态监视或跟踪。另外，它也不能保证重新启动失败的任务，无论是由于应用程序失败还是硬件故障。</li>
+<li>应用程序管理器（AM）负责接收提交的工作，协商执行应用程序的第一个容器，并并提供在失败时重新启动应用程序管理器(AM)容器的服务。每个应用程序管理器(AM)负责从调度程序中协商适当的资源容器，跟踪它们的状态并监视进程。</li>
+</ul>
+</li>
+<li>YARN 还支持资源预定的概念，保留资源以确保重要工作的可预见性执行。预订系统会对资源进行跟踪，对预订进行控制，并动态地指导底层的调度程序，以确保预订是满的。</li>
+</ul>
+<p><img src="/uploads/hadoop_yarn.png" alt="Alt text"></p>
+<blockquote>
+<p>Hadoop官网：<a href="http://hadoop.apache.org" target="_blank" rel="external">http://hadoop.apache.org</a></p>
+</blockquote>
+
+    
+
+    
+</div>
+
+
+                
+
+                <!-- Post Comments -->
+                
+                    
+                
+            </div>
+
+            <!-- Post Prev & Next Nav -->
+            <nav class="material-nav mdl-color-text--grey-50 mdl-cell mdl-cell--12-col">
+    <!-- Prev Nav -->
+    
+        <a href="/2017/05/26/Nodejs-Express-MongoDB快速搭建网站/" id="post_nav-newer" class="prev-content">
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
+                <i class="material-icons">arrow_back</i>
+            </button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            Newer
+        </a>
+    
+
+    <!-- Section Spacer -->
+    <div class="section-spacer"></div>
+
+    <!-- Next Nav -->
+    
+        <a href="/2017/05/16/Nodejs的使用技巧/" id="post_nav-older" class="next-content">
+            Older
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
+                <i class="material-icons">arrow_forward</i>
+            </button>
+        </a>
+    
+</nav>
+
+        </div>
+    </div>
+
+
+
+                    
+                        <!-- Overlay For Active Sidebar -->
+<div class="sidebar-overlay"></div>
+
+<!-- Material sidebar -->
+<aside id="sidebar" class="sidebar sidebar-colored sidebar-fixed-left" role="navigation">
+    <div id="sidebar-main">
+        <!-- Sidebar Header -->
+        <div class="sidebar-header header-cover" style="background-image: url(/img/sidebar_header.png);">
+    <!-- Top bar -->
+    <div class="top-bar"></div>
+
+    <!-- Sidebar toggle button -->
+    <button type="button" class="sidebar-toggle mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" style="display: initial;" data-upgraded=",MaterialButton,MaterialRipple">
+        <i class="material-icons">clear_all</i>
+        <span class="mdl-button__ripple-container">
+            <span class="mdl-ripple">
+            </span>
+        </span>
+    </button>
+
+    <!-- Sidebar Avatar -->
+    <div class="sidebar-image">
+        <img src="/img/avatar.jpg" alt="Jochen-M's avatar">
+    </div>
+
+    <!-- Sidebar Email -->
+    <a data-toggle="dropdown" class="sidebar-brand" href="#settings-dropdown">
+        Jochen_M@email.com
+        <b class="caret"></b>
+    </a>
+</div>
+
+
+        <!-- Sidebar Navigation  -->
+        <ul class="nav sidebar-nav">
+    <!-- User dropdown  -->
+    <li class="dropdown">
+        <ul id="settings-dropdown" class="dropdown-menu">
+            
+                <li>
+                    <a href="#" target="_blank" title="Email Me">
+                        
+                            <i class="material-icons sidebar-material-icons sidebar-indent-left1pc-element">email</i>
+                        
+                        Email Me
+                    </a>
+                </li>
+            
+        </ul>
+    </li>
+
+    <!-- Homepage -->
+    
+        <li id="sidebar-first-li">
+            <a href="/">
+                
+                    <i class="material-icons sidebar-material-icons">home</i>
+                
+                Home
+            </a>
+        </li>
+        
+    
+
+    <!-- Archives  -->
+    
+        <li class="dropdown">
+            <a href="#" class="ripple-effect dropdown-toggle" data-toggle="dropdown">
+                
+                    <i class="material-icons sidebar-material-icons">inbox</i>
+                
+                    Archives
+                <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
+            <li>
+                <a class="sidebar_archives-link" href="/archives/2017/09/">September 2017<span class="sidebar_archives-count">14</span></a></li><li><a class="sidebar_archives-link" href="/archives/2017/07/">July 2017<span class="sidebar_archives-count">2</span></a></li><li><a class="sidebar_archives-link" href="/archives/2017/06/">June 2017<span class="sidebar_archives-count">9</span></a></li><li><a class="sidebar_archives-link" href="/archives/2017/05/">May 2017<span class="sidebar_archives-count">8</span></a></li><li><a class="sidebar_archives-link" href="/archives/2017/01/">January 2017<span class="sidebar_archives-count">1</span></a>
+            </ul>
+        </li>
+        
+    
+
+    <!-- Categories  -->
+    
+        <li class="dropdown">
+            <a href="#" class="ripple-effect dropdown-toggle" data-toggle="dropdown">
+                
+                    <i class="material-icons sidebar-material-icons">chrome_reader_mode</i>
+                
+                Categories
+                <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
+                <li>
+                <a class="sidebar_archives-link" href="/categories/Algorithm/">Algorithm<span class="sidebar_archives-count">19</span></a></li><li><a class="sidebar_archives-link" href="/categories/Big-Data/">Big Data<span class="sidebar_archives-count">5</span></a></li><li><a class="sidebar_archives-link" href="/categories/Docker/">Docker<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/categories/Github/">Github<span class="sidebar_archives-count">2</span></a></li><li><a class="sidebar_archives-link" href="/categories/Java/">Java<span class="sidebar_archives-count">2</span></a></li><li><a class="sidebar_archives-link" href="/categories/Nodejs/">Nodejs<span class="sidebar_archives-count">4</span></a></li><li><a class="sidebar_archives-link" href="/categories/PHP/">PHP<span class="sidebar_archives-count">1</span></a>
+            </ul>
+        </li>
+        
+    
+
+    <!-- Pages  -->
+    
+        <li>
+            <a href="/timeline" title="Timeline">
+                
+                    <i class="material-icons sidebar-material-icons">schedule</i>
+                
+                Timeline
+            </a>
+        </li>
+        
+    
+        <li>
+            <a href="/gallery" title="Gallery">
+                
+                    <i class="material-icons sidebar-material-icons">camera</i>
+                
+                Gallery
+            </a>
+        </li>
+        
+    
+        <li>
+            <a href="/tags" title="Tags">
+                
+                    <i class="material-icons sidebar-material-icons">label</i>
+                
+                Tags
+            </a>
+        </li>
+        
+    
+        <li>
+            <a href="/about" title="About">
+                
+                    <i class="material-icons sidebar-material-icons">person</i>
+                
+                About
+            </a>
+        </li>
+        
+    
+
+    <!-- Article Number  -->
+    
+</ul>
+
+
+        <!-- Sidebar Footer -->
+        <!--
+I'm glad you use this theme, the development is no so easy, I hope you can keep the copyright, I will thank you so much.
+If you still want to delete the copyrights, could you still retain the first one? Which namely "Theme Material"
+It will not impact the appearance and can give developers a lot of support :)
+
+很高兴您使用并喜欢该主题，开发不易 十分谢谢与希望您可以保留一下版权声明。
+如果您仍然想删除的话 能否只保留第一项呢？即 "Theme Material"
+它不会影响美观并可以给开发者很大的支持和动力。 :)
+-->
+
+<!-- Sidebar Divider -->
+
+
+<!-- Theme Material -->
+
+
+<!-- Help & Support -->
+<!--
+
+-->
+
+<!-- Feedback -->
+<!--
+
+-->
+
+<!-- About Theme -->
+<!--
+
+-->
+
+    </div>
+
+    <!-- Sidebar Image -->
+    
+
+</aside>
+
+                    
+
+                    
+                        <!-- Footer Top Button -->
+                        <div id="back-to-top" class="toTop-wrap">
+    <a href="#top" class="toTop">
+        <i class="material-icons footer_top-i">expand_less</i>
+    </a>
+</div>
+
+                    
+
+                    <!--Footer-->
+<footer class="mdl-mini-footer" id="bottom">
+    
+        <!-- Paradox Footer Left Section -->
+        <div class="mdl-mini-footer--left-section sns-list">
+    <!-- Twitter -->
+    
+
+    <!-- Facebook -->
+    
+
+    <!-- Google + -->
+    
+        <a href="https://www.google.com/" target="_blank">
+            <button class="mdl-mini-footer--social-btn social-btn footer-sns-gplus">
+                <span class="visuallyhidden">Google Plus</span>
+            </button><!--
+     --></a>
+    
+
+    <!-- Weibo -->
+    
+        <a href="http://weibo.com/u/5054297276?refer_flag=1001030201_" target="_blank">
+            <button class="mdl-mini-footer--social-btn social-btn footer-sns-weibo">
+                <span class="visuallyhidden">Weibo</span>
+            </button><!--
+     --></a>
+    
+
+    <!-- Instagram -->
+    
+
+    <!-- Tumblr -->
+    
+
+    <!-- Github -->
+    
+        <a href="https://github.com/Jochen-M" target="_blank">
+            <button class="mdl-mini-footer--social-btn social-btn footer-sns-github">
+                <span class="visuallyhidden">Github</span>
+            </button><!--
+     --></a>
+    
+
+    <!-- LinkedIn -->
+    
+
+    <!-- Zhihu -->
+    
+
+    <!-- Bilibili -->
+    
+
+    <!-- Telegram -->
+    
+</div>
+
+
+        <!--Copyright-->
+        <div id="copyright">
+            Copyright&nbsp;©<script type="text/javascript">var fd = new Date();document.write("&nbsp;" + fd.getFullYear() + "&nbsp;");</script>Jochen-M
+        </div>
+
+        <!-- Paradox Footer Right Section -->
+
+        <!--
+        I am glad you use this theme, the development is no so easy, I hope you can keep the copyright.
+        It will not impact the appearance and can give developers a lot of support :)
+
+        很高兴您使用该主题，开发不易，希望您可以保留一下版权声明。
+        它不会影响美观并可以给开发者很大的支持。 :)
+        -->
+
+        <div class="mdl-mini-footer--right-section">
+            <div>
+                <div class="footer-develop-div">Powered by <a href="https://hexo.io" target="_blank" class="footer-develop-a">Hexo</a></div>
+                <div class="footer-develop-div">Theme - <a href="https://github.com/viosey/hexo-theme-material" target="_blank" class="footer-develop-a">Material</a></div>
+            </div>
+        </div>
+    
+</footer>
+
+
+                    <!-- Import File -->
+
+
+    <script>lsloader.load("js/lazyload.min.js","/js/lazyload.min.js?1BcfzuNXqV+ntF6gq+5X3Q==")</script>
+    <script>lsloader.load("js/js.min.js","/js/js.min.js?oAl/+lvaqTFV31JXTmbrNA==")</script>
+
+
+
+    <script>lsloader.load("js/nprogress.js","/js/nprogress.js?pl3Qhb9lvqR1FlyLUna1Yw==")</script>
+
+
+<script type="text/ls-javascript" id="NProgress-script">
+    NProgress.configure({
+        showSpinner: true
+    });
+    NProgress.start();
+    $('#nprogress .bar').css({
+        'background': '#29d'
+    });
+    $('#nprogress .peg').css({
+        'box-shadow': '0 0 10px #29d, 0 0 15px #29d'
+    });
+    $('#nprogress .spinner-icon').css({
+        'border-top-color': '#29d',
+        'border-left-color': '#29d'
+    });
+    setTimeout(function() {
+        NProgress.done();
+        $('.fade').removeClass('out');
+    }, 800);
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- UC Browser Compatible -->
+<script>
+	var agent = navigator.userAgent.toLowerCase();
+	if(agent.indexOf('ucbrowser')>0) {
+		document.write('<link rel="stylesheet" href="/css/uc.css">');
+	   alert('由于 UC 浏览器使用极旧的内核，而本网站使用了一些新的特性。\n为了您能更好的浏览，推荐使用 Chrome 或 Firefox 浏览器。');
+	}
+</script>
+
+<!-- Window Load-->
+<script type="text/ls-javascript" id="window-load">
+    $(window).on('load', function() {
+        // Post_Toc parent position fixed
+        $('.post-toc-wrap').parent('.mdl-menu__container').css('position', 'fixed');
+    });
+</script>
+
+<!-- MathJax Load-->
+
+<script type="text/ls-javascript" id="lazy-load">
+    // Offer LazyLoad
+    queue.offer(function(){
+        $('.lazy').lazyload({
+            effect : 'show'
+        });
+    });
+
+    // Start Queue
+    $(document).ready(function(){
+        setInterval(function(){
+            queue.execNext();
+        },200);
+    });
+</script>
+
+<!-- Bing Background -->
+
+
+<script>
+    (function(){
+        var scriptList = document.querySelectorAll('script[type="text/ls-javascript"]')
+
+        for (var i = 0; i < scriptList.length; ++i) {
+            var item = scriptList[i];
+            lsloader.runInlineScript(item.id,item.id);
+        }
+    })()
+console.log('\n %c © Material Theme | Version: 1.4.0 | https://github.com/viosey/hexo-theme-material %c \n', 'color:#455a64;background:#e0e0e0;padding:5px 0;border-top-left-radius:5px;border-bottom-left-radius:5px;', 'color:#455a64;background:#e0e0e0;padding:5px 0;border-top-right-radius:5px;border-bottom-right-radius:5px;');
+</script>
+
+                </main>
+            </div>
+        </body>
+    
+</html>
