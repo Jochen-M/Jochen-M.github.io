@@ -70,6 +70,10 @@ IncludeOptional sites-enabled/*.conf
 	ServerAdmin webmaster@localhost
 	DocumentRoot /var/www/html
 
+  <Directory "/var/www/html">
+  	  AllowOverride All
+	</Directory>
+
 	# Available loglevels: trace8, ..., trace1, debug, info, notice, warn,
 	# error, crit, alert, emerg.
 	# It is also possible to configure the loglevel for particular
@@ -122,6 +126,10 @@ sudo cp 000-default.conf site2_com.conf
 	ServerAdmin webmaster@localhost
 	DocumentRoot /var/www/site1_com
 
+  <Directory "/var/www/site1_com">
+  	  AllowOverride All
+	</Directory>
+
 	# Available loglevels: trace8, ..., trace1, debug, info, notice, warn,
 	# error, crit, alert, emerg.
 	# It is also possible to configure the loglevel for particular
@@ -147,14 +155,30 @@ sudo ln -s /etc/apache2/sites-available/site1_com.conf /etc/apache2/sites-enable
 sudo ln -s /etc/apache2/sites-available/site2_com.conf /etc/apache2/sites-enabled/site2_com.conf
 ```
 
-##### 将web项目编译成静态文件后，将文件夹拷贝到/var/www/目录下，分别命名为site1_com和site2_com，然后修改目录所有者：
+##### 部署项目（以Angular2项目为例）
++ 使用ng build命令，将web项目编译成静态文件；
++ 将dist/文件夹拷贝到/var/www/目录下，重命名为site1_com和site2_com；
++ 在site1_com目录下新建文件.htaccess，以重构路由:
 ```
-sudo chown -R site1_com site2_com
+<IfModule mod_rewrite.c>
+	  RewriteEngine On
+    RewriteBase /
+	  RewriteRule ^index\.html$ - [L]
+	  RewriteCond %{REQUEST_FILENAME} !-f
+	  RewriteCond %{REQUEST_FILENAME} !-d
+	  RewriteRule . /index.html [L]
+</IfModule>
+```
++ 重写apache2配置
+```
+sudo a2enmod rewrite
 ```
 
 ##### 重启Apache2使配置生效
 ```
 sudo service apache2 restart
+或
+sudo /etc/init.d/apache2 restart
 ```
 
 ##### 修改/etc/hosts文件，便于测试。
@@ -191,6 +215,10 @@ Listen 8082
 	ServerAdmin webmaster@localhost
 	DocumentRoot /var/www/site2_com
 
+  <Directory "/var/www/site2_com">
+  	  AllowOverride All
+	</Directory>
+
 	# Available loglevels: trace8, ..., trace1, debug, info, notice, warn,
 	# error, crit, alert, emerg.
 	# It is also possible to configure the loglevel for particular
@@ -215,5 +243,12 @@ Listen 8082
     127.0.0.1   site.com
 ```
 
+##### 重启Apache2使配置生效
+```
+sudo service apache2 restart
+或
+sudo /etc/init.d/apache2 restart
+```
+
 ##### 测试
-重启Apache2，访问http://site.com:8082即可看到我们的网站。
+访问http://site.com:8082即可看到我们的网站。

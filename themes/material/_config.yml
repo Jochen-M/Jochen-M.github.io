@@ -166,10 +166,10 @@ sidebar:
             link: "/timeline"
             icon: schedule
             divider: false
-        Gallery:
-            link: "/gallery"
-            icon: camera
-            divider: false
+        # Gallery:
+        #     link: "/gallery"
+        #     icon: camera
+        #     divider: false
         Tags:
             link: "/tags"
             icon: label
