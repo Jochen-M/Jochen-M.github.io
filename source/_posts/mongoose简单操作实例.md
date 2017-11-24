@@ -7,7 +7,6 @@ tags:
     - mongoose
 categories:
     - Nodejs
-    - Utils
 ---
 
 Mongoose API: [http://mongoosejs.com/docs/api.html](http://mongoosejs.com/docs/api.html)

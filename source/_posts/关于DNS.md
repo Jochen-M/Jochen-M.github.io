@@ -5,9 +5,10 @@ tags:
     - DNS
     - Nodejs
 categories:
-    - Utils
+    - Nodejs
 ---
 
+### EAI_AGAIN
 近日在Node开发过程中，屡次遇到如下问题：
 ```
 getaddrinfo EAI_AGAIN

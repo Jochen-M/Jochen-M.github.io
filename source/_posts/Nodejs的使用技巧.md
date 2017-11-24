@@ -5,7 +5,6 @@ tags:
     - Nodejs
 categories:
     - Nodejs
-    - Utils
 ---
 > 一、node.js升级到最新版本
 > 二、使用nvm管理node版本
