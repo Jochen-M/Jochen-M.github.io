@@ -3,6 +3,52 @@
   
     
     <entry>
+      <title><![CDATA[Apache2 SSL加密]]></title>
+      <url>/2017/11/24/Apache2-SSL%E5%8A%A0%E5%AF%86/</url>
+      <content type="html"><![CDATA[<h3 id="HTTPS和HTTP的区别"><a href="#HTTPS和HTTP的区别" class="headerlink" title="HTTPS和HTTP的区别"></a>HTTPS和HTTP的区别</h3><ul>
+<li><p>超文本传输协议HTTP协议被用于在Web浏览器和网站服务器之间传递信息。HTTP协议以明文方式发送内容，不提供任何方式的数据加密，如果攻击者截取了Web浏览器和网站服务器之间的传输报文，就可以直接读懂其中的信息，因此HTTP协议不适合传输一些敏感信息，比如信用卡号、密码等。</p>
+</li>
+<li><p>为了解决HTTP协议的这一缺陷，需要使用另一种协议：安全套接字层超文本传输协议HTTPS。为了数据传输的安全，HTTPS在HTTP的基础上加入了SSL协议，SSL依靠证书来验证服务器的身份，并为浏览器和服务器之间的通信加密。</p>
+</li>
+<li><p>HTTPS和HTTP的区别主要为以下四点：</p>
+<ul>
+<li>https协议需要到ca申请证书，一般免费证书很少，需要交费。</li>
+<li>http是超文本传输协议，信息是明文传输，https则是具有安全性的ssl加密传输协议。</li>
+<li>http和https使用的是完全不同的连接方式，用的端口也不一样，前者是80，后者是443。（默认情况下）</li>
+<li>http的连接很简单，是无状态的；HTTPS协议是由SSL+HTTP协议构建的可进行加密传输、身份认证的网络协议，比http协议安全。</li>
+</ul>
+</li>
+<li><p>TLS(传输层安全)及其前身SSL(安全套接字层)，是为了在受保护的、加密的信道中通信而创建的安全协议。</p>
+</li>
+</ul>
+<h3 id="如何对Apache中的项目进行加密处理呢"><a href="#如何对Apache中的项目进行加密处理呢" class="headerlink" title="如何对Apache中的项目进行加密处理呢?"></a>如何对Apache中的项目进行加密处理呢?</h3><p>一种方式是用openssl手动生成证书和密钥，这种方式的缺点是：浏览器不认这类证书，通过浏览器访问时会有安全性提示，影响体验，所以这里不再赘述。具体方法可以参考这篇文章<a href="https://www.digitalocean.com/community/tutorials/how-to-create-a-ssl-certificate-on-apache-for-ubuntu-14-04" target="_blank" rel="external">《How To Create a SSL Certificate on Apache for Ubuntu 14.04》</a>。</p>
+<p>这里主要记录另一种方法：通过ubuntu的Certbot工具来生成证书和秘钥，对apache进行加密。</p>
+<p>具体步骤及说明如下：</p>
+<h4 id="安装Certbot"><a href="#安装Certbot" class="headerlink" title="安装Certbot"></a>安装Certbot</h4><p>在Ubuntu系统中，Certbot团队维护了一个PPA软件源。将其添加到仓库列表中，并安装Certbot。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$ sudo apt-get update</div><div class="line">$ sudo apt-get install software-properties-common</div><div class="line">$ sudo add-apt-repository ppa:certbot/certbot</div><div class="line">$ sudo apt-get update</div><div class="line">$ sudo apt-get install python-certbot-apache</div></pre></td></tr></table></figure></p>
+<h4 id="开始加密"><a href="#开始加密" class="headerlink" title="开始加密"></a>开始加密</h4><p>Certbot有一个很稳定的测试版Apache插件，它会自动获取并安装certs。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo certbot --apache</div></pre></td></tr></table></figure></p>
+<p>运行该命令，你将会得到一个证书，并且Certbot会自动修改apache的配置文件使加密生效。</p>
+<h4 id="自动更新"><a href="#自动更新" class="headerlink" title="自动更新"></a>自动更新</h4><p>Certbot包附带一个cron定时任务，该任务会在证书到期之前自动更新证书。因为加密证书有效期为90天，所以最好三个月定时更新。你可以使用如下命令来测试证书的自动更新：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo certbot renew --dry-run</div></pre></td></tr></table></figure></p>
+<p>你可以通过cron或者systemd任务来执行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">certbot renew</div></pre></td></tr></table></figure></p>
+]]></content>
+      
+        <categories>
+            
+            <category> Ubuntu </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> Ubuntu </tag>
+            
+            <tag> Apache </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[ImageMagick]]></title>
       <url>/2017/11/24/ImageMagick/</url>
       <content type="html"><![CDATA[<p>ubuntu中可以用convert命令对图像的格式和大小等进行转换（convert命令可以用在脚本中，如Nodejs中的gm模块），但是convert不是ubuntu自带的命令，需要先安装ImageMagick，之后才可以使用。</p>
