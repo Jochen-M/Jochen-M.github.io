@@ -3,6 +3,32 @@
   
     
     <entry>
+      <title><![CDATA[ImageMagick]]></title>
+      <url>/2017/11/24/ImageMagick/</url>
+      <content type="html"><![CDATA[<p>ubuntu中可以用convert命令对图像的格式和大小等进行转换（convert命令可以用在脚本中，如Nodejs中的gm模块），但是convert不是ubuntu自带的命令，需要先安装ImageMagick，之后才可以使用。</p>
+<h4 id="安装命令"><a href="#安装命令" class="headerlink" title="安装命令"></a>安装命令</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install imagemagick</div></pre></td></tr></table></figure>
+<h4 id="测试是否安装成功"><a href="#测试是否安装成功" class="headerlink" title="测试是否安装成功"></a>测试是否安装成功</h4><p>首先查看版本，命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">convert -version</div></pre></td></tr></table></figure></p>
+<p>如果看到下面的信息，则说明安装成功：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Version: ImageMagick 6.7.7-10 2014-03-06 Q16 http://www.imagemagick.org</div><div class="line">Copyright: Copyright (C) 1999-2012 ImageMagick Studio LLC</div><div class="line">Features: OpenMP</div></pre></td></tr></table></figure></p>
+]]></content>
+      
+        <categories>
+            
+            <category> Ubuntu </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> Ubuntu </tag>
+            
+            <tag> Nodejs </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[关于DNS]]></title>
       <url>/2017/11/24/%E5%85%B3%E4%BA%8EDNS/</url>
       <content type="html"><![CDATA[<h3 id="EAI-AGAIN"><a href="#EAI-AGAIN" class="headerlink" title="EAI_AGAIN"></a>EAI_AGAIN</h3><p>近日在Node开发过程中，屡次遇到如下问题：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">getaddrinfo EAI_AGAIN</div></pre></td></tr></table></figure></p>
