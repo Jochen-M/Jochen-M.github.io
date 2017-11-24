@@ -5,7 +5,7 @@
     <entry>
       <title><![CDATA[关于DNS]]></title>
       <url>/2017/11/24/%E5%85%B3%E4%BA%8EDNS/</url>
-      <content type="html"><![CDATA[<p>近日在Node开发过程中，屡次遇到如下问题：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">getaddrinfo EAI_AGAIN</div></pre></td></tr></table></figure></p>
+      <content type="html"><![CDATA[<h3 id="EAI-AGAIN"><a href="#EAI-AGAIN" class="headerlink" title="EAI_AGAIN"></a>EAI_AGAIN</h3><p>近日在Node开发过程中，屡次遇到如下问题：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">getaddrinfo EAI_AGAIN</div></pre></td></tr></table></figure></p>
 <p>google过后，发现这是一个DNS相关的问题：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">EAI_AGAIN is a DNS lookup timed out error, means it is a network connectivity error or proxy related error.</div></pre></td></tr></table></figure></p>
 <p>即 DNS 查找超时，意味着网络链接错误或者代理相关错误。</p>
 <p>在 Ubuntu 16.04 系统下，可以手动设置域名服务器解决该问题。<br>在 /etc/resolv.conf 中添加一行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">nameserver 8.8.8.8</div><div class="line">或</div><div class="line">nameserver 114.114.114.114</div></pre></td></tr></table></figure></p>
