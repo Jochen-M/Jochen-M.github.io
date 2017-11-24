@@ -5,6 +5,7 @@ tags:
     - Nodejs
 categories:
     - Nodejs
+    - Utils
 ---
 > 一、node.js升级到最新版本
 > 二、使用nvm管理node版本
@@ -45,8 +46,8 @@ nvm install stable #安装最新稳定版
 
 *额外说明*
 ```
-nvm install stable #安装最新稳定版 node 
-nvm install 4.2.2 #安装 4.2.2 版本 
+nvm install stable #安装最新稳定版 node
+nvm install 4.2.2 #安装 4.2.2 版本
 nvm install 0.12.7 #安装 0.12.7 版本
 nvm alias default 0.12.7 #设置默认 node 版本为 0.12.7
 ```
