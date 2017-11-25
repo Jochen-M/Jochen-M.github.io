@@ -251,4 +251,4 @@ sudo /etc/init.d/apache2 restart
 ```
 
 ##### 测试
-访问http://site.com:8082即可看到我们的网站。
+访问 http://site.com:8082 即可看到我们的网站。
