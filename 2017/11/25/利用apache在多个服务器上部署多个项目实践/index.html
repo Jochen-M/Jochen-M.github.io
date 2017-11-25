@@ -12,7 +12,7 @@
     
     <title>
         
-            Categories: Big Data | 
+            利用 apache2 在多个服务器上部署多个项目实践 | 
         
         Jochen-M
     </title>
@@ -36,7 +36,7 @@
     <meta name="theme-color" content="#0097A7">
     <meta name="author" content="Jochen-M">
     <meta name="description" itemprop="description" content="The journey of a thousand miles begins with a single step.">
-    <meta name="keywords" content="Jochen,jochen,hexo">
+    <meta name="keywords" content="Jochen,jochen,hexo,Ubuntu,Apache">
 
     <!-- Site Verification -->
     
@@ -65,15 +65,18 @@
     <!-- The Open Graph protocol -->
     <meta property="og:url" content="http://jochen-m.github.io">
     <meta property="og:type" content="blog">
-    <meta property="og:title" content="Categories: Big Data | Jochen-M">
+    <meta property="og:title" content="利用 apache2 在多个服务器上部署多个项目实践 | Jochen-M">
     <meta property="og:image" content="/img/favicon.png" />
     <meta property="og:description" content="The journey of a thousand miles begins with a single step.">
-    
+    <meta property="og:article:tag" content="Ubuntu"> <meta property="og:article:tag" content="Apache"> 
 
+    
+        <meta property="article:published_time" content="Nov 25, 2017" />
+        <meta property="article:modified_time" content="Nov 25, 2017" />
     
 
     <!-- The Twitter Card protocol -->
-    <meta name="twitter:title" content="Categories: Big Data | Jochen-M">
+    <meta name="twitter:title" content="利用 apache2 在多个服务器上部署多个项目实践 | Jochen-M">
     <meta name="twitter:description" content="The journey of a thousand miles begins with a single step.">
     <meta name="twitter:image" content="/img/favicon.png">
     <meta name="twitter:card" content="summary_large_image" />
@@ -81,13 +84,43 @@
 
     <!-- Add canonical link for SEO -->
     
-        <link rel="canonical" href="http://jochen-m.github.io/categories/Big-Data/index.html" />
+        <link rel="canonical" href="http://jochen-m.github.io/2017/11/25/利用apache在多个服务器上部署多个项目实践/index.html" />
     
 
     <!-- Structured-data for SEO -->
     
         
 
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "publisher": {
+        "@type": "Organization",
+        "name": "Jochen-M",
+        "logo": "/img/favicon.png"
+    },
+    "author": {
+        "@type": "Person",
+        "name": "Jochen-M",
+        "image": {
+            "@type": "ImageObject",
+            "url": "/img/favicon.png"
+        },
+        "description": "Do the thing you think you cannot do."
+    },
+    "headline": "利用 apache2 在多个服务器上部署多个项目实践",
+    "url": "http://jochen-m.github.io/2017/11/25/利用apache在多个服务器上部署多个项目实践/index.html",
+    "datePublished": "Nov 25, 2017",
+    "dateModified": "Nov 25, 2017",
+    "description": "The journey of a thousand miles begins with a single step.",
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "http://jochen-m.github.io"
+    }
+}
+</script>
 
 
     
@@ -276,334 +309,267 @@
                         </button>
                     
 
-                    <!-- Index Module -->
-<div class="material-index mdl-grid">
-    
-    <div class="locate-thumbnail-symbol"></div>
+                    <!-- Post TOC -->
 
-    <!-- Pin on top -->
+    
+    <!-- Back Button -->
+    <!--
+    <div class="material-back" id="backhome-div" tabindex="0">
+        <a class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon"
+           href="#" onclick="window.history.back();return false;"
+           target="_self"
+           role="button"
+           data-upgraded=",MaterialButton,MaterialRipple">
+            <i class="material-icons" role="presentation">arrow_back</i>
+            <span class="mdl-button__ripple-container">
+                <span class="mdl-ripple"></span>
+            </span>
+        </a>
+    </div>
+    -->
+
+    <!-- Left aligned menu below button -->
+    <button id="post-toc-trigger-btn"
+        class="mdl-button mdl-js-button mdl-button--icon">
+        <i class="material-icons">format_list_numbered</i>
+    </button>
+
+    
+    <ul class="post-toc-wrap mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="post-toc-trigger-btn" style="max-height:80vh; overflow-y:scroll;">
+        <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#服务器配置说明"><span class="post-toc-number">1.</span> <span class="post-toc-text">服务器配置说明</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#架构图"><span class="post-toc-number">2.</span> <span class="post-toc-text">架构图</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#apache2-的安装与配置"><span class="post-toc-number">3.</span> <span class="post-toc-text">apache2 的安装与配置</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#安装"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">安装</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#VPS-1-中-Apache2-的配置"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">VPS 1 中 Apache2 的配置</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#VPS-2-中-Apache2-的配置"><span class="post-toc-number">3.3.</span> <span class="post-toc-text">VPS 2 中 Apache2 的配置</span></a></li></ol></li></ol>
+        <!--
+        <li class="mdl-menu__item">
+            Some Action
+        </li>
+        -->
+    </ul>
     
 
-    <!-- Normal Post -->
-    
-        
-            
-                <!-- Paradox Thumbnail -->
-                <div class="post_entry-module mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col fade out">
-    <!-- Post Thumbnail -->
+
+
+
+
+<!-- Layouts -->
+
+    <!-- Post Module -->
+    <div class="material-post_container">
+
+        <div class="material-post mdl-grid">
+            <div class="mdl-card mdl-shadow--4dp mdl-cell mdl-cell--12-col">
+
+                <!-- Post Header(Thumbnail & Title) -->
+                
+    <!-- Paradox Post Header -->
     
         
             <!-- Random Thumbnail -->
             <div class="post_thumbnail-random mdl-card__media mdl-color-text--grey-50">
-        
-    
+            <script type="text/ls-javascript" id="post-thumbnail-script">
+    var randomNum = Math.floor(Math.random() * 19 + 1);
 
-        <!-- Post Title -->
-        <p class="article-headline-p"><a href="/2017/07/13/Storm集群搭建小结/">Storm集群搭建小结</a></p>
-    </div>
-
-    <!-- Post Excerpt -->
-    <div class="mdl-color-text--grey-600 mdl-card__supporting-text post_entry-content">
-        
-            环境
-五...
-        
-        &nbsp;&nbsp;&nbsp;
-        <span>
-            <a href="/2017/07/13/Storm集群搭建小结/" target="_self">Read more</a>
-        </span>
-    </div>
-    <!-- Post_entry Info-->
-    <div id="post_entry-info">
-        <div id="post_entry-left-info" class="mdl-card__supporting-text meta mdl-color-text--grey-600 ">
-            <!-- Author Avatar -->
-            <div id="author-avatar">
-                <img src="/img/avatar.jpg" width="44px" height="44px" alt="Jochen-M's avatar">
-            </div>
-            <div>
-                <strong>Jochen-M</strong>
-                <span>Jul 13, 2017</span>
-            </div>
-        </div>
-        <div id="post_entry-right-info">
-            <!-- Category -->
-            <span class="post_entry-category">
-                <a class="post_category-link" href="/categories/Big-Data/">Big Data</a>
-            </span>
-
-            
-
-            
-
-            <!-- Post Views -->
-            <span class="post_entry-views">
-            </span>
-        </div>
-    </div>
-</div>
-
-            
-            
-        
-    
-        
-            
-                <!-- Paradox Thumbnail -->
-                <div class="post_entry-module mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col fade out">
-    <!-- Post Thumbnail -->
-    
-        
-            <!-- Random Thumbnail -->
-            <div class="post_thumbnail-random mdl-card__media mdl-color-text--grey-50">
-        
-    
-
-        <!-- Post Title -->
-        <p class="article-headline-p"><a href="/2017/07/05/Hadoop-2.8.0实践(二)/">Hadoop-2.8.0实践——搭建Hadoop集群</a></p>
-    </div>
-
-    <!-- Post Excerpt -->
-    <div class="mdl-color-text--grey-600 mdl-card__supporting-text post_entry-content">
-        
-            在本地测试hadoop成功后，我们在多台主机上搭建hadoop集群，用于处理大规模数据…
-
-        
-        &nbsp;&nbsp;&nbsp;
-        <span>
-            <a href="/2017/07/05/Hadoop-2.8.0实践(二)/" target="_self">Read more</a>
-        </span>
-    </div>
-    <!-- Post_entry Info-->
-    <div id="post_entry-info">
-        <div id="post_entry-left-info" class="mdl-card__supporting-text meta mdl-color-text--grey-600 ">
-            <!-- Author Avatar -->
-            <div id="author-avatar">
-                <img src="/img/avatar.jpg" width="44px" height="44px" alt="Jochen-M's avatar">
-            </div>
-            <div>
-                <strong>Jochen-M</strong>
-                <span>Jul 05, 2017</span>
-            </div>
-        </div>
-        <div id="post_entry-right-info">
-            <!-- Category -->
-            <span class="post_entry-category">
-                <a class="post_category-link" href="/categories/Big-Data/">Big Data</a>
-            </span>
-
-            
-
-            
-
-            <!-- Post Views -->
-            <span class="post_entry-views">
-            </span>
-        </div>
-    </div>
-</div>
-
-            
-            
-        
-    
-        
-            
-                <!-- Paradox Thumbnail -->
-                <div class="post_entry-module mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col fade out">
-    <!-- Post Thumbnail -->
-    
-        
-            <!-- Random Thumbnail -->
-            <div class="post_thumbnail-random mdl-card__media mdl-color-text--grey-50">
-        
-    
-
-        <!-- Post Title -->
-        <p class="article-headline-p"><a href="/2017/06/28/Hadoop-2.8.0实践(一)/">Hadoop-2.8.0实践——单机模式和伪分布模式</a></p>
-    </div>
-
-    <!-- Post Excerpt -->
-    <div class="mdl-color-text--grey-600 mdl-card__supporting-text post_entry-content">
-        
-            安装
-        
-        &nbsp;&nbsp;&nbsp;
-        <span>
-            <a href="/2017/06/28/Hadoop-2.8.0实践(一)/" target="_self">Read more</a>
-        </span>
-    </div>
-    <!-- Post_entry Info-->
-    <div id="post_entry-info">
-        <div id="post_entry-left-info" class="mdl-card__supporting-text meta mdl-color-text--grey-600 ">
-            <!-- Author Avatar -->
-            <div id="author-avatar">
-                <img src="/img/avatar.jpg" width="44px" height="44px" alt="Jochen-M's avatar">
-            </div>
-            <div>
-                <strong>Jochen-M</strong>
-                <span>Jun 28, 2017</span>
-            </div>
-        </div>
-        <div id="post_entry-right-info">
-            <!-- Category -->
-            <span class="post_entry-category">
-                <a class="post_category-link" href="/categories/Big-Data/">Big Data</a>
-            </span>
-
-            
-
-            
-
-            <!-- Post Views -->
-            <span class="post_entry-views">
-            </span>
-        </div>
-    </div>
-</div>
-
-            
-            
-        
-    
-        
-            
-                <!-- Paradox Thumbnail -->
-                <div class="post_entry-module mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col fade out">
-    <!-- Post Thumbnail -->
-    
-        
-            <!-- Random Thumbnail -->
-            <div class="post_thumbnail-random mdl-card__media mdl-color-text--grey-50">
-        
-    
-
-        <!-- Post Title -->
-        <p class="article-headline-p"><a href="/2017/05/19/Hadoop大数据平台架构与实践/">Hadoop大数据平台架构与实践</a></p>
-    </div>
-
-    <!-- Post Excerpt -->
-    <div class="mdl-color-text--grey-600 mdl-card__supporting-text post_entry-content">
-        
-            
-        
-        &nbsp;&nbsp;&nbsp;
-        <span>
-            <a href="/2017/05/19/Hadoop大数据平台架构与实践/" target="_self">Read more</a>
-        </span>
-    </div>
-    <!-- Post_entry Info-->
-    <div id="post_entry-info">
-        <div id="post_entry-left-info" class="mdl-card__supporting-text meta mdl-color-text--grey-600 ">
-            <!-- Author Avatar -->
-            <div id="author-avatar">
-                <img src="/img/avatar.jpg" width="44px" height="44px" alt="Jochen-M's avatar">
-            </div>
-            <div>
-                <strong>Jochen-M</strong>
-                <span>May 19, 2017</span>
-            </div>
-        </div>
-        <div id="post_entry-right-info">
-            <!-- Category -->
-            <span class="post_entry-category">
-                <a class="post_category-link" href="/categories/Big-Data/">Big Data</a>
-            </span>
-
-            
-
-            
-
-            <!-- Post Views -->
-            <span class="post_entry-views">
-            </span>
-        </div>
-    </div>
-</div>
-
-            
-            
-        
-    
-        
-            
-                <!-- Paradox Thumbnail -->
-                <div class="post_entry-module mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col fade out">
-    <!-- Post Thumbnail -->
-    
-        
-            <!-- Random Thumbnail -->
-            <div class="post_thumbnail-random mdl-card__media mdl-color-text--grey-50">
-        
-    
-
-        <!-- Post Title -->
-        <p class="article-headline-p"><a href="/2017/05/14/Flink学习笔记/">Flink学习笔记</a></p>
-    </div>
-
-    <!-- Post Excerpt -->
-    <div class="mdl-color-text--grey-600 mdl-card__supporting-text post_entry-content">
-        
-            Apache Flink is an open source platform for distributed stream and batch data processing. Flink’s core is a streaming dataflow engine that provides data distribution, communication, and fault tolerance for distributed computations over data streams. Flink also builds batch processing on top of the streaming engine, overlaying native iteration support, managed memory, and program optimization.
-        
-        &nbsp;&nbsp;&nbsp;
-        <span>
-            <a href="/2017/05/14/Flink学习笔记/" target="_self">Read more</a>
-        </span>
-    </div>
-    <!-- Post_entry Info-->
-    <div id="post_entry-info">
-        <div id="post_entry-left-info" class="mdl-card__supporting-text meta mdl-color-text--grey-600 ">
-            <!-- Author Avatar -->
-            <div id="author-avatar">
-                <img src="/img/avatar.jpg" width="44px" height="44px" alt="Jochen-M's avatar">
-            </div>
-            <div>
-                <strong>Jochen-M</strong>
-                <span>May 14, 2017</span>
-            </div>
-        </div>
-        <div id="post_entry-right-info">
-            <!-- Category -->
-            <span class="post_entry-category">
-                <a class="post_category-link" href="/categories/Big-Data/">Big Data</a>
-            </span>
-
-            
-
-            
-
-            <!-- Post Views -->
-            <span class="post_entry-views">
-            </span>
-        </div>
-    </div>
-</div>
-
-            
-            
-        
-    
-
-    
-
-    
-        <script type="text/ls-javascript" id="thumbnail-script">
-    var randomNum;
-
-    var locatePost = $('.locate-thumbnail-symbol').next();
-    for(var i = 0; i < 10; i++) {
-        randomNum = Math.floor(Math.random() * 19 + 1);
-
-        locatePost.children('.post_thumbnail-random').attr('id', 'random_thumbnail-'+randomNum);
-        locatePost.children('.post_thumbnail-random').attr('data-original', '/img/random/material-' + randomNum + '.png');
+    $('.post_thumbnail-random').attr('data-original', '/img/random/material-' + randomNum + '.png');
     $('.post_thumbnail-random').addClass('lazy');
-
-        locatePost = locatePost.next();
-    }
 </script>
 
+        
+    
+            <p class="article-headline-p">
+                利用 apache2 在多个服务器上部署多个项目实践
+            </p>
+        </div>
+
+
+
+
+
+                
+                    <!-- Paradox Post Info -->
+                    <div class="mdl-color-text--grey-700 mdl-card__supporting-text meta">
+
+    <!-- Author Avatar -->
+    <div id="author-avatar">
+        <img src="/img/avatar.jpg" width="44px" height="44px" alt="Author Avatar"/>
+    </div>
+    <!-- Author Name & Date -->
+    <div>
+        <strong>Jochen-M</strong>
+        <span>Nov 25, 2017</span>
+    </div>
+
+    <div class="section-spacer"></div>
+
+    <!-- Favorite -->
+    <!--
+        <button id="article-functions-like-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon btn-like">
+            <i class="material-icons" role="presentation">favorite</i>
+            <span class="visuallyhidden">favorites</span>
+        </button>
+    -->
+
+    <!-- Qrcode -->
+    
+
+    <!-- Tags (bookmark) -->
+    
+    <button id="article-functions-viewtags-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+        <i class="material-icons" role="presentation">bookmark</i>
+        <span class="visuallyhidden">bookmark</span>
+    </button>
+    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-functions-viewtags-button">
+        <li class="mdl-menu__item">
+        <a class="post_tag-link" href="/tags/Apache/">Apache</a></li><li class="mdl-menu__item"><a class="post_tag-link" href="/tags/Ubuntu/">Ubuntu</a>
+    </ul>
+    
+
+    <!-- Share -->
+    <button id="article-fuctions-share-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+    <i class="material-icons" role="presentation">share</i>
+    <span class="visuallyhidden">share</span>
+</button>
+<ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-fuctions-share-button">
+    
+
+    
+
+    <!-- Share Weibo -->
+    
+        <a class="post_share-link" href="http://service.weibo.com/share/share.php?appkey=&title=利用 apache2 在多个服务器上部署多个项目实践&url=http://jochen-m.github.io/2017/11/25/利用apache在多个服务器上部署多个项目实践/index.html&pic=&searchPic=false&style=simple" target="_blank">
+            <li class="mdl-menu__item">
+                Share to Weibo
+            </li>
+        </a>
+    
+
+    <!-- Share Twitter -->
+    
+        <a class="post_share-link" href="https://twitter.com/intent/tweet?text=利用 apache2 在多个服务器上部署多个项目实践&url=http://jochen-m.github.io/2017/11/25/利用apache在多个服务器上部署多个项目实践/index.html&via=Jochen-M" target="_blank">
+            <li class="mdl-menu__item">
+                Share to Twitter
+            </li>
+        </a>
+    
+
+    <!-- Share Facebook -->
+    
+        <a class="post_share-link" href="https://www.facebook.com/sharer/sharer.php?u=http://jochen-m.github.io/2017/11/25/利用apache在多个服务器上部署多个项目实践/index.html" target="_blank">
+            <li class="mdl-menu__item">
+                Share to Facebook
+            </li>
+        </a>
+    
+
+    <!-- Share Google+ -->
+    
+        <a class="post_share-link" href="https://plus.google.com/share?url=http://jochen-m.github.io/2017/11/25/利用apache在多个服务器上部署多个项目实践/index.html" target="_blank">
+            <li class="mdl-menu__item">
+                Share to Google+
+            </li>
+        </a>
+    
+
+    <!-- Share LinkedIn -->
+    
+
+    <!-- Share QQ -->
+    
+
+    <!-- Share Telegram -->
+    
+</ul>
+
+</div>
+
+                
+
+                <!-- Post Content -->
+                <div id="post-content" class="mdl-color-text--grey-700 mdl-card__supporting-text fade out">
+    
+        <p>近日在开发某电商平台时，应项目需求，要在两个远程服务器上利用 apache2 部署多个项目（前后端分离）：</p>
+<ul>
+<li>Server (Nodejs/Koa2)</li>
+<li>site1.com (Angular2)</li>
+<li>site2.com、site3.com(site2.com:8080) (Angular2)</li>
+<li>Android APP、Apple APP (ionic3)</li>
+</ul>
+<p>现将部署过程及遇到的问题记录下来。</p>
+<h3 id="服务器配置说明"><a href="#服务器配置说明" class="headerlink" title="服务器配置说明"></a>服务器配置说明</h3><p>项目一共用到了两台服务器，具体配置信息如下：</p>
+<p><strong>VPS 1 (域名: site1.com)</strong></p>
+<ul>
+<li>System: Ubuntu 16.04</li>
+<li>Mem: 8G</li>
+<li>Disk: 200G</li>
+<li>Bindwidth: 10Mbps</li>
+</ul>
+<p><strong>VPS 2 (域名: site2.com)</strong></p>
+<ul>
+<li>System: Ubuntu 16.04</li>
+<li>Mem: 2G</li>
+<li>Disk: 50G</li>
+<li>Bindwidth: 2.5Mbps</li>
+</ul>
+<h3 id="架构图"><a href="#架构图" class="headerlink" title="架构图"></a>架构图</h3><p>为了清晰明了，特绘制架构图如下：<br><img src="/uploads/multi_server_multi_site.png" alt="Alt text"></p>
+<p>根据上图可知，这里将Server、site1.com等部署在了性能更优的服务器(VPS 1)，而将site2.com、site3.com部署在性能较低的服务器(VPS 2)。之所以这样分配，原因有三：</p>
+<ol>
+<li><p>Server需要接收并处理所有前端（web + app）的请求，还要进行数据的存储（MongoDB）和搜索（ElasticSearch），对内存、带宽、硬盘容量等的要求都比较高；</p>
+</li>
+<li><p>做web版微信支付等开发时，要求配置独立的域名，不能带端口（微信支付具体要求很复杂，主要是为了安全性）；</p>
+</li>
+<li><p>由于配套网站较多（这里是 3 个），需要多个域名或多个端口。采用一个服务器开放多个端口的方式，节省成本，但降低了网站的识别度，也不满足上述第 2 条要求；而每个网站都配备一个域名和服务器，意味着更高的成本，对于小型项目来说不是经济的做法，而且不利于管理。</p>
+</li>
+</ol>
+<p>因此，本项目采取了架构图所示的折中的方式。</p>
+<h3 id="apache2-的安装与配置"><a href="#apache2-的安装与配置" class="headerlink" title="apache2 的安装与配置"></a>apache2 的安装与配置</h3><h4 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h4><p>ubuntu 上自带了 apache2 软件包，只需要执行命令安装：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install apache2</div></pre></td></tr></table></figure></p>
+<h4 id="VPS-1-中-Apache2-的配置"><a href="#VPS-1-中-Apache2-的配置" class="headerlink" title="VPS 1 中 Apache2 的配置"></a>VPS 1 中 Apache2 的配置</h4><p>在 /etc/apache2/sites-available 中新增配置文件 site1.conf，忽略掉所有注释后，配置如下，重点注意这里的重定向配置:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">&lt;VirtualHost *:80&gt;</div><div class="line">	ServerAdmin webmaster@localhost</div><div class="line">	DocumentRoot /var/www/site1_com  # 项目目录</div><div class="line"></div><div class="line">	ErrorLog $&#123;APACHE_LOG_DIR&#125;/error.log</div><div class="line">	CustomLog $&#123;APACHE_LOG_DIR&#125;/access.log combined</div><div class="line">  &lt;Directory &quot;/var/www/site1_com&quot;&gt;  # 项目目录</div><div class="line">  	  AllowOverride All</div><div class="line">	&lt;/Directory&gt;</div><div class="line"></div><div class="line">  # 重定向</div><div class="line">  # 将所有对该apache服务器上 site1.com(:80) 的 http 请求，都重定向到 https://site1.com/REQUEST_URI</div><div class="line">	RewriteEngine on</div><div class="line">	RewriteCond %&#123;SERVER_NAME&#125; = site1.com</div><div class="line">	RewriteRule ^ https://%&#123;SERVER_NAME&#125;%&#123;REQUEST_URI&#125; [END,NE,R=permanent]</div><div class="line">&lt;/VirtualHost&gt;</div></pre></td></tr></table></figure>
+<p>该项目可以直接通过公网调用 server 的接口：site1.com:3000，及其不安全。</p>
+<p>为了安全性，需要对网站进行 ssl 加密。这里先保留以上不安全的配置文件和项目目录，另外再新增一个 ssl 加密配置文件和项目目录 site_com_ssl。</p>
+<p>加密的具体做法可以参考<a href="https://jochen-m.github.io/2017/11/24/Apache2-SSL%E5%8A%A0%E5%AF%86/">《Apache2 SSL加密》</a>。</p>
+<p>加密完成后，/etc/apache2/sites-available/ 目录下会多出一个配置文件 site1-le-ssl.conf，内容大体如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line">&lt;IfModule mod_ssl.c&gt;</div><div class="line">&lt;VirtualHost *:443&gt;</div><div class="line">	ServerAdmin webmaster@localhost</div><div class="line">	DocumentRoot /var/www/site1_com_ssl</div><div class="line"></div><div class="line">	ErrorLog $&#123;APACHE_LOG_DIR&#125;/error.log</div><div class="line">	CustomLog $&#123;APACHE_LOG_DIR&#125;/access.log combined</div><div class="line">  &lt;Directory &quot;/var/www/site1_com_ssl&quot;&gt;</div><div class="line">  	  AllowOverride All</div><div class="line">	&lt;/Directory&gt;</div><div class="line"></div><div class="line">	ServerName site1.com</div><div class="line"></div><div class="line">  # 以下为 Certbot 自动配置的信息，引入了 ssl 证书和密钥等。</div><div class="line">	Include /etc/letsencrypt/options-ssl-apache.conf</div><div class="line">	SSLCertificateFile /etc/letsencrypt/live/site1.com/fullchain.pem</div><div class="line">	SSLCertificateKeyFile /etc/letsencrypt/live/site1.com/privkey.pem</div><div class="line">&lt;/VirtualHost&gt;</div><div class="line"></div><div class="line">&lt;VirtualHost *:3001&gt;</div><div class="line">  # 重点 - 反向代理</div><div class="line">  # 将外部对 https://site1.com:3001 的访问请求，反向代理到服务器的 http://localhost:3000 （即 Node 监听的端口）。</div><div class="line">  # 通过反向代理，外部只能访问 https://site1.com:3001 的安全接口，而将 http://localhost:3000 “隐藏”起来，可以防止服务器遭受外部恶意攻击。</div><div class="line">  # 相应地，site1_com_ssl 访问服务器时的请求地址也要修改为 https://site1.com:3001。</div><div class="line">	ProxyPreserveHost On</div><div class="line">	ProxyPass / http://localhost:3000/</div><div class="line">	ProxyPassReverse / http://localhost:3000/</div><div class="line"></div><div class="line">	ServerName site1.com</div><div class="line"></div><div class="line">  Include /etc/letsencrypt/options-ssl-apache.conf</div><div class="line">  SSLCertificateFile /etc/letsencrypt/live/site1.com/fullchain.pem</div><div class="line">  SSLCertificateKeyFile /etc/letsencrypt/live/site1.com/privkey.pem</div><div class="line">&lt;/VirtualHost&gt;</div><div class="line">&lt;/IfModule&gt;</div></pre></td></tr></table></figure></p>
+<p><strong>因此在正式生产环境下，应将 :80端口 重定向到 :443 端口，并关闭防火墙的 3000 端口，打开 3001 端口。</strong></p>
+<h4 id="VPS-2-中-Apache2-的配置"><a href="#VPS-2-中-Apache2-的配置" class="headerlink" title="VPS 2 中 Apache2 的配置"></a>VPS 2 中 Apache2 的配置</h4><p>该服务器的配置和部署相对简单，和 VPS 1 的配置大同小异。</p>
+<p>需要注意的是，apache2 还要监听 :8080 的 ssl 端口，因此 /etc/apache2/ports.conf 的配置如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">Listen 80</div><div class="line">&lt;IfModule ssl_module&gt;</div><div class="line">	Listen 443</div><div class="line">	Listen 8080</div><div class="line">&lt;/IfModule&gt;</div><div class="line"></div><div class="line">&lt;IfModule mod_gnutls.c&gt;</div><div class="line">	Listen 443</div><div class="line">	Listen 8080</div><div class="line">&lt;/IfModule&gt;</div></pre></td></tr></table></figure>
+<p><strong>不要忘记打开防火墙的该端口</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo ufw allow 8080</div></pre></td></tr></table></figure></p>
+<p>另外，site2.com 、site3.com 以及 Android/Apple 请求数据的地址应为 <a href="https://site1.com:3001" target="_blank" rel="external">https://site1.com:3001</a> 。</p>
+<p>至此，在两个服务器上部署多个项目基本完成，更多细节不再赘述。</p>
+
+    
+
     
 </div>
+
+
+                
+
+                <!-- Post Comments -->
+                
+                    
+                
+            </div>
+
+            <!-- Post Prev & Next Nav -->
+            <nav class="material-nav mdl-color-text--grey-50 mdl-cell mdl-cell--12-col">
+    <!-- Prev Nav -->
+    
+
+    <!-- Section Spacer -->
+    <div class="section-spacer"></div>
+
+    <!-- Next Nav -->
+    
+        <a href="/2017/11/24/Apache2-SSL加密/" id="post_nav-older" class="next-content">
+            Older
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
+                <i class="material-icons">arrow_forward</i>
+            </button>
+        </a>
+    
+</nav>
+
+        </div>
+    </div>
+
 
 
                     

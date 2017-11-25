@@ -3,6 +3,76 @@
   
     
     <entry>
+      <title><![CDATA[利用 apache2 在多个服务器上部署多个项目实践]]></title>
+      <url>/2017/11/25/%E5%88%A9%E7%94%A8apache%E5%9C%A8%E5%A4%9A%E4%B8%AA%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E9%83%A8%E7%BD%B2%E5%A4%9A%E4%B8%AA%E9%A1%B9%E7%9B%AE%E5%AE%9E%E8%B7%B5/</url>
+      <content type="html"><![CDATA[<p>近日在开发某电商平台时，应项目需求，要在两个远程服务器上利用 apache2 部署多个项目（前后端分离）：</p>
+<ul>
+<li>Server (Nodejs/Koa2)</li>
+<li>site1.com (Angular2)</li>
+<li>site2.com、site3.com(site2.com:8080) (Angular2)</li>
+<li>Android APP、Apple APP (ionic3)</li>
+</ul>
+<p>现将部署过程及遇到的问题记录下来。</p>
+<h3 id="服务器配置说明"><a href="#服务器配置说明" class="headerlink" title="服务器配置说明"></a>服务器配置说明</h3><p>项目一共用到了两台服务器，具体配置信息如下：</p>
+<p><strong>VPS 1 (域名: site1.com)</strong></p>
+<ul>
+<li>System: Ubuntu 16.04</li>
+<li>Mem: 8G</li>
+<li>Disk: 200G</li>
+<li>Bindwidth: 10Mbps</li>
+</ul>
+<p><strong>VPS 2 (域名: site2.com)</strong></p>
+<ul>
+<li>System: Ubuntu 16.04</li>
+<li>Mem: 2G</li>
+<li>Disk: 50G</li>
+<li>Bindwidth: 2.5Mbps</li>
+</ul>
+<h3 id="架构图"><a href="#架构图" class="headerlink" title="架构图"></a>架构图</h3><p>为了清晰明了，特绘制架构图如下：<br><img src="/uploads/multi_server_multi_site.png" alt="Alt text"></p>
+<p>根据上图可知，这里将Server、site1.com等部署在了性能更优的服务器(VPS 1)，而将site2.com、site3.com部署在性能较低的服务器(VPS 2)。之所以这样分配，原因有三：</p>
+<ol>
+<li><p>Server需要接收并处理所有前端（web + app）的请求，还要进行数据的存储（MongoDB）和搜索（ElasticSearch），对内存、带宽、硬盘容量等的要求都比较高；</p>
+</li>
+<li><p>做web版微信支付等开发时，要求配置独立的域名，不能带端口（微信支付具体要求很复杂，主要是为了安全性）；</p>
+</li>
+<li><p>由于配套网站较多（这里是 3 个），需要多个域名或多个端口。采用一个服务器开放多个端口的方式，节省成本，但降低了网站的识别度，也不满足上述第 2 条要求；而每个网站都配备一个域名和服务器，意味着更高的成本，对于小型项目来说不是经济的做法，而且不利于管理。</p>
+</li>
+</ol>
+<p>因此，本项目采取了架构图所示的折中的方式。</p>
+<h3 id="apache2-的安装与配置"><a href="#apache2-的安装与配置" class="headerlink" title="apache2 的安装与配置"></a>apache2 的安装与配置</h3><h4 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h4><p>ubuntu 上自带了 apache2 软件包，只需要执行命令安装：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install apache2</div></pre></td></tr></table></figure></p>
+<h4 id="VPS-1-中-Apache2-的配置"><a href="#VPS-1-中-Apache2-的配置" class="headerlink" title="VPS 1 中 Apache2 的配置"></a>VPS 1 中 Apache2 的配置</h4><p>在 /etc/apache2/sites-available 中新增配置文件 site1.conf，忽略掉所有注释后，配置如下，重点注意这里的重定向配置:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">&lt;VirtualHost *:80&gt;</div><div class="line">	ServerAdmin webmaster@localhost</div><div class="line">	DocumentRoot /var/www/site1_com  # 项目目录</div><div class="line"></div><div class="line">	ErrorLog $&#123;APACHE_LOG_DIR&#125;/error.log</div><div class="line">	CustomLog $&#123;APACHE_LOG_DIR&#125;/access.log combined</div><div class="line">  &lt;Directory &quot;/var/www/site1_com&quot;&gt;  # 项目目录</div><div class="line">  	  AllowOverride All</div><div class="line">	&lt;/Directory&gt;</div><div class="line"></div><div class="line">  # 重定向</div><div class="line">  # 将所有对该apache服务器上 site1.com(:80) 的 http 请求，都重定向到 https://site1.com/REQUEST_URI</div><div class="line">	RewriteEngine on</div><div class="line">	RewriteCond %&#123;SERVER_NAME&#125; = site1.com</div><div class="line">	RewriteRule ^ https://%&#123;SERVER_NAME&#125;%&#123;REQUEST_URI&#125; [END,NE,R=permanent]</div><div class="line">&lt;/VirtualHost&gt;</div></pre></td></tr></table></figure>
+<p>该项目可以直接通过公网调用 server 的接口：site1.com:3000，及其不安全。</p>
+<p>为了安全性，需要对网站进行 ssl 加密。这里先保留以上不安全的配置文件和项目目录，另外再新增一个 ssl 加密配置文件和项目目录 site_com_ssl。</p>
+<p>加密的具体做法可以参考<a href="https://jochen-m.github.io/2017/11/24/Apache2-SSL%E5%8A%A0%E5%AF%86/">《Apache2 SSL加密》</a>。</p>
+<p>加密完成后，/etc/apache2/sites-available/ 目录下会多出一个配置文件 site1-le-ssl.conf，内容大体如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line">&lt;IfModule mod_ssl.c&gt;</div><div class="line">&lt;VirtualHost *:443&gt;</div><div class="line">	ServerAdmin webmaster@localhost</div><div class="line">	DocumentRoot /var/www/site1_com_ssl</div><div class="line"></div><div class="line">	ErrorLog $&#123;APACHE_LOG_DIR&#125;/error.log</div><div class="line">	CustomLog $&#123;APACHE_LOG_DIR&#125;/access.log combined</div><div class="line">  &lt;Directory &quot;/var/www/site1_com_ssl&quot;&gt;</div><div class="line">  	  AllowOverride All</div><div class="line">	&lt;/Directory&gt;</div><div class="line"></div><div class="line">	ServerName site1.com</div><div class="line"></div><div class="line">  # 以下为 Certbot 自动配置的信息，引入了 ssl 证书和密钥等。</div><div class="line">	Include /etc/letsencrypt/options-ssl-apache.conf</div><div class="line">	SSLCertificateFile /etc/letsencrypt/live/site1.com/fullchain.pem</div><div class="line">	SSLCertificateKeyFile /etc/letsencrypt/live/site1.com/privkey.pem</div><div class="line">&lt;/VirtualHost&gt;</div><div class="line"></div><div class="line">&lt;VirtualHost *:3001&gt;</div><div class="line">  # 重点 - 反向代理</div><div class="line">  # 将外部对 https://site1.com:3001 的访问请求，反向代理到服务器的 http://localhost:3000 （即 Node 监听的端口）。</div><div class="line">  # 通过反向代理，外部只能访问 https://site1.com:3001 的安全接口，而将 http://localhost:3000 “隐藏”起来，可以防止服务器遭受外部恶意攻击。</div><div class="line">  # 相应地，site1_com_ssl 访问服务器时的请求地址也要修改为 https://site1.com:3001。</div><div class="line">	ProxyPreserveHost On</div><div class="line">	ProxyPass / http://localhost:3000/</div><div class="line">	ProxyPassReverse / http://localhost:3000/</div><div class="line"></div><div class="line">	ServerName site1.com</div><div class="line"></div><div class="line">  Include /etc/letsencrypt/options-ssl-apache.conf</div><div class="line">  SSLCertificateFile /etc/letsencrypt/live/site1.com/fullchain.pem</div><div class="line">  SSLCertificateKeyFile /etc/letsencrypt/live/site1.com/privkey.pem</div><div class="line">&lt;/VirtualHost&gt;</div><div class="line">&lt;/IfModule&gt;</div></pre></td></tr></table></figure></p>
+<p><strong>因此在正式生产环境下，应将 :80端口 重定向到 :443 端口，并关闭防火墙的 3000 端口，打开 3001 端口。</strong></p>
+<h4 id="VPS-2-中-Apache2-的配置"><a href="#VPS-2-中-Apache2-的配置" class="headerlink" title="VPS 2 中 Apache2 的配置"></a>VPS 2 中 Apache2 的配置</h4><p>该服务器的配置和部署相对简单，和 VPS 1 的配置大同小异。</p>
+<p>需要注意的是，apache2 还要监听 :8080 的 ssl 端口，因此 /etc/apache2/ports.conf 的配置如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">Listen 80</div><div class="line">&lt;IfModule ssl_module&gt;</div><div class="line">	Listen 443</div><div class="line">	Listen 8080</div><div class="line">&lt;/IfModule&gt;</div><div class="line"></div><div class="line">&lt;IfModule mod_gnutls.c&gt;</div><div class="line">	Listen 443</div><div class="line">	Listen 8080</div><div class="line">&lt;/IfModule&gt;</div></pre></td></tr></table></figure>
+<p><strong>不要忘记打开防火墙的该端口</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo ufw allow 8080</div></pre></td></tr></table></figure></p>
+<p>另外，site2.com 、site3.com 以及 Android/Apple 请求数据的地址应为 <a href="https://site1.com:3001" target="_blank" rel="external">https://site1.com:3001</a> 。</p>
+<p>至此，在两个服务器上部署多个项目基本完成，更多细节不再赘述。</p>
+]]></content>
+      
+        <categories>
+            
+            <category> Ubuntu </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> Ubuntu </tag>
+            
+            <tag> Apache </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[Apache2 SSL加密]]></title>
       <url>/2017/11/24/Apache2-SSL%E5%8A%A0%E5%AF%86/</url>
       <content type="html"><![CDATA[<h3 id="关于HTTPS和HTTP"><a href="#关于HTTPS和HTTP" class="headerlink" title="关于HTTPS和HTTP"></a>关于HTTPS和HTTP</h3><h4 id="超文本传输协议HTTP"><a href="#超文本传输协议HTTP" class="headerlink" title="超文本传输协议HTTP"></a>超文本传输协议HTTP</h4><p>超文本传输协议HTTP协议被用于在Web浏览器和网站服务器之间传递信息。HTTP协议以明文方式发送内容，不提供任何方式的数据加密，如果攻击者截取了Web浏览器和网站服务器之间的传输报文，就可以直接读懂其中的信息，因此HTTP协议不适合传输一些敏感信息，比如信用卡号、密码等。</p>
@@ -149,7 +219,7 @@
 <h5 id="修改site1-com-conf和site2-com-conf："><a href="#修改site1-com-conf和site2-com-conf：" class="headerlink" title="修改site1_com.conf和site2_com.conf："></a>修改site1_com.conf和site2_com.conf：</h5><p>以site2_com为例,将监听的端口改为8082，ServerName改为site.com。（site1_com同理。）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">&lt;VirtualHost *:8082&gt;</div><div class="line">	# The ServerName directive sets the request scheme, hostname and port that</div><div class="line">	# the server uses to identify itself. This is used when creating</div><div class="line">	# redirection URLs. In the context of virtual hosts, the ServerName</div><div class="line">	# specifies what hostname must appear in the request&apos;s Host: header to</div><div class="line">	# match this virtual host. For the default virtual host (this file) this</div><div class="line">	# value is not decisive as it is used as a last resort host regardless.</div><div class="line">	# However, you must set it for any further virtual host explicitly.</div><div class="line">	ServerName site.com</div><div class="line"></div><div class="line">	ServerAdmin webmaster@localhost</div><div class="line">	DocumentRoot /var/www/site2_com</div><div class="line"></div><div class="line">  &lt;Directory &quot;/var/www/site2_com&quot;&gt;</div><div class="line">  	  AllowOverride All</div><div class="line">	&lt;/Directory&gt;</div><div class="line"></div><div class="line">	# Available loglevels: trace8, ..., trace1, debug, info, notice, warn,</div><div class="line">	# error, crit, alert, emerg.</div><div class="line">	# It is also possible to configure the loglevel for particular</div><div class="line">	# modules, e.g.</div><div class="line">	#LogLevel info ssl:warn</div><div class="line"></div><div class="line">	ErrorLog $&#123;APACHE_LOG_DIR&#125;/error.log</div><div class="line">	CustomLog $&#123;APACHE_LOG_DIR&#125;/access.log combined</div><div class="line"></div><div class="line">	# For most configuration files from conf-available/, which are</div><div class="line">	# enabled or disabled at a global level, it is possible to</div><div class="line">	# include a line for only one particular virtual host. For example the</div><div class="line">	# following line enables the CGI configuration for this host only</div><div class="line">	# after it has been globally disabled with &quot;a2disconf&quot;.</div><div class="line">	#Include conf-available/serve-cgi-bin.conf</div><div class="line">&lt;/VirtualHost&gt;</div></pre></td></tr></table></figure></p>
 <h5 id="修改-etc-hosts文件，便于测试。-1"><a href="#修改-etc-hosts文件，便于测试。-1" class="headerlink" title="修改/etc/hosts文件，便于测试。"></a>修改/etc/hosts文件，便于测试。</h5><p>添加一行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">127.0.0.1   site.com</div></pre></td></tr></table></figure></p>
 <h5 id="重启Apache2使配置生效-1"><a href="#重启Apache2使配置生效-1" class="headerlink" title="重启Apache2使配置生效"></a>重启Apache2使配置生效</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">sudo service apache2 restart</div><div class="line">或</div><div class="line">sudo /etc/init.d/apache2 restart</div></pre></td></tr></table></figure>
-<h5 id="测试-1"><a href="#测试-1" class="headerlink" title="测试"></a>测试</h5><p>访问<a href="http://site.com:8082即可看到我们的网站。" target="_blank" rel="external">http://site.com:8082即可看到我们的网站。</a></p>
+<h5 id="测试-1"><a href="#测试-1" class="headerlink" title="测试"></a>测试</h5><p>访问 <a href="http://site.com:8082" target="_blank" rel="external">http://site.com:8082</a> 即可看到我们的网站。</p>
 ]]></content>
       
         <categories>
@@ -1534,14 +1604,14 @@
     </entry>
     
     <entry>
-      <title><![CDATA[tags]]></title>
-      <url>/tags/index.html</url>
+      <title><![CDATA[timeline]]></title>
+      <url>/timeline/index.html</url>
       <content type="html"></content>
     </entry>
     
     <entry>
-      <title><![CDATA[timeline]]></title>
-      <url>/timeline/index.html</url>
+      <title><![CDATA[tags]]></title>
+      <url>/tags/index.html</url>
       <content type="html"></content>
     </entry>
     
