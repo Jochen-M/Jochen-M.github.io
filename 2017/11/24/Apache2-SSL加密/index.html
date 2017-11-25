@@ -72,7 +72,7 @@
 
     
         <meta property="article:published_time" content="Nov 24, 2017" />
-        <meta property="article:modified_time" content="Nov 24, 2017" />
+        <meta property="article:modified_time" content="Nov 25, 2017" />
     
 
     <!-- The Twitter Card protocol -->
@@ -113,7 +113,7 @@
     "headline": "Apache2 SSL加密",
     "url": "http://jochen-m.github.io/2017/11/24/Apache2-SSL加密/index.html",
     "datePublished": "Nov 24, 2017",
-    "dateModified": "Nov 24, 2017",
+    "dateModified": "Nov 25, 2017",
     "description": "The journey of a thousand miles begins with a single step.",
     "mainEntityOfPage": {
         "@type": "WebPage",
@@ -336,7 +336,7 @@
 
     
     <ul class="post-toc-wrap mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="post-toc-trigger-btn" style="max-height:80vh; overflow-y:scroll;">
-        <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#HTTPS和HTTP的区别"><span class="post-toc-number">1.</span> <span class="post-toc-text">HTTPS和HTTP的区别</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#如何对Apache中的项目进行加密处理呢"><span class="post-toc-number">2.</span> <span class="post-toc-text">如何对Apache中的项目进行加密处理呢?</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#安装Certbot"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">安装Certbot</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#开始加密"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">开始加密</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#自动更新"><span class="post-toc-number">2.3.</span> <span class="post-toc-text">自动更新</span></a></li></ol></li></ol>
+        <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#关于HTTPS和HTTP"><span class="post-toc-number">1.</span> <span class="post-toc-text">关于HTTPS和HTTP</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#如何对Apache中的项目进行加密处理呢"><span class="post-toc-number">2.</span> <span class="post-toc-text">如何对Apache中的项目进行加密处理呢?</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#安装Certbot"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">安装Certbot</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#开始加密"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">开始加密</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#自动更新"><span class="post-toc-number">2.3.</span> <span class="post-toc-text">自动更新</span></a></li></ol></li></ol>
         <!--
         <li class="mdl-menu__item">
             Some Action
@@ -484,8 +484,8 @@
                 <!-- Post Content -->
                 <div id="post-content" class="mdl-color-text--grey-700 mdl-card__supporting-text fade out">
     
-        <h3 id="HTTPS和HTTP的区别"><a href="#HTTPS和HTTP的区别" class="headerlink" title="HTTPS和HTTP的区别"></a>HTTPS和HTTP的区别</h3><ul>
-<li><p>超文本传输协议HTTP协议被用于在Web浏览器和网站服务器之间传递信息。HTTP协议以明文方式发送内容，不提供任何方式的数据加密，如果攻击者截取了Web浏览器和网站服务器之间的传输报文，就可以直接读懂其中的信息，因此HTTP协议不适合传输一些敏感信息，比如信用卡号、密码等。</p>
+        <h3 id="关于HTTPS和HTTP"><a href="#关于HTTPS和HTTP" class="headerlink" title="关于HTTPS和HTTP"></a>关于HTTPS和HTTP</h3><ol>
+<li><p>超文本传输协议HTTP<br>超文本传输协议HTTP协议被用于在Web浏览器和网站服务器之间传递信息。HTTP协议以明文方式发送内容，不提供任何方式的数据加密，如果攻击者截取了Web浏览器和网站服务器之间的传输报文，就可以直接读懂其中的信息，因此HTTP协议不适合传输一些敏感信息，比如信用卡号、密码等。</p>
 </li>
 <li><p>为了解决HTTP协议的这一缺陷，需要使用另一种协议：安全套接字层超文本传输协议HTTPS。为了数据传输的安全，HTTPS在HTTP的基础上加入了SSL协议，SSL依靠证书来验证服务器的身份，并为浏览器和服务器之间的通信加密。</p>
 </li>
@@ -499,7 +499,7 @@
 </li>
 <li><p>TLS(传输层安全)及其前身SSL(安全套接字层)，是为了在受保护的、加密的信道中通信而创建的安全协议。</p>
 </li>
-</ul>
+</ol>
 <h3 id="如何对Apache中的项目进行加密处理呢"><a href="#如何对Apache中的项目进行加密处理呢" class="headerlink" title="如何对Apache中的项目进行加密处理呢?"></a>如何对Apache中的项目进行加密处理呢?</h3><p>一种方式是用openssl手动生成证书和密钥，这种方式的缺点是：浏览器不认这类证书，通过浏览器访问时会有安全性提示，影响体验，所以这里不再赘述。具体方法可以参考这篇文章<a href="https://www.digitalocean.com/community/tutorials/how-to-create-a-ssl-certificate-on-apache-for-ubuntu-14-04" target="_blank" rel="external">《How To Create a SSL Certificate on Apache for Ubuntu 14.04》</a>。</p>
 <p>这里主要记录另一种方法：通过ubuntu的Certbot工具来生成证书和秘钥，对apache进行加密。</p>
 <p>具体步骤及说明如下：</p>
