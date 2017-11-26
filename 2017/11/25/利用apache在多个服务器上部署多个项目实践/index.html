@@ -72,7 +72,7 @@
 
     
         <meta property="article:published_time" content="Nov 25, 2017" />
-        <meta property="article:modified_time" content="Nov 25, 2017" />
+        <meta property="article:modified_time" content="Nov 26, 2017" />
     
 
     <!-- The Twitter Card protocol -->
@@ -113,7 +113,7 @@
     "headline": "利用 apache2 在多个服务器上部署多个项目实践",
     "url": "http://jochen-m.github.io/2017/11/25/利用apache在多个服务器上部署多个项目实践/index.html",
     "datePublished": "Nov 25, 2017",
-    "dateModified": "Nov 25, 2017",
+    "dateModified": "Nov 26, 2017",
     "description": "The journey of a thousand miles begins with a single step.",
     "mainEntityOfPage": {
         "@type": "WebPage",
@@ -507,7 +507,7 @@
 <li>Disk: 50G</li>
 <li>Bindwidth: 2.5Mbps</li>
 </ul>
-<h3 id="架构图"><a href="#架构图" class="headerlink" title="架构图"></a>架构图</h3><p>为了清晰明了，特绘制架构图如下：<br><img src="/uploads/multi_server_multi_site.png" alt="Alt text"></p>
+<h3 id="架构图"><a href="#架构图" class="headerlink" title="架构图"></a>架构图</h3><p>为了清晰明了，特绘制架构图如下：<br><img src="/uploads/apache2_multi_sites.png" alt="Alt text"></p>
 <p>根据上图可知，这里将Server、site1.com等部署在了性能更优的服务器(VPS 1)，而将site2.com、site3.com部署在性能较低的服务器(VPS 2)。之所以这样分配，原因有三：</p>
 <ol>
 <li><p>Server需要接收并处理所有前端（web + app）的请求，还要进行数据的存储（MongoDB）和搜索（ElasticSearch），对内存、带宽、硬盘容量等的要求都比较高；</p>
