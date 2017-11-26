@@ -35,7 +35,7 @@ categories:
 ### 架构图
 
 为了清晰明了，特绘制架构图如下：
-![Alt text](/uploads/multi_server_multi_site.png)
+![Alt text](/uploads/apache2_multi_sites.png)
 
 根据上图可知，这里将Server、site1.com等部署在了性能更优的服务器(VPS 1)，而将site2.com、site3.com部署在性能较低的服务器(VPS 2)。之所以这样分配，原因有三：
 
@@ -61,20 +61,20 @@ sudo apt-get install apache2
 
 ```
 <VirtualHost *:80>
-	ServerAdmin webmaster@localhost
-	DocumentRoot /var/www/site1_com  # 项目目录
+  ServerAdmin webmaster@localhost
+  DocumentRoot /var/www/site1_com  # 项目目录
 
-	ErrorLog ${APACHE_LOG_DIR}/error.log
-	CustomLog ${APACHE_LOG_DIR}/access.log combined
+  ErrorLog ${APACHE_LOG_DIR}/error.log
+  CustomLog ${APACHE_LOG_DIR}/access.log combined
   <Directory "/var/www/site1_com">  # 项目目录
-  	  AllowOverride All
-	</Directory>
+    AllowOverride All
+  </Directory>
 
   # 重定向
   # 将所有对该apache服务器上 site1.com(:80) 的 http 请求，都重定向到 https://site1.com/REQUEST_URI
-	RewriteEngine on
-	RewriteCond %{SERVER_NAME} = site1.com
-	RewriteRule ^ https://%{SERVER_NAME}%{REQUEST_URI} [END,NE,R=permanent]
+  RewriteEngine on
+  RewriteCond %{SERVER_NAME} = site1.com
+  RewriteRule ^ https://%{SERVER_NAME}%{REQUEST_URI} [END,NE,R=permanent]
 </VirtualHost>
 ```
 
@@ -88,21 +88,21 @@ sudo apt-get install apache2
 ```
 <IfModule mod_ssl.c>
 <VirtualHost *:443>
-	ServerAdmin webmaster@localhost
-	DocumentRoot /var/www/site1_com_ssl
+  ServerAdmin webmaster@localhost
+  DocumentRoot /var/www/site1_com_ssl
 
-	ErrorLog ${APACHE_LOG_DIR}/error.log
-	CustomLog ${APACHE_LOG_DIR}/access.log combined
+  ErrorLog ${APACHE_LOG_DIR}/error.log
+  CustomLog ${APACHE_LOG_DIR}/access.log combined
   <Directory "/var/www/site1_com_ssl">
-  	  AllowOverride All
-	</Directory>
+    AllowOverride All
+  </Directory>
 
-	ServerName site1.com
+  ServerName site1.com
 
   # 以下为 Certbot 自动配置的信息，引入了 ssl 证书和密钥等。
-	Include /etc/letsencrypt/options-ssl-apache.conf
-	SSLCertificateFile /etc/letsencrypt/live/site1.com/fullchain.pem
-	SSLCertificateKeyFile /etc/letsencrypt/live/site1.com/privkey.pem
+  Include /etc/letsencrypt/options-ssl-apache.conf
+  SSLCertificateFile /etc/letsencrypt/live/site1.com/fullchain.pem
+  SSLCertificateKeyFile /etc/letsencrypt/live/site1.com/privkey.pem
 </VirtualHost>
 
 <VirtualHost *:3001>
@@ -110,11 +110,11 @@ sudo apt-get install apache2
   # 将外部对 https://site1.com:3001 的访问请求，反向代理到服务器的 http://localhost:3000 （即 Node 监听的端口）。
   # 通过反向代理，外部只能访问 https://site1.com:3001 的安全接口，而将 http://localhost:3000 “隐藏”起来，可以防止服务器遭受外部恶意攻击。
   # 相应地，site1_com_ssl 访问服务器时的请求地址也要修改为 https://site1.com:3001。
-	ProxyPreserveHost On
-	ProxyPass / http://localhost:3000/
-	ProxyPassReverse / http://localhost:3000/
+  ProxyPreserveHost On
+  ProxyPass / http://localhost:3000/
+  ProxyPassReverse / http://localhost:3000/
 
-	ServerName site1.com
+  ServerName site1.com
 
   Include /etc/letsencrypt/options-ssl-apache.conf
   SSLCertificateFile /etc/letsencrypt/live/site1.com/fullchain.pem
