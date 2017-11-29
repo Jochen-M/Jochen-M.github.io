@@ -1624,7 +1624,7 @@
     <entry>
       <title></title>
       <url>/about/index.html</url>
-      <content type="html"><![CDATA[<div align="center">I can do anything.</div>
+      <content type="html"><![CDATA[<center><br>  <font color="gray" size="5" face="微软雅黑">I can do anything.</font><br></center>
 ]]></content>
     </entry>
     
