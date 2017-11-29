@@ -73,9 +73,12 @@ sudo apt-get install apache2
 
   # 重定向
   # 将所有对该apache服务器上 site1.com(:80) 的 http 请求，都重定向到 https://site1.com/REQUEST_URI
-  RewriteEngine on
-  RewriteCond %{SERVER_NAME} = site1.com
-  RewriteRule ^ https://%{SERVER_NAME}%{REQUEST_URI} [END,NE,R=permanent]
+  # RewriteEngine on
+  # RewriteCond %{SERVER_NAME} = site1.com
+  # RewriteRule ^ https://%{SERVER_NAME}%{REQUEST_URI} [END,NE,R=permanent]
+  RewriteEngine On
+  RewriteCond %{HTTPS} off
+  RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
 </VirtualHost>
 ```
 
