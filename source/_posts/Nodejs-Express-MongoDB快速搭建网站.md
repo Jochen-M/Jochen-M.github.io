@@ -7,6 +7,7 @@ tags:
     - MongoDB
 categories:
     - Nodejs
+    - MongoDB
 ---
 
 ## 基本架构（前期准备）
@@ -31,7 +32,7 @@ categories:
 - jQuery(通过Bower安装)
 - Bootstrap(通过Bower安装)
 
-* * * 
+* * *
 
 ## 项目流程（编码实现）：
 ### 项目前后端流程打通
@@ -68,7 +69,7 @@ app.get('/', function(req, res){
 app.listen(port);
 console.log('MovieGoGo is running at http://localhost:' + port);
 ```
-  
+
 #### 目录初始化：
 
 ```
@@ -111,19 +112,19 @@ head.jade:
       a.navbar-brand(href="/") MovieGoGo
       ul.nav.navbar-nav
         li.dropdown
-          a(href="#", class="dropdown-toggle", data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false") Movie 
+          a(href="#", class="dropdown-toggle", data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false") Movie
             span.caret
           ul.dropdown-menu
             li: a(href="/admin/movie/new") New
             li: a(href="/admin/movie/list") List
         li.dropdown
-          a(href="#", class="dropdown-toggle", data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false") Category 
+          a(href="#", class="dropdown-toggle", data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false") Category
             span.caret
           ul.dropdown-menu
             li: a(href="/admin/category/new") New
             li: a(href="/admin/category/list") List
         li.dropdown
-          a(href="#", class="dropdown-toggle", data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false") User 
+          a(href="#", class="dropdown-toggle", data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false") User
             span.caret
           ul.dropdown-menu
             li: a(href="/signup") New
@@ -295,7 +296,7 @@ let MovieSchema = new mongoose.Schema({
   meta: {
     createAt: {
       type: Date,
-      default: Date.now() 
+      default: Date.now()
     },
     updateAt: {
       type: Date,

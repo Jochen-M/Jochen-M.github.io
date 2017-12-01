@@ -7,6 +7,7 @@ tags:
     - mongoose
 categories:
     - Nodejs
+    - MongoDB
 ---
 
 Mongoose API: [http://mongoosejs.com/docs/api.html](http://mongoosejs.com/docs/api.html)

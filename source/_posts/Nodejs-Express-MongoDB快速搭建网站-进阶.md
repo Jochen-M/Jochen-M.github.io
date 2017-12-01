@@ -7,6 +7,7 @@ tags:
     - MongoDB
 categories:
     - Nodejs
+    - MongoDB
 ---
 
 ### 开发用户的注册登录功能
