@@ -6,14 +6,8 @@ tags:
 categories:
     - Nodejs
 ---
-> 一、node.js升级到最新版本
-> 二、使用nvm管理node版本
-> 三、几个npm的常用命令
-> 四、使用淘宝 NPM 镜像
 
-<!-- more -->
-
-#### 一、node.js升级到最新版本
+#### node.js升级到最新版本
 node有一个模块叫n，是专门用来管理node.js的版本的。
 首先安装n模块：
 ```
@@ -25,7 +19,7 @@ npm install -g n
 n stable
 ```
 
-#### 二、使用nvm管理node版本
+#### 使用nvm管理node版本
 linux 安装 nvm
 ```
 curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.31.1/install.sh | bash
@@ -60,7 +54,7 @@ nvm use #无需指定版本号，会自动使用 .nvmrc 文件中配置的版本
 node -v #查看 node 是否切换为对应版本
 ```
 
-#### 三、几个npm的常用命令
+#### 几个npm的常用命令
 ```
 npm -v          #显示版本，检查npm 是否正确安装。
 npm install express   #安装express模块
@@ -73,7 +67,7 @@ npm update -g express  #升级全局安装的express模块
 npm uninstall express  #删除指定的模块
 ```
 
-#### 四、使用淘宝 NPM 镜像
+#### 使用淘宝 NPM 镜像
 国内直接使用 npm 的官方镜像是非常慢的，这里推荐使用淘宝 NPM 镜像。
 淘宝 NPM 镜像是一个完整 npmjs.org 镜像，你可以用此代替官方版本(只读)，同步频率目前为 10分钟一次以保证尽量与官方服务同步。
 你可以使用淘宝定制的 cnpm (gzip 压缩支持) 命令行工具代替默认的 npm:
