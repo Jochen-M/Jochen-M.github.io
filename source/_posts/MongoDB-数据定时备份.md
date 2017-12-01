@@ -3,8 +3,8 @@ title: MongoDB 数据定时备份
 date: 2017-11-29 20:39:52
 tags:
     - MongoDB
-categories:
     - Ubuntu
+categories:
     - MongoDB
 ---
 

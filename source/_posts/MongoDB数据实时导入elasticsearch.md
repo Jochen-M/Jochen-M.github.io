@@ -1,12 +1,11 @@
 ---
-title: MongoDB数据实时导入elasticsearch
+title: MongoDB 数据实时导入 Elasticsearch
 date: 2017-12-01 10:43:57
 tags:
     - MongoDB
-    - elasticsearch
+    - Elasticsearch
 categories:
     - MongoDB
-    - elasticsearch
 ---
 
 项目中需要实现对数据的全文检索功能，数据主要存储在了 MongoDB 中。MongoDB 本身是自带文本检索功能的，但是不支持中文，而且当数据量增大时，MongoDB 的检索效率会大大降低。

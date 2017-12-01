@@ -6,7 +6,6 @@ tags:
     - MongoDB
     - mongoose
 categories:
-    - Nodejs
     - MongoDB
 ---
 

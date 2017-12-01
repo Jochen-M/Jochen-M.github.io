@@ -7,7 +7,6 @@ tags:
     - MongoDB
 categories:
     - Nodejs
-    - MongoDB
 ---
 
 ## 基本架构（前期准备）
