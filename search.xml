@@ -3,7 +3,7 @@
   
     
     <entry>
-      <title><![CDATA[MongoDB数据实时导入elasticsearch]]></title>
+      <title><![CDATA[MongoDB 数据实时导入 Elasticsearch]]></title>
       <url>/2017/12/01/MongoDB%E6%95%B0%E6%8D%AE%E5%AE%9E%E6%97%B6%E5%AF%BC%E5%85%A5elasticsearch/</url>
       <content type="html"><![CDATA[<p>项目中需要实现对数据的全文检索功能，数据主要存储在了 MongoDB 中。MongoDB 本身是自带文本检索功能的，但是不支持中文，而且当数据量增大时，MongoDB 的检索效率会大大降低。</p>
 <p>由于最近在学习 Elasticsearch，而 Elasticsearch 的特性又十分适合全文检索，于是就选择了它。</p>
@@ -45,8 +45,6 @@
             
             <category> MongoDB </category>
             
-            <category> elasticsearch </category>
-            
         </categories>
         
         
@@ -54,7 +52,7 @@
             
             <tag> MongoDB </tag>
             
-            <tag> elasticsearch </tag>
+            <tag> Elasticsearch </tag>
             
         </tags>
         
@@ -73,14 +71,14 @@
       
         <categories>
             
-            <category> Ubuntu </category>
-            
             <category> MongoDB </category>
             
         </categories>
         
         
         <tags>
+            
+            <tag> Ubuntu </tag>
             
             <tag> MongoDB </tag>
             
@@ -939,8 +937,6 @@
             
             <category> Nodejs </category>
             
-            <category> MongoDB </category>
-            
         </categories>
         
         
@@ -975,8 +971,6 @@
 ]]></content>
       
         <categories>
-            
-            <category> Nodejs </category>
             
             <category> MongoDB </category>
             
@@ -1191,8 +1185,6 @@
         <categories>
             
             <category> Nodejs </category>
-            
-            <category> MongoDB </category>
             
         </categories>
         
