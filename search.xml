@@ -16,14 +16,9 @@
 <h5 id="Secondary"><a href="#Secondary" class="headerlink" title="Secondary"></a>Secondary</h5><ul>
 <li>通过 oplog 来重放 Primary 上的所有操作，拥有 Primary 节点数据的完整拷贝。</li>
 <li>默认情况下，不可写，也不可读。</li>
-<li><p>根据不同的需求，Secondary 又可配置为如下形式：</p>
-<ul>
-<li><p>Priority 0 Replica Set Members - 优先级为0的节点</p>
-<p>优先级为0的成员永远不会被选举为 primary。在mongoDB副本集中，允许给不同的节点设置不同的优先级。优先级的取值范围为0-1000，可设置为浮点数，默认为1。拥有最高优先级的成员会优先选举为primary。譬如，在副本集中添加了一个优先级为2的成员node3:27020，而其它成员的优先级为1，只要node3:27020拥有最新的数据，那么当前的primary就会自动降级，node3:27020将会被选举为新的primary节点，但如果node3:27020中的数据不够新，则当前primary节点保持不变，直到node3:27020的数据更新到最新。</p>
-</li>
-<li><p>Hidden Replica Set Members - 隐藏节点</p>
-<p>隐藏节点的优先级同样为0，同时对客户端不可见使用rs.status()和rs.config()可以看到隐藏节点，但是对于db.isMaster()不可见。客户端连接到副本集时，会调用db.isMaster()命令来查看可用成员信息。所以，隐藏节点不会受到客户端的读请求。隐藏节点常用于执行特定的任务，譬如报表，备份。</p>
-</li>
+<li>根据不同的需求，Secondary 又可配置为如下形式：<ul>
+<li>Priority 0 Replica Set Members - 优先级为0的节点<br>优先级为0的成员永远不会被选举为 primary。在mongoDB副本集中，允许给不同的节点设置不同的优先级。优先级的取值范围为0-1000，可设置为浮点数，默认为1。拥有最高优先级的成员会优先选举为primary。譬如，在副本集中添加了一个优先级为2的成员node3:27020，而其它成员的优先级为1，只要node3:27020拥有最新的数据，那么当前的primary就会自动降级，node3:27020将会被选举为新的primary节点，但如果node3:27020中的数据不够新，则当前primary节点保持不变，直到node3:27020的数据更新到最新。</li>
+<li>Hidden Replica Set Members - 隐藏节点<br>隐藏节点的优先级同样为0，同时对客户端不可见使用rs.status()和rs.config()可以看到隐藏节点，但是对于db.isMaster()不可见。客户端连接到副本集时，会调用db.isMaster()命令来查看可用成员信息。所以，隐藏节点不会受到客户端的读请求。隐藏节点常用于执行特定的任务，譬如报表，备份。</li>
 <li>Delayed Replica Set Members - 延迟节点<br>延迟节点会比primary节点延迟指定的时间（通过slaveDelay参数来指定）。延迟节点必须是隐藏节点。</li>
 </ul>
 </li>
@@ -122,12 +117,9 @@
 <h3 id="架构图"><a href="#架构图" class="headerlink" title="架构图"></a>架构图</h3><p>为了清晰明了，特绘制架构图如下：<br><img src="/uploads/apache2_multi_sites.png" alt="Alt text"></p>
 <p>根据上图可知，这里将Server、site1.com等部署在了性能更优的服务器(VPS 1)，而将site2.com、site3.com部署在性能较低的服务器(VPS 2)。之所以这样分配，原因有三：</p>
 <ol>
-<li><p>Server需要接收并处理所有前端（web + app）的请求，还要进行数据的存储（MongoDB）和搜索（ElasticSearch），对内存、带宽、硬盘容量等的要求都比较高；</p>
-</li>
-<li><p>做web版微信支付等开发时，要求配置独立的域名，不能带端口（微信支付具体要求很复杂，主要是为了安全性）；</p>
-</li>
-<li><p>由于配套网站较多（这里是 3 个），需要多个域名或多个端口。采用一个服务器开放多个端口的方式，节省成本，但降低了网站的识别度，也不满足上述第 2 条要求；而每个网站都配备一个域名和服务器，意味着更高的成本，对于小型项目来说不是经济的做法，而且不利于管理。</p>
-</li>
+<li>Server需要接收并处理所有前端（web + app）的请求，还要进行数据的存储（MongoDB）和搜索（ElasticSearch），对内存、带宽、硬盘容量等的要求都比较高；</li>
+<li>做web版微信支付等开发时，要求配置独立的域名，不能带端口（微信支付具体要求很复杂，主要是为了安全性）；</li>
+<li>由于配套网站较多（这里是 3 个），需要多个域名或多个端口。采用一个服务器开放多个端口的方式，节省成本，但降低了网站的识别度，也不满足上述第 2 条要求；而每个网站都配备一个域名和服务器，意味着更高的成本，对于小型项目来说不是经济的做法，而且不利于管理。</li>
 </ol>
 <p>因此，本项目采取了架构图所示的折中的方式。</p>
 <h3 id="apache2-的安装与配置"><a href="#apache2-的安装与配置" class="headerlink" title="apache2 的安装与配置"></a>apache2 的安装与配置</h3><h4 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h4><p>ubuntu 上自带了 apache2 软件包，只需要执行命令安装：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install apache2</div></pre></td></tr></table></figure></p>
@@ -737,9 +729,7 @@
       <title><![CDATA[Hadoop-2.8.0实践——搭建Hadoop集群]]></title>
       <url>/2017/07/05/Hadoop-2.8.0%E5%AE%9E%E8%B7%B5(%E4%BA%8C)/</url>
       <content type="html"><![CDATA[<p>在本地测试hadoop成功后，我们在多台主机上搭建hadoop集群，用于处理大规模数据…</p>
-<h3 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h3><h4 id="系统环境"><a href="#系统环境" class="headerlink" title="系统环境"></a>系统环境</h4><ul>
-<li>三台 Ubuntu 16.04 64位笔记本（一台作为Master节点，另外两台作为Slave节点）</li>
-</ul>
+<h3 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h3><h4 id="系统环境"><a href="#系统环境" class="headerlink" title="系统环境"></a>系统环境</h4><p>三台 Ubuntu 16.04 64位笔记本（一台作为Master节点，另外两台作为Slave节点）</p>
 <h4 id="创建用户"><a href="#创建用户" class="headerlink" title="创建用户"></a>创建用户</h4><p>创建用户，并为其添加root权限：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">sudo adduser hadoop</div><div class="line">sudo vim /etc/sudoers</div><div class="line"># 修改内容如下：</div><div class="line">root 	ALL=(ALL:ALL) ALL</div><div class="line">hadoop 	ALL=(ALL:ALL) ALL</div></pre></td></tr></table></figure></p>
 <p>给hadoop用户创建目录，并添加到sudo用户组中：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">sudo chown hadoop /home/hadoop</div><div class="line"># 添加到sudo用户组</div><div class="line">sudo adduser hadoop sudo</div></pre></td></tr></table></figure></p>
 <p>最后注销当前用户，使用新创建的hadoop用户登陆。</p>
@@ -1358,20 +1348,16 @@
     <entry>
       <title><![CDATA[Nodejs的使用技巧]]></title>
       <url>/2017/05/16/Nodejs%E7%9A%84%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7/</url>
-      <content type="html"><![CDATA[<blockquote>
-<p>一、node.js升级到最新版本<br>二、使用nvm管理node版本<br>三、几个npm的常用命令<br>四、使用淘宝 NPM 镜像</p>
-</blockquote>
-<a id="more"></a>
-<h4 id="一、node-js升级到最新版本"><a href="#一、node-js升级到最新版本" class="headerlink" title="一、node.js升级到最新版本"></a>一、node.js升级到最新版本</h4><p>node有一个模块叫n，是专门用来管理node.js的版本的。<br>首先安装n模块：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install -g n</div></pre></td></tr></table></figure></p>
+      <content type="html"><![CDATA[<h4 id="node-js升级到最新版本"><a href="#node-js升级到最新版本" class="headerlink" title="node.js升级到最新版本"></a>node.js升级到最新版本</h4><p>node有一个模块叫n，是专门用来管理node.js的版本的。<br>首先安装n模块：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install -g n</div></pre></td></tr></table></figure></p>
 <p>第二步：<br>升级node.js到最新稳定版<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">n stable</div></pre></td></tr></table></figure></p>
-<h4 id="二、使用nvm管理node版本"><a href="#二、使用nvm管理node版本" class="headerlink" title="二、使用nvm管理node版本"></a>二、使用nvm管理node版本</h4><p>linux 安装 nvm<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.31.1/install.sh | bash</div></pre></td></tr></table></figure></p>
+<h4 id="使用nvm管理node版本"><a href="#使用nvm管理node版本" class="headerlink" title="使用nvm管理node版本"></a>使用nvm管理node版本</h4><p>linux 安装 nvm<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.31.1/install.sh | bash</div></pre></td></tr></table></figure></p>
 <p>或者<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.31.1/install.sh | bash</div></pre></td></tr></table></figure></p>
 <p>然后<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">source ~/.bashrc</div></pre></td></tr></table></figure></p>
 <p>安装node<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">nvm install stable #安装最新稳定版</div></pre></td></tr></table></figure></p>
 <p><em>额外说明</em><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">nvm install stable #安装最新稳定版 node</div><div class="line">nvm install 4.2.2 #安装 4.2.2 版本</div><div class="line">nvm install 0.12.7 #安装 0.12.7 版本</div><div class="line">nvm alias default 0.12.7 #设置默认 node 版本为 0.12.7</div></pre></td></tr></table></figure></p>
 <p><em>nvm切换版本</em><br>如果你的默认 node 版本（通过 nvm alias 命令设置的）与项目所需的版本不同，则可在项目根目录或其任意父级目录中创建 .nvmrc 文件，在文件中指定使用的 node 版本号，例如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">cd &lt;项目根目录&gt;  #进入项目根目录</div><div class="line">echo 4 &gt; .nvmrc #添加 .nvmrc 文件</div><div class="line">nvm use #无需指定版本号，会自动使用 .nvmrc 文件中配置的版本</div><div class="line">node -v #查看 node 是否切换为对应版本</div></pre></td></tr></table></figure></p>
-<h4 id="三、几个npm的常用命令"><a href="#三、几个npm的常用命令" class="headerlink" title="三、几个npm的常用命令"></a>三、几个npm的常用命令</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">npm -v          #显示版本，检查npm 是否正确安装。</div><div class="line">npm install express   #安装express模块</div><div class="line">npm install -g express  #全局安装express模块</div><div class="line">npm list         #列出已安装模块</div><div class="line">npm show express     #显示模块详情</div><div class="line">npm update        #升级当前目录下的项目的所有模块</div><div class="line">npm update express    #升级当前目录下的项目的指定模块</div><div class="line">npm update -g express  #升级全局安装的express模块</div><div class="line">npm uninstall express  #删除指定的模块</div></pre></td></tr></table></figure>
-<h4 id="四、使用淘宝-NPM-镜像"><a href="#四、使用淘宝-NPM-镜像" class="headerlink" title="四、使用淘宝 NPM 镜像"></a>四、使用淘宝 NPM 镜像</h4><p>国内直接使用 npm 的官方镜像是非常慢的，这里推荐使用淘宝 NPM 镜像。<br>淘宝 NPM 镜像是一个完整 npmjs.org 镜像，你可以用此代替官方版本(只读)，同步频率目前为 10分钟一次以保证尽量与官方服务同步。<br>你可以使用淘宝定制的 cnpm (gzip 压缩支持) 命令行工具代替默认的 npm:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install -g cnpm --registry=https://registry.npm.taobao.org</div></pre></td></tr></table></figure></p>
+<h4 id="几个npm的常用命令"><a href="#几个npm的常用命令" class="headerlink" title="几个npm的常用命令"></a>几个npm的常用命令</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">npm -v          #显示版本，检查npm 是否正确安装。</div><div class="line">npm install express   #安装express模块</div><div class="line">npm install -g express  #全局安装express模块</div><div class="line">npm list         #列出已安装模块</div><div class="line">npm show express     #显示模块详情</div><div class="line">npm update        #升级当前目录下的项目的所有模块</div><div class="line">npm update express    #升级当前目录下的项目的指定模块</div><div class="line">npm update -g express  #升级全局安装的express模块</div><div class="line">npm uninstall express  #删除指定的模块</div></pre></td></tr></table></figure>
+<h4 id="使用淘宝-NPM-镜像"><a href="#使用淘宝-NPM-镜像" class="headerlink" title="使用淘宝 NPM 镜像"></a>使用淘宝 NPM 镜像</h4><p>国内直接使用 npm 的官方镜像是非常慢的，这里推荐使用淘宝 NPM 镜像。<br>淘宝 NPM 镜像是一个完整 npmjs.org 镜像，你可以用此代替官方版本(只读)，同步频率目前为 10分钟一次以保证尽量与官方服务同步。<br>你可以使用淘宝定制的 cnpm (gzip 压缩支持) 命令行工具代替默认的 npm:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install -g cnpm --registry=https://registry.npm.taobao.org</div></pre></td></tr></table></figure></p>
 <p>这样就可以使用 cnpm 命令来安装模块了：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cnpm install [name]</div></pre></td></tr></table></figure></p>
 ]]></content>
       
@@ -1706,14 +1692,14 @@
     </entry>
     
     <entry>
-      <title><![CDATA[timeline]]></title>
-      <url>/timeline/index.html</url>
+      <title><![CDATA[tags]]></title>
+      <url>/tags/index.html</url>
       <content type="html"></content>
     </entry>
     
     <entry>
-      <title><![CDATA[tags]]></title>
-      <url>/tags/index.html</url>
+      <title><![CDATA[timeline]]></title>
+      <url>/timeline/index.html</url>
       <content type="html"></content>
     </entry>
     

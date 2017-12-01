@@ -495,14 +495,9 @@
 <h5 id="Secondary"><a href="#Secondary" class="headerlink" title="Secondary"></a>Secondary</h5><ul>
 <li>通过 oplog 来重放 Primary 上的所有操作，拥有 Primary 节点数据的完整拷贝。</li>
 <li>默认情况下，不可写，也不可读。</li>
-<li><p>根据不同的需求，Secondary 又可配置为如下形式：</p>
-<ul>
-<li><p>Priority 0 Replica Set Members - 优先级为0的节点</p>
-<p>优先级为0的成员永远不会被选举为 primary。在mongoDB副本集中，允许给不同的节点设置不同的优先级。优先级的取值范围为0-1000，可设置为浮点数，默认为1。拥有最高优先级的成员会优先选举为primary。譬如，在副本集中添加了一个优先级为2的成员node3:27020，而其它成员的优先级为1，只要node3:27020拥有最新的数据，那么当前的primary就会自动降级，node3:27020将会被选举为新的primary节点，但如果node3:27020中的数据不够新，则当前primary节点保持不变，直到node3:27020的数据更新到最新。</p>
-</li>
-<li><p>Hidden Replica Set Members - 隐藏节点</p>
-<p>隐藏节点的优先级同样为0，同时对客户端不可见使用rs.status()和rs.config()可以看到隐藏节点，但是对于db.isMaster()不可见。客户端连接到副本集时，会调用db.isMaster()命令来查看可用成员信息。所以，隐藏节点不会受到客户端的读请求。隐藏节点常用于执行特定的任务，譬如报表，备份。</p>
-</li>
+<li>根据不同的需求，Secondary 又可配置为如下形式：<ul>
+<li>Priority 0 Replica Set Members - 优先级为0的节点<br>优先级为0的成员永远不会被选举为 primary。在mongoDB副本集中，允许给不同的节点设置不同的优先级。优先级的取值范围为0-1000，可设置为浮点数，默认为1。拥有最高优先级的成员会优先选举为primary。譬如，在副本集中添加了一个优先级为2的成员node3:27020，而其它成员的优先级为1，只要node3:27020拥有最新的数据，那么当前的primary就会自动降级，node3:27020将会被选举为新的primary节点，但如果node3:27020中的数据不够新，则当前primary节点保持不变，直到node3:27020的数据更新到最新。</li>
+<li>Hidden Replica Set Members - 隐藏节点<br>隐藏节点的优先级同样为0，同时对客户端不可见使用rs.status()和rs.config()可以看到隐藏节点，但是对于db.isMaster()不可见。客户端连接到副本集时，会调用db.isMaster()命令来查看可用成员信息。所以，隐藏节点不会受到客户端的读请求。隐藏节点常用于执行特定的任务，譬如报表，备份。</li>
 <li>Delayed Replica Set Members - 延迟节点<br>延迟节点会比primary节点延迟指定的时间（通过slaveDelay参数来指定）。延迟节点必须是隐藏节点。</li>
 </ul>
 </li>
